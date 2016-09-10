@@ -7,13 +7,118 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC5CDC8D1D80B30F008C2A8D /* CoronaGL.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5CDC8C1D80B30F008C2A8D /* CoronaGL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */; };
+		DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */; };
+		DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */; };
+		DC5CDCA81D80B351008C2A8D /* GLSDoubleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC971D80B351008C2A8D /* GLSDoubleSprite.swift */; };
+		DC5CDCA91D80B351008C2A8D /* GLSFireSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC981D80B351008C2A8D /* GLSFireSprite.swift */; };
+		DC5CDCAA1D80B351008C2A8D /* GLSFrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC991D80B351008C2A8D /* GLSFrameBuffer.swift */; };
+		DC5CDCAB1D80B351008C2A8D /* GLSFrameSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC9A1D80B351008C2A8D /* GLSFrameSprite.swift */; };
+		DC5CDCAC1D80B351008C2A8D /* GLSGradientSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC9B1D80B351008C2A8D /* GLSGradientSprite.swift */; };
+		DC5CDCAD1D80B351008C2A8D /* GLSGroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC9C1D80B351008C2A8D /* GLSGroupNode.swift */; };
+		DC5CDCAE1D80B351008C2A8D /* GLSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC9D1D80B351008C2A8D /* GLSNode.swift */; };
+		DC5CDCB01D80B351008C2A8D /* GLSParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC9F1D80B351008C2A8D /* GLSParticleEmitter.swift */; };
+		DC5CDCB11D80B351008C2A8D /* GLSPerlinNoiseSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCA01D80B351008C2A8D /* GLSPerlinNoiseSprite.swift */; };
+		DC5CDCB21D80B351008C2A8D /* GLSRadialGradientSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */; };
+		DC5CDCB31D80B351008C2A8D /* GLSRecursivePropertyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCA21D80B351008C2A8D /* GLSRecursivePropertyNode.swift */; };
+		DC5CDCB51D80B351008C2A8D /* GLSSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCA41D80B351008C2A8D /* GLSSprite.swift */; };
+		DC5CDCC91D80B360008C2A8D /* CCTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCB71D80B360008C2A8D /* CCTexture.swift */; };
+		DC5CDCCA1D80B360008C2A8D /* CCTextureOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCB81D80B360008C2A8D /* CCTextureOrganizer.swift */; };
+		DC5CDCCB1D80B360008C2A8D /* GLAttributeBridger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCB91D80B360008C2A8D /* GLAttributeBridger.swift */; };
+		DC5CDCCC1D80B360008C2A8D /* GLGradientTexture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBA1D80B360008C2A8D /* GLGradientTexture2D.swift */; };
+		DC5CDCCD1D80B360008C2A8D /* GLKOmniController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBB1D80B360008C2A8D /* GLKOmniController.swift */; };
+		DC5CDCCE1D80B360008C2A8D /* GLProgramDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBC1D80B360008C2A8D /* GLProgramDictionary.swift */; };
+		DC5CDCCF1D80B360008C2A8D /* GLSAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBD1D80B360008C2A8D /* GLSAnimator.swift */; };
+		DC5CDCD01D80B360008C2A8D /* GLSCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBE1D80B360008C2A8D /* GLSCamera.swift */; };
+		DC5CDCD11D80B360008C2A8D /* GLSFramebufferReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCBF1D80B360008C2A8D /* GLSFramebufferReference.swift */; };
+		DC5CDCD21D80B360008C2A8D /* GLSFramebufferStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC01D80B360008C2A8D /* GLSFramebufferStack.swift */; };
+		DC5CDCD31D80B360008C2A8D /* GLSNode+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC11D80B360008C2A8D /* GLSNode+Animation.swift */; };
+		DC5CDCD41D80B360008C2A8D /* MultiTexturedQuad.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC21D80B360008C2A8D /* MultiTexturedQuad.swift */; };
+		DC5CDCD51D80B360008C2A8D /* NoiseFadeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC31D80B360008C2A8D /* NoiseFadeAnimation.swift */; };
+		DC5CDCD61D80B360008C2A8D /* NoiseTexture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC41D80B360008C2A8D /* NoiseTexture2D.swift */; };
+		DC5CDCD71D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC51D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift */; };
+		DC5CDCD81D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC61D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift */; };
+		DC5CDCD91D80B360008C2A8D /* ShaderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC71D80B360008C2A8D /* ShaderHelper.swift */; };
+		DC5CDCDA1D80B360008C2A8D /* TexturedQuad.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCC81D80B360008C2A8D /* TexturedQuad.swift */; };
+		DC5CDCE41D80B38C008C2A8D /* CoronaConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5CDCE31D80B388008C2A8D /* CoronaConvenience.framework */; };
+		DC5CDCEC1D80B3C2008C2A8D /* CoronaStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5CDCEB1D80B3BD008C2A8D /* CoronaStructures.framework */; };
+		DC5CDCF71D80B6D1008C2A8D /* BilinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCEE1D80B6D1008C2A8D /* BilinearArray.swift */; };
+		DC5CDCF81D80B6D1008C2A8D /* FluctuatingNoise1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCEF1D80B6D1008C2A8D /* FluctuatingNoise1D.swift */; };
+		DC5CDCF91D80B6D1008C2A8D /* LinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF01D80B6D1008C2A8D /* LinearArray.swift */; };
+		DC5CDCFB1D80B6D1008C2A8D /* NoiseArray1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF21D80B6D1008C2A8D /* NoiseArray1D.swift */; };
+		DC5CDCFC1D80B6D1008C2A8D /* NoiseArray2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF31D80B6D1008C2A8D /* NoiseArray2D.swift */; };
+		DC5CDCFD1D80B6D1008C2A8D /* NoiseArray3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF41D80B6D1008C2A8D /* NoiseArray3D.swift */; };
+		DC5CDCFE1D80B6D1008C2A8D /* SmoothingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */; };
+		DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */; };
+		DC806F371D8202A9006F95F7 /* GLSBoolList2DSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */; };
+		DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DC5CDCE21D80B388008C2A8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC4D07951D7D233A00862432;
+			remoteInfo = CoronaConvenience;
+		};
+		DC5CDCEA1D80B3BD008C2A8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC5CDCE51D80B3BD008C2A8D /* CoronaStructures.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC7428CE1D7F4446001AF8E1;
+			remoteInfo = CoronaStructures;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DC5CDC891D80B30F008C2A8D /* CoronaGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC5CDC8C1D80B30F008C2A8D /* CoronaGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoronaGL.h; sourceTree = "<group>"; };
 		DC5CDC8E1D80B30F008C2A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSTileSprite.swift; sourceTree = "<group>"; };
+		DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSAlphaHoleSprite.swift; sourceTree = "<group>"; };
+		DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSBlurSprite.swift; sourceTree = "<group>"; };
+		DC5CDC971D80B351008C2A8D /* GLSDoubleSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSDoubleSprite.swift; sourceTree = "<group>"; };
+		DC5CDC981D80B351008C2A8D /* GLSFireSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSFireSprite.swift; sourceTree = "<group>"; };
+		DC5CDC991D80B351008C2A8D /* GLSFrameBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSFrameBuffer.swift; sourceTree = "<group>"; };
+		DC5CDC9A1D80B351008C2A8D /* GLSFrameSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSFrameSprite.swift; sourceTree = "<group>"; };
+		DC5CDC9B1D80B351008C2A8D /* GLSGradientSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSGradientSprite.swift; sourceTree = "<group>"; };
+		DC5CDC9C1D80B351008C2A8D /* GLSGroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSGroupNode.swift; sourceTree = "<group>"; };
+		DC5CDC9D1D80B351008C2A8D /* GLSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSNode.swift; sourceTree = "<group>"; };
+		DC5CDC9F1D80B351008C2A8D /* GLSParticleEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSParticleEmitter.swift; sourceTree = "<group>"; };
+		DC5CDCA01D80B351008C2A8D /* GLSPerlinNoiseSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSPerlinNoiseSprite.swift; sourceTree = "<group>"; };
+		DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSRadialGradientSprite.swift; sourceTree = "<group>"; };
+		DC5CDCA21D80B351008C2A8D /* GLSRecursivePropertyNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSRecursivePropertyNode.swift; sourceTree = "<group>"; };
+		DC5CDCA41D80B351008C2A8D /* GLSSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSSprite.swift; sourceTree = "<group>"; };
+		DC5CDCB71D80B360008C2A8D /* CCTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTexture.swift; sourceTree = "<group>"; };
+		DC5CDCB81D80B360008C2A8D /* CCTextureOrganizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTextureOrganizer.swift; sourceTree = "<group>"; };
+		DC5CDCB91D80B360008C2A8D /* GLAttributeBridger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLAttributeBridger.swift; sourceTree = "<group>"; };
+		DC5CDCBA1D80B360008C2A8D /* GLGradientTexture2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLGradientTexture2D.swift; sourceTree = "<group>"; };
+		DC5CDCBB1D80B360008C2A8D /* GLKOmniController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLKOmniController.swift; sourceTree = "<group>"; };
+		DC5CDCBC1D80B360008C2A8D /* GLProgramDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLProgramDictionary.swift; sourceTree = "<group>"; };
+		DC5CDCBD1D80B360008C2A8D /* GLSAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSAnimator.swift; sourceTree = "<group>"; };
+		DC5CDCBE1D80B360008C2A8D /* GLSCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSCamera.swift; sourceTree = "<group>"; };
+		DC5CDCBF1D80B360008C2A8D /* GLSFramebufferReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSFramebufferReference.swift; sourceTree = "<group>"; };
+		DC5CDCC01D80B360008C2A8D /* GLSFramebufferStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSFramebufferStack.swift; sourceTree = "<group>"; };
+		DC5CDCC11D80B360008C2A8D /* GLSNode+Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GLSNode+Animation.swift"; sourceTree = "<group>"; };
+		DC5CDCC21D80B360008C2A8D /* MultiTexturedQuad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiTexturedQuad.swift; sourceTree = "<group>"; };
+		DC5CDCC31D80B360008C2A8D /* NoiseFadeAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseFadeAnimation.swift; sourceTree = "<group>"; };
+		DC5CDCC41D80B360008C2A8D /* NoiseTexture2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseTexture2D.swift; sourceTree = "<group>"; };
+		DC5CDCC51D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleEmitterBackgroundQueue.swift; sourceTree = "<group>"; };
+		DC5CDCC61D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundOpenGLDelegate.swift; sourceTree = "<group>"; };
+		DC5CDCC71D80B360008C2A8D /* ShaderHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderHelper.swift; sourceTree = "<group>"; };
+		DC5CDCC81D80B360008C2A8D /* TexturedQuad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TexturedQuad.swift; sourceTree = "<group>"; };
+		DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoronaConvenience.xcodeproj; path = ../CoronaConvenience/CoronaConvenience.xcodeproj; sourceTree = "<group>"; };
+		DC5CDCE51D80B3BD008C2A8D /* CoronaStructures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoronaStructures.xcodeproj; path = ../CoronaStructures/CoronaStructures.xcodeproj; sourceTree = "<group>"; };
+		DC5CDCEE1D80B6D1008C2A8D /* BilinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BilinearArray.swift; sourceTree = "<group>"; };
+		DC5CDCEF1D80B6D1008C2A8D /* FluctuatingNoise1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FluctuatingNoise1D.swift; sourceTree = "<group>"; };
+		DC5CDCF01D80B6D1008C2A8D /* LinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinearArray.swift; sourceTree = "<group>"; };
+		DC5CDCF21D80B6D1008C2A8D /* NoiseArray1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseArray1D.swift; sourceTree = "<group>"; };
+		DC5CDCF31D80B6D1008C2A8D /* NoiseArray2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseArray2D.swift; sourceTree = "<group>"; };
+		DC5CDCF41D80B6D1008C2A8D /* NoiseArray3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseArray3D.swift; sourceTree = "<group>"; };
+		DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothingFunctions.swift; sourceTree = "<group>"; };
+		DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrilinearArray.swift; sourceTree = "<group>"; };
+		DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSBoolList2DSprite.swift; sourceTree = "<group>"; };
+		DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient1D.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,6 +126,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC5CDCEC1D80B3C2008C2A8D /* CoronaStructures.framework in Frameworks */,
+				DC5CDCE41D80B38C008C2A8D /* CoronaConvenience.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -30,6 +137,8 @@
 		DC5CDC7F1D80B30F008C2A8D = {
 			isa = PBXGroup;
 			children = (
+				DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */,
+				DC5CDCE51D80B3BD008C2A8D /* CoronaStructures.xcodeproj */,
 				DC5CDC8B1D80B30F008C2A8D /* CoronaGL */,
 				DC5CDC8A1D80B30F008C2A8D /* Products */,
 			);
@@ -46,10 +155,84 @@
 		DC5CDC8B1D80B30F008C2A8D /* CoronaGL */ = {
 			isa = PBXGroup;
 			children = (
-				DC5CDC8C1D80B30F008C2A8D /* CoronaGL.h */,
+				DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */,
+				DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */,
+				DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */,
+				DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */,
+				DC5CDC971D80B351008C2A8D /* GLSDoubleSprite.swift */,
+				DC5CDC981D80B351008C2A8D /* GLSFireSprite.swift */,
+				DC5CDC991D80B351008C2A8D /* GLSFrameBuffer.swift */,
+				DC5CDC9A1D80B351008C2A8D /* GLSFrameSprite.swift */,
+				DC5CDC9B1D80B351008C2A8D /* GLSGradientSprite.swift */,
+				DC5CDC9C1D80B351008C2A8D /* GLSGroupNode.swift */,
+				DC5CDC9D1D80B351008C2A8D /* GLSNode.swift */,
+				DC5CDC9F1D80B351008C2A8D /* GLSParticleEmitter.swift */,
+				DC5CDCA01D80B351008C2A8D /* GLSPerlinNoiseSprite.swift */,
+				DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */,
+				DC5CDCA21D80B351008C2A8D /* GLSRecursivePropertyNode.swift */,
+				DC5CDCA41D80B351008C2A8D /* GLSSprite.swift */,
+				DC5CDCB61D80B355008C2A8D /* Helpers */,
+				DC5CDCED1D80B6C5008C2A8D /* Noise */,
 				DC5CDC8E1D80B30F008C2A8D /* Info.plist */,
 			);
 			path = CoronaGL;
+			sourceTree = "<group>";
+		};
+		DC5CDCB61D80B355008C2A8D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DC5CDCB71D80B360008C2A8D /* CCTexture.swift */,
+				DC5CDCB81D80B360008C2A8D /* CCTextureOrganizer.swift */,
+				DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */,
+				DC5CDCB91D80B360008C2A8D /* GLAttributeBridger.swift */,
+				DC5CDCBA1D80B360008C2A8D /* GLGradientTexture2D.swift */,
+				DC5CDCBB1D80B360008C2A8D /* GLKOmniController.swift */,
+				DC5CDCBC1D80B360008C2A8D /* GLProgramDictionary.swift */,
+				DC5CDCBD1D80B360008C2A8D /* GLSAnimator.swift */,
+				DC5CDCBE1D80B360008C2A8D /* GLSCamera.swift */,
+				DC5CDCBF1D80B360008C2A8D /* GLSFramebufferReference.swift */,
+				DC5CDCC01D80B360008C2A8D /* GLSFramebufferStack.swift */,
+				DC5CDCC11D80B360008C2A8D /* GLSNode+Animation.swift */,
+				DC5CDCC21D80B360008C2A8D /* MultiTexturedQuad.swift */,
+				DC5CDCC31D80B360008C2A8D /* NoiseFadeAnimation.swift */,
+				DC5CDCC41D80B360008C2A8D /* NoiseTexture2D.swift */,
+				DC5CDCC51D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift */,
+				DC5CDCC61D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift */,
+				DC5CDCC71D80B360008C2A8D /* ShaderHelper.swift */,
+				DC5CDCC81D80B360008C2A8D /* TexturedQuad.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		DC5CDCDF1D80B388008C2A8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DC5CDCE31D80B388008C2A8D /* CoronaConvenience.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DC5CDCE61D80B3BD008C2A8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DC5CDCEB1D80B3BD008C2A8D /* CoronaStructures.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DC5CDCED1D80B6C5008C2A8D /* Noise */ = {
+			isa = PBXGroup;
+			children = (
+				DC5CDCEE1D80B6D1008C2A8D /* BilinearArray.swift */,
+				DC5CDCEF1D80B6D1008C2A8D /* FluctuatingNoise1D.swift */,
+				DC5CDCF01D80B6D1008C2A8D /* LinearArray.swift */,
+				DC5CDCF21D80B6D1008C2A8D /* NoiseArray1D.swift */,
+				DC5CDCF31D80B6D1008C2A8D /* NoiseArray2D.swift */,
+				DC5CDCF41D80B6D1008C2A8D /* NoiseArray3D.swift */,
+				DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */,
+				DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */,
+			);
+			name = Noise;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,7 +242,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC5CDC8D1D80B30F008C2A8D /* CoronaGL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,12 +290,39 @@
 			mainGroup = DC5CDC7F1D80B30F008C2A8D;
 			productRefGroup = DC5CDC8A1D80B30F008C2A8D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DC5CDCDF1D80B388008C2A8D /* Products */;
+					ProjectRef = DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */;
+				},
+				{
+					ProductGroup = DC5CDCE61D80B3BD008C2A8D /* Products */;
+					ProjectRef = DC5CDCE51D80B3BD008C2A8D /* CoronaStructures.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				DC5CDC881D80B30F008C2A8D /* CoronaGL */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DC5CDCE31D80B388008C2A8D /* CoronaConvenience.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CoronaConvenience.framework;
+			remoteRef = DC5CDCE21D80B388008C2A8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DC5CDCEB1D80B3BD008C2A8D /* CoronaStructures.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CoronaStructures.framework;
+			remoteRef = DC5CDCEA1D80B3BD008C2A8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DC5CDC871D80B30F008C2A8D /* Resources */ = {
@@ -130,6 +339,49 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC5CDCDA1D80B360008C2A8D /* TexturedQuad.swift in Sources */,
+				DC5CDCA81D80B351008C2A8D /* GLSDoubleSprite.swift in Sources */,
+				DC5CDCD41D80B360008C2A8D /* MultiTexturedQuad.swift in Sources */,
+				DC5CDCD21D80B360008C2A8D /* GLSFramebufferStack.swift in Sources */,
+				DC5CDCC91D80B360008C2A8D /* CCTexture.swift in Sources */,
+				DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */,
+				DC5CDCAE1D80B351008C2A8D /* GLSNode.swift in Sources */,
+				DC5CDCF71D80B6D1008C2A8D /* BilinearArray.swift in Sources */,
+				DC5CDCD31D80B360008C2A8D /* GLSNode+Animation.swift in Sources */,
+				DC5CDCB01D80B351008C2A8D /* GLSParticleEmitter.swift in Sources */,
+				DC5CDCCD1D80B360008C2A8D /* GLKOmniController.swift in Sources */,
+				DC5CDCFC1D80B6D1008C2A8D /* NoiseArray2D.swift in Sources */,
+				DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */,
+				DC5CDCA91D80B351008C2A8D /* GLSFireSprite.swift in Sources */,
+				DC5CDCB51D80B351008C2A8D /* GLSSprite.swift in Sources */,
+				DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */,
+				DC5CDCAD1D80B351008C2A8D /* GLSGroupNode.swift in Sources */,
+				DC5CDCAA1D80B351008C2A8D /* GLSFrameBuffer.swift in Sources */,
+				DC5CDCB21D80B351008C2A8D /* GLSRadialGradientSprite.swift in Sources */,
+				DC5CDCAC1D80B351008C2A8D /* GLSGradientSprite.swift in Sources */,
+				DC5CDCD01D80B360008C2A8D /* GLSCamera.swift in Sources */,
+				DC5CDCD61D80B360008C2A8D /* NoiseTexture2D.swift in Sources */,
+				DC5CDCD81D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift in Sources */,
+				DC5CDCD71D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift in Sources */,
+				DC5CDCCF1D80B360008C2A8D /* GLSAnimator.swift in Sources */,
+				DC5CDCAB1D80B351008C2A8D /* GLSFrameSprite.swift in Sources */,
+				DC5CDCD51D80B360008C2A8D /* NoiseFadeAnimation.swift in Sources */,
+				DC806F371D8202A9006F95F7 /* GLSBoolList2DSprite.swift in Sources */,
+				DC5CDCCB1D80B360008C2A8D /* GLAttributeBridger.swift in Sources */,
+				DC5CDCFE1D80B6D1008C2A8D /* SmoothingFunctions.swift in Sources */,
+				DC5CDCF91D80B6D1008C2A8D /* LinearArray.swift in Sources */,
+				DC5CDCCA1D80B360008C2A8D /* CCTextureOrganizer.swift in Sources */,
+				DC5CDCCE1D80B360008C2A8D /* GLProgramDictionary.swift in Sources */,
+				DC5CDCCC1D80B360008C2A8D /* GLGradientTexture2D.swift in Sources */,
+				DC5CDCD11D80B360008C2A8D /* GLSFramebufferReference.swift in Sources */,
+				DC5CDCD91D80B360008C2A8D /* ShaderHelper.swift in Sources */,
+				DC5CDCB31D80B351008C2A8D /* GLSRecursivePropertyNode.swift in Sources */,
+				DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */,
+				DC5CDCB11D80B351008C2A8D /* GLSPerlinNoiseSprite.swift in Sources */,
+				DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */,
+				DC5CDCFD1D80B6D1008C2A8D /* NoiseArray3D.swift in Sources */,
+				DC5CDCF81D80B6D1008C2A8D /* FluctuatingNoise1D.swift in Sources */,
+				DC5CDCFB1D80B6D1008C2A8D /* NoiseArray1D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +482,7 @@
 		DC5CDC921D80B30F008C2A8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -240,12 +493,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Corona-Corporation.CoronaGL";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		DC5CDC931D80B30F008C2A8D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -278,6 +533,7 @@
 				DC5CDC931D80B30F008C2A8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
