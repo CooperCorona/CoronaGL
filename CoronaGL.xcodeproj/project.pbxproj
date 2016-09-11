@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC0266011D84B48400D763CC /* StaticRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0266001D84B48400D763CC /* StaticRenderer.swift */; };
 		DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */; };
 		DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */; };
 		DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC0266001D84B48400D763CC /* StaticRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRenderer.swift; sourceTree = "<group>"; };
 		DC5CDC891D80B30F008C2A8D /* CoronaGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5CDC8E1D80B30F008C2A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSTileSprite.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				DC5CDCC51D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift */,
 				DC5CDCC61D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift */,
 				DC5CDCC71D80B360008C2A8D /* ShaderHelper.swift */,
+				DC0266001D84B48400D763CC /* StaticRenderer.swift */,
 				DC5CDCC81D80B360008C2A8D /* TexturedQuad.swift */,
 			);
 			name = Helpers;
@@ -357,6 +360,7 @@
 				DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */,
 				DC5CDCAD1D80B351008C2A8D /* GLSGroupNode.swift in Sources */,
 				DC5CDCAA1D80B351008C2A8D /* GLSFrameBuffer.swift in Sources */,
+				DC0266011D84B48400D763CC /* StaticRenderer.swift in Sources */,
 				DC5CDCB21D80B351008C2A8D /* GLSRadialGradientSprite.swift in Sources */,
 				DC5CDCAC1D80B351008C2A8D /* GLSGradientSprite.swift in Sources */,
 				DC5CDCD01D80B360008C2A8D /* GLSCamera.swift in Sources */,
