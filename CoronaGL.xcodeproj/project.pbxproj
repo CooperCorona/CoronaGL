@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DC0266011D84B48400D763CC /* StaticRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0266001D84B48400D763CC /* StaticRenderer.swift */; };
+		DC087D471D85F76800104A84 /* HealthBarSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC087D461D85F76800104A84 /* HealthBarSprite.swift */; };
 		DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */; };
 		DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */; };
 		DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */; };
@@ -74,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		DC0266001D84B48400D763CC /* StaticRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRenderer.swift; sourceTree = "<group>"; };
+		DC087D461D85F76800104A84 /* HealthBarSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthBarSprite.swift; sourceTree = "<group>"; };
 		DC5CDC891D80B30F008C2A8D /* CoronaGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5CDC8E1D80B30F008C2A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSTileSprite.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */,
 				DC5CDCA21D80B351008C2A8D /* GLSRecursivePropertyNode.swift */,
 				DC5CDCA41D80B351008C2A8D /* GLSSprite.swift */,
+				DC087D461D85F76800104A84 /* HealthBarSprite.swift */,
 				DC5CDCB61D80B355008C2A8D /* Helpers */,
 				DC5CDCED1D80B6C5008C2A8D /* Noise */,
 				DC5CDC8E1D80B30F008C2A8D /* Info.plist */,
@@ -383,6 +386,7 @@
 				DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */,
 				DC5CDCB11D80B351008C2A8D /* GLSPerlinNoiseSprite.swift in Sources */,
 				DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */,
+				DC087D471D85F76800104A84 /* HealthBarSprite.swift in Sources */,
 				DC5CDCFD1D80B6D1008C2A8D /* NoiseArray3D.swift in Sources */,
 				DC5CDCF81D80B6D1008C2A8D /* FluctuatingNoise1D.swift in Sources */,
 				DC5CDCFB1D80B6D1008C2A8D /* NoiseArray1D.swift in Sources */,
