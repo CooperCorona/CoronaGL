@@ -44,7 +44,6 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         
         init(type:NoiseType) {
             
-            
             let program:GLuint
             switch type {
             case .Default:

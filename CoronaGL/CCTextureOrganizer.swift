@@ -46,9 +46,9 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         self.parser = XMLFileHandler(files: self.files, directory: self.directory, delegate: self)
         
         if let validParser = self.parser {
-            
+            #if os(iOS)
             EAGLContext.setCurrentContext(CCTextureOrganizer.sharedContext)
-            
+            #endif
             validParser.loadFile()
         }//valid to load
         else {
@@ -119,7 +119,11 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
         let size = CGSize(width: dataComps[2].getCGFloatValue(), height: dataComps[3].getCGFloatValue())
         
+        #if os(iOS)
         let tSize = CGSizeFromString(attributes["size"] as! String)
+        #else
+        let tSize = NSSizeFromString(attributes["size"] as! String)
+        #endif
         let keyStr = attributes["keys"] as! NSString
         let keyComps = keyStr.componentsSeparatedByString(", ") 
         
@@ -175,7 +179,11 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     public func processPreviousIndividualAtlas(name:GLuint, attributes:[NSObject : AnyObject]) {
         
         let key = attributes["key"]! as! String
+        #if os(iOS)
         let frame = CGRectFromString(attributes["frame"]! as! String)
+        #else
+        let frame = NSRectFromString(attributes["frame"]! as! String)
+        #endif
         
         textures[key] = CCTexture(name: name, frame: frame)
     }//process texture that's previously been created
@@ -234,7 +242,9 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
         return tex
         #else
-        fatalError("CCTextureOrganizer::createPDFTexture not implemented for Mac OS X")
+        let image = NSImage.imageWithPDFFile(file, size: size)!
+        let data = image.TIFFRepresentation!
+        return try! GLKTextureLoader.textureWithContentsOfData(data, options: [GLKTextureLoaderOriginBottomLeft:true])
         #endif
     }//create pdf texture with size
     
@@ -286,6 +296,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         return StaticInstance.instance
     }//get dictionary that encapsulates all 'CCTextureOrganizer' instances
     
+    #if os(iOS)
     public class var sharedContext:EAGLContext {
         
         struct StaticInstance {
@@ -300,7 +311,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
         return StaticInstance.instance
     }//get main context
-    
+    #endif
     public class var sharedInstance:CCTextureOrganizer {
         struct StaticInstance {
             static let instance:CCTextureOrganizer = CCTextureOrganizer(identifier:"Shared Instance", files: [], directory: nil)

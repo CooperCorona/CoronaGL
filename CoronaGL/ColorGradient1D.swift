@@ -153,6 +153,16 @@ public class ColorGradient1D: NSObject {
         return SCVector4(x: CGFloat(r) / 255.0, y: CGFloat(g) / 255.0, z: CGFloat(b) / 255.0, w: CGFloat(a) / 255.0)
     }
     
+    public func blendColor(color:SCVector4) -> ColorGradient1D {
+        var anchors:ColorArray = []
+        for anchor in self.anchors {
+            let blendedColor = linearlyInterpolate(color.a, left: anchor.color.xyz, right: color.xyz)
+            anchors.append((color: SCVector4(vector3: blendedColor, wValue: anchor.color.a), weight: anchor.weight))
+        }
+        return ColorGradient1D(colorsAndWeights: anchors, smoothed: self.isSmoothed)
+    }
+    
+    #if os(iOS)
     // MARK: - Quick Look Debug
     public func getImage(height:CGFloat = 32.0) -> UIImage {
         
@@ -177,6 +187,7 @@ public class ColorGradient1D: NSObject {
     public func debugQuickLookObject() -> AnyObject {
         return self.getImage()
     }
+    #endif
     
     // MARK: - Static Gradients
     

@@ -15,6 +15,11 @@ import CoronaConvenience
 import CoronaStructures
 import QuartzCore
 
+#if os(iOS)
+public typealias ImageType = UIImage
+#else
+public typealias ImageType = NSImage
+#endif
 public class GLSFrameBuffer: GLSNode {
     
     private var framebufferName:GLuint = 0
@@ -22,6 +27,16 @@ public class GLSFrameBuffer: GLSNode {
     private var internalTextureName:GLuint = 0
     //    var texture:GLuint { return self.texture }
     public var textureName:GLuint { return self.internalTextureName }
+    #if os(OSX)
+    private(set) public var renderBuffer:GLuint = 0
+    public static let globalContext = NSOpenGLContext(format: NSOpenGLPixelFormat(attributes: [
+        UInt32(NSOpenGLPFAAccelerated),
+        UInt32(NSOpenGLPFAColorSize), UInt32(32),
+        UInt32(NSOpenGLPFAOpenGLProfile),
+        UInt32(NSOpenGLProfileVersion3_2Core),
+        UInt32(0)
+        ])!, shareContext: nil)!
+    #endif
     
     public let internalSize:CGSize
     public let internalScale:CGFloat
@@ -53,6 +68,9 @@ public class GLSFrameBuffer: GLSNode {
     
     ///Initializes a GLSFrameBuffer with a given size and retina scale.
     public init(size:CGSize, scale:CGFloat) {
+        #if os(OSX)
+        GLSFrameBuffer.globalContext.makeCurrentContext()
+        #endif
         
         self.size = size
         self.internalScale = scale
@@ -74,12 +92,14 @@ public class GLSFrameBuffer: GLSNode {
         let height = GLsizei(self.internalSize.height)
         glTexImage2D(enumTex, 0, GLint(GL_RGBA), width, height, 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), nil)
         glFramebufferTexture2D(GLenum(GL_FRAMEBUFFER), GLenum(GL_COLOR_ATTACHMENT0), enumTex, self.internalTextureName, 0)
-        /*
+        
+        #if os(OSX)
         glGenRenderbuffers(1, &self.renderBuffer)
         glBindRenderbuffer(GLenum(GL_RENDERBUFFER), self.renderBuffer)
         glRenderbufferStorage(GLenum(GL_RENDERBUFFER), GLenum(GL_RGBA8), width, height)
         glFramebufferRenderbuffer(GLenum(GL_FRAMEBUFFER), GLenum(GL_COLOR_ATTACHMENT1), GLenum(GL_RENDERBUFFER), self.renderBuffer)
-        */
+        #endif
+        
         let status = glCheckFramebufferStatus(GLenum(GL_FRAMEBUFFER))
         if (status != GLenum(GL_FRAMEBUFFER_COMPLETE)) {
             print("Framebuffer binding failed.")
@@ -90,11 +110,11 @@ public class GLSFrameBuffer: GLSNode {
             print("Size:\(self.size) Internal:\(self.internalSize)")
             print("Width:\(width) Height:\(height)")
         }
-        
+ 
         let ccSize = self.size * self.internalScale / self.internalSize
         self.ccTexture = CCTexture(name: self.internalTextureName, frame: CGRect(x: 0.0, y: 0.0, width: ccSize.width, height: ccSize.height))
         self.sprite = GLSSprite(position: CGPoint.zero, size: self.size, texture: self.ccTexture)
-        
+ 
         super.init(position:CGPoint.zero, size: self.size)
         
         self.vertices = self.sprite.vertices
@@ -142,9 +162,8 @@ public class GLSFrameBuffer: GLSNode {
         
     }//bind clear color
     
+    public func getImage() -> ImageType {
     
-    public func getImage() -> UIImage {
-        
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), self.framebufferName)
         glReadBuffer(GLenum(GL_COLOR_ATTACHMENT0))
         
@@ -205,10 +224,15 @@ public class GLSFrameBuffer: GLSNode {
         let cgIm2 = CGBitmapContextCreateImage(context)
         CGContextRestoreGState(context)
 //        UIGraphicsEndImageContext()
+        #if os(iOS)
         let im = UIImage(CGImage: cgIm2!, scale: self.internalScale, orientation: .Up)
+        #else
+        let im = NSImage(CGImage: cgIm2!, size: self.contentSize)
+        #endif
         return im
     }//get framebuffer as image
     
+    #if os(iOS)
     /**
     Saves contents of framebuffer to png file.
 
@@ -234,7 +258,7 @@ public class GLSFrameBuffer: GLSNode {
         
         return filePath
     }//save with name
-    
+    #endif
     
     override public func clone() -> GLSFrameBuffer {
         
@@ -333,7 +357,6 @@ public extension GLSFrameBuffer {
 //Getters / public class Functions
 public extension GLSFrameBuffer {
     
-    
     public class func isPowerOf2(value:Int) -> Bool {
         return (value & (value - 1)) == 0
     }
@@ -374,7 +397,7 @@ public extension GLSFrameBuffer {
     }//check if size is valid
     
     public class func getRetinaScale() -> CGFloat {
-        
+        #if os(iOS)
         if (UIScreen.mainScreen().respondsToSelector(Selector("nativeScale"))) {
             let nativeScale = UIScreen.mainScreen().nativeScale
             return (nativeScale > 0.0) ? nativeScale : 1.0
@@ -384,8 +407,12 @@ public extension GLSFrameBuffer {
             //was introduced
             return UIScreen.mainScreen().scale
         }
-        
         return 1.0
+        #else
+            //Don't really know how to check for
+            //retina scale value on a Mac.
+            return 1.0
+        #endif
     }//get retina scale
     
 }

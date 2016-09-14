@@ -8,9 +8,6 @@
 
 #if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
 import CoronaConvenience
 import CoronaStructures
 
@@ -107,3 +104,4 @@ public extension GLSCamera {
     }//convert rect to OpenGL
     
 }//Conversions
+#endif

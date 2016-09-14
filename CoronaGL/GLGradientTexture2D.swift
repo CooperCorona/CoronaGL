@@ -61,6 +61,7 @@ public class GLGradientTexture2D: NSObject {
         super.init()
     }//initialize
     
+    #if os(iOS)
     // MARK: - Quick Look Debug
     public func debugQuickLookObject() -> AnyObject {
         /*
@@ -86,7 +87,7 @@ public class GLGradientTexture2D: NSObject {
         */
         return self.gradient.getImage()
     }
-    
+    #endif
     // MARK: - Clean Up
     deinit {
         glDeleteTextures(1, &self.textureName)

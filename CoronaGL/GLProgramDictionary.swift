@@ -11,6 +11,7 @@ import UIKit
 #else
 import Cocoa
 #endif
+import CoronaConvenience
 import CoronaStructures
 
 public class GLProgramDictionary: GLAttributeBridger {
@@ -21,6 +22,10 @@ public class GLProgramDictionary: GLAttributeBridger {
     public let locations:[String]
     
     public var attributeSizes:[Int]? = nil
+    
+    #if os(OSX)
+    private(set) public var vertexArray:GLuint = 0
+    #endif
     
     // MARK: - Setup
     
@@ -57,8 +62,69 @@ public class GLProgramDictionary: GLAttributeBridger {
         super.init(program: program)
         
         self.addAttributes(attributes)
+        
+        #if os(OSX)
+        glGenVertexArrays(1, &self.vertexArray)
+        glBindVertexArray(self.vertexArray)
+        glBindVertexArray(0)
+        #endif
     }
     
+    public convenience init?(program:GLuint, vertexShader:String, fragmentShader:String) {
+        var uniforms:[String]       = []
+        var attributes:[String]     = []
+        var attributeSizes:[Int]    = []
+        let vertexLocations = GLProgramDictionary.bridgeLocationsForFile(vertexShader, shaderType: GLenum(GL_VERTEX_SHADER))
+        uniforms += vertexLocations.uniforms
+        attributes += vertexLocations.attributes
+        attributeSizes += vertexLocations.attributeSizes
+        let fragmentLocations = GLProgramDictionary.bridgeLocationsForFile(fragmentShader, shaderType: GLenum(GL_FRAGMENT_SHADER))
+        uniforms += fragmentLocations.uniforms
+        // Fragment shader doesn't have attributes
+        self.init(program: program, locations: uniforms + attributes)
+        self.attributeSizes = attributeSizes
+    }
+    
+    private class func bridgeLocationsForFile(file:String, shaderType:GLenum) -> (uniforms:[String], attributes:[String], attributeSizes:[Int]) {
+        
+        func isUniform(line:String) -> Bool {
+            return line.hasPrefix("uniform")
+        }
+        
+        func isAttribute(line:String) -> Bool {
+            return line.hasPrefix("attribute") || (line.hasPrefix("in") && shaderType == GLenum(GL_VERTEX_SHADER))
+        }
+        
+        guard let uniformRegex = NSRegularExpression(regex: "u_.*[^;]"),
+            attributeRegex = NSRegularExpression(regex: "a_.*[^;]"),
+            varyingRegex = NSRegularExpression(regex: "v_.*[^;]") else {
+                return ([], [], [])
+        }
+        var uniforms:[String] = []
+        var attributes:[String] = []
+        var attributeSizes:[Int] = []
+        let lines = file.componentsSeparatedByString("\n")
+        for (i, line) in lines.enumerate() {
+            if let uniform = uniformRegex.matchedStringsInString(line).first where isUniform(line) {
+                uniforms.append(uniform)
+            } else if let attribute = attributeRegex.matchedStringsInString(line).first where isAttribute(line) {
+                attributes.append(attribute)
+                if line.containsString("float") {
+                    attributeSizes.append(1)
+                } else if line.containsString("vec2") {
+                    attributeSizes.append(2)
+                } else if line.containsString("vec3") {
+                    attributeSizes.append(3)
+                } else if line.containsString("vec4") {
+                    attributeSizes.append(4)
+                } else {
+                    print("Error: invalid attribute size for line #\(i) \"\(line)\"")
+                }
+            }
+            
+        }
+        return (uniforms, attributes, attributeSizes)
+    }
     // MARK: - Logic
     
     /**
@@ -89,6 +155,9 @@ public class GLProgramDictionary: GLAttributeBridger {
     */
     public func use() {
         glUseProgram(self.program)
+        #if os(OSX)
+        glBindVertexArray(self.vertexArray)
+        #endif
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.vertexBuffer)
     }
     
@@ -107,5 +176,16 @@ public class GLProgramDictionary: GLAttributeBridger {
     public func uniform4f(location:String, value:SCVector4) {
         glUniform4f(self[location], GLfloat(value.x), GLfloat(value.y), GLfloat(value.z), GLfloat(value.w))
     }
-    
+   
+    public func uniformMatrix4fv(location:String, matrix:SCMatrix4) {
+        glUniformMatrix4fv(self[location], 1, 0, matrix.values)
+    }
+
+    #if os(OSX)
+    public func disable() {
+        super.disableAttributes()
+        glUseProgram(0)
+        glBindVertexArray(0)
+    }
+    #endif
 }

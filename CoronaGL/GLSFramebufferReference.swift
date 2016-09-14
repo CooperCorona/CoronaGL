@@ -8,6 +8,7 @@
 
 import GLKit
 
+#if os(iOS)
 public class GLSFramebufferReference: NSObject {
 
     weak var glkView:GLKView? = nil
@@ -72,3 +73,4 @@ public func ==(lhs:GLSFramebufferReference, rhs:GLSFramebufferReference) -> Bool
     
     return false
 }//check if two references refer to the same framebuffer
+#endif

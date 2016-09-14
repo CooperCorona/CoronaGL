@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Cooper Knaak. All rights reserved.
 //
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 import CoronaConvenience
 import CoronaStructures
 

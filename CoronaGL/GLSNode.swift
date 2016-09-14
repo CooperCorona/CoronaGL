@@ -247,8 +247,7 @@ public class GLSNode: NSObject {
             self.iterateChildrenRecursively() { $0.framebufferStack = self.framebufferStack }
         }
     }
-    public var framebufferReference = GLSFramebufferReference()
-    
+//    public var framebufferReference = GLSFramebufferReference()
     public var removeAtUpdate = false
     public var hidden = false
     public var modelMatrixAlwaysUsesRenderSelf = false
@@ -561,7 +560,7 @@ public class GLSNode: NSObject {
     }
     
     //Setters
-    
+    /*
     public func setFramebufferView(view:GLKView) {
         self.framebufferReference = GLSFramebufferReference(view: view)
     }
@@ -569,7 +568,7 @@ public class GLSNode: NSObject {
     public func setGLSFramebuffer(buffer:GLSFrameBuffer) {
         self.framebufferReference = GLSFramebufferReference(framebuffer: buffer)
     }
-    
+    */
     public func setTintIntensityScalar(value:CGFloat) {
         self.tintIntensity = SCVector3(x: value, y: value, z: value)
     }
