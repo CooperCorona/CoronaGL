@@ -22,71 +22,6 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Types
     
-    public class PerlinNoiseProgram {
-        
-        var program:GLuint { return self.attributeBridger.program }
-        let attributeBridger:GLAttributeBridger
-        
-        let u_Projection:GLint
-        let u_TextureInfo:GLint
-        let u_NoiseTextureInfo:GLint
-        let u_GradientInfo:GLint
-        let u_PermutationInfo:GLint
-        let u_Offset:GLint
-        let u_NoiseDivisor:GLint
-        let u_Alpha:GLint
-        let u_Period:GLint
-        let a_Position:GLint
-        let a_Texture:GLint
-        let a_NoiseTexture:GLint
-        
-        let u_NoiseAngle:GLint
-        
-        init(type:NoiseType) {
-            
-            let program:GLuint
-            switch type {
-            case .Default:
-                program = ShaderHelper.programForString("Perlin Noise Shader")!
-            case .Fractal:
-                program = ShaderHelper.programForString("Perlin Fractal Noise Shader")!
-            case .Abs:
-                program = ShaderHelper.programForString("Perlin Abs Noise Shader")!
-            case .Sin:
-                program = ShaderHelper.programForString("Perlin Sin Noise Shader")!
-            }
-            
-            while glGetError() != GLenum(GL_NO_ERROR) {
-                
-            }
-            self.u_Projection       = glGetUniformLocation(program, "u_Projection")
-            self.u_TextureInfo      = glGetUniformLocation(program, "u_TextureInfo")
-            self.u_NoiseTextureInfo = glGetUniformLocation(program, "u_NoiseTextureInfo")
-            self.u_GradientInfo     = glGetUniformLocation(program, "u_GradientInfo")
-            self.u_PermutationInfo  = glGetUniformLocation(program, "u_PermutationInfo")
-            self.u_Offset           = glGetUniformLocation(program, "u_Offset")
-            self.u_NoiseDivisor     = glGetUniformLocation(program, "u_NoiseDivisor")
-            self.u_Alpha            = glGetUniformLocation(program, "u_Alpha")
-            self.u_Period           = glGetUniformLocation(program, "u_Period")
-            self.a_Position     = glGetAttribLocation(program, "a_Position")
-            self.a_Texture      = glGetAttribLocation(program, "a_Texture")
-            self.a_NoiseTexture = glGetAttribLocation(program, "a_NoiseTexture")
-
-            self.attributeBridger = GLAttributeBridger(program: program)
-            
-            let atts = [self.a_Position, self.a_Texture, self.a_NoiseTexture]
-            self.attributeBridger.addAttributes(atts)
-            
-            if (type == .Sin) {
-                self.u_NoiseAngle = glGetUniformLocation(program, "u_NoiseAngle")
-            } else {
-                self.u_NoiseAngle = 0
-            }
-            
-        }//initialize
-        
-    }
-    
     public struct PerlinNoiseVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
         var texture:(GLfloat, GLfloat)  = (0.0, 0.0)
@@ -103,7 +38,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Properties
     
-    public private(set) var noiseProgram = PerlinNoiseProgram(type: .Default)
+    private var noiseProgram = ShaderHelper.programDictionaryForString("Perlin Noise Shader")!
     
     ///Texture used to find, generate, and interpolate between noise values.
     public var noiseTexture:Noise3DTexture2D
@@ -117,13 +52,23 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     }
     
     public let noiseVertices:TexturedQuadVertices<PerlinNoiseVertex> = []
-//    public let buffer:GLSFrameBuffer
     public private(set) var buffer:GLSFrameBuffer
     
     ///What type of noise is drawn (Default, Fractal, etc.)
     public var noiseType:NoiseType = NoiseType.Default {
         didSet {
-            self.noiseProgram = PerlinNoiseProgram(type: noiseType)
+            let key:String
+            switch self.noiseType {
+            case .Default:
+                key = "Perlin Noise Shader"
+            case .Fractal:
+                key = "Perlin Fractal Noise Shader"
+            case .Abs:
+                key = "Perlin Abs Noise Shader"
+            case .Sin:
+                key = "Perlin Sin Noise Shader"
+            }
+            self.noiseProgram = ShaderHelper.programDictionaryForString(key)!
             self.bufferIsDirty = true
         }
     }
@@ -306,46 +251,43 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         glClearColor(0.0, 0.0, 0.0, 0.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
         
-        glUseProgram(self.noiseProgram.program)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.noiseProgram.attributeBridger.vertexBuffer)
+        self.noiseProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.noiseVertices.size, self.noiseVertices.vertices, GLenum(GL_STATIC_DRAW))
         
-//        let proj = GLSUniversalRenderer.sharedInstance.projection
         let proj = self.projection
-        glUniformMatrix4fv(self.noiseProgram.u_Projection, 1, 0, proj.values)
+        self.noiseProgram.uniformMatrix4fv("u_Projection", matrix: proj)
         
-        glUniform1i(self.noiseProgram.u_TextureInfo, 0)
+        glUniform1i(self.noiseProgram["u_TextureInfo"], 0)
         glActiveTexture(GLenum(GL_TEXTURE0))
         glBindTexture(GLenum(GL_TEXTURE_2D), self.shadeTexture?.name ?? 0)
         
-        glUniform1i(self.noiseProgram.u_NoiseTextureInfo, 1)
+        glUniform1i(self.noiseProgram["u_NoiseTextureInfo"], 1)
         glActiveTexture(GLenum(GL_TEXTURE1))
         glBindTexture(GLenum(GL_TEXTURE_2D), self.noiseTexture.noiseTexture)
         
-        glUniform1i(self.noiseProgram.u_GradientInfo, 2)
+        glUniform1i(self.noiseProgram["u_GradientInfo"], 2)
         glActiveTexture(GLenum(GL_TEXTURE2))
         glBindTexture(GLenum(GL_TEXTURE_2D), self.gradient.textureName)
         
-        glUniform1i(self.noiseProgram.u_PermutationInfo, 3)
+        glUniform1i(self.noiseProgram["u_PermutationInfo"], 3)
         glActiveTexture(GLenum(GL_TEXTURE3))
         glBindTexture(GLenum(GL_TEXTURE_2D), self.noiseTexture.permutationTexture)
         
-//        glUniform1iv(self.noiseProgram.u_Permutations, 256, self.permutations)
-        self.bridgeUniform3f(self.noiseProgram.u_Offset, vector: self.offset)
-        glUniform1f(self.noiseProgram.u_NoiseDivisor, GLfloat(self.noiseDivisor))
-        glUniform1f(self.noiseProgram.u_Alpha, GLfloat(self.noiseAlpha))
-        glUniform3i(self.noiseProgram.u_Period, GLint(self.period.x), GLint(self.period.y), GLint(self.period.z))
+        self.noiseProgram.uniform3f("u_Offset", value: self.offset)
+        glUniform1f(self.noiseProgram["u_NoiseDivisor"], GLfloat(self.noiseDivisor))
+        glUniform1f(self.noiseProgram["u_Alpha"], GLfloat(self.noiseAlpha))
+        glUniform3i(self.noiseProgram["u_Period"], GLint(self.period.x), GLint(self.period.y), GLint(self.period.z))
         
         if (self.noiseType == .Sin) {
-            glUniform1f(self.noiseProgram.u_NoiseAngle, GLfloat(self.noiseAngle))
+            glUniform1f(self.noiseProgram["u_NoiseAngle"], GLfloat(self.noiseAngle))
         }
         
-        self.noiseProgram.attributeBridger.enableAttributes()
-        self.noiseProgram.attributeBridger.bridgeAttributesWithSizes([2, 2, 3], stride: self.noiseVertices.stride)
+        self.noiseProgram.enableAttributes()
+        self.noiseProgram.bridgeAttributesWithSizes([2, 2, 3], stride: self.noiseVertices.stride)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.noiseVertices.count))
         
-        self.noiseProgram.attributeBridger.disableAttributes()
+        self.noiseProgram.disable()
         self.framebufferStack?.popFramebuffer()
         glActiveTexture(GLenum(GL_TEXTURE0))
         
