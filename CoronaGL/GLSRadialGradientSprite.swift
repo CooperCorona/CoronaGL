@@ -15,35 +15,7 @@ import CoronaConvenience
 import CoronaStructures
 
 public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
-   
-    class RadialGradientProgram: GLAttributeBridger {
-        
-        let u_Projection:GLint
-        let u_GradientInfo:GLint
-        let u_TextureInfo:GLint
-        let a_Position:GLint
-        let a_RadialTexture:GLint
-        let a_Texture:GLint
-        
-        init() {
-            let program = ShaderHelper.programForString("Radial Gradient Shader")!
-            
-            self.u_Projection   = glGetUniformLocation(program, "u_Projection")
-            self.u_GradientInfo = glGetUniformLocation(program, "u_GradientInfo")
-            self.u_TextureInfo  = glGetUniformLocation(program, "u_TextureInfo")
-            self.a_Position     = glGetAttribLocation(program, "a_Position")
-            self.a_RadialTexture = glGetAttribLocation(program, "a_RadialTexture")
-            self.a_Texture      = glGetAttribLocation(program, "a_Texture")
-            
-            super.init(program: program)
-            
-            let atts = [self.a_Position, self.a_RadialTexture, self.a_Texture]
-            print("Atts:\(atts)")
-            self.addAttributes(atts)
-        }
-        
-    }
-    
+
     struct RadialVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
         var radialTexture:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -51,7 +23,7 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
     }
     
     public let gradient:GLGradientTexture2D
-    let radialProgram = RadialGradientProgram()
+    let radialProgram = ShaderHelper.programDictionaryForString("Radial Gradient Shader")!
     public let buffer:GLSFrameBuffer
     public var shadeTexture:CCTexture? = nil {
         didSet {
@@ -87,23 +59,20 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
         
         self.framebufferStack?.pushGLSFramebuffer(self.buffer)
         
-        glUseProgram(self.radialProgram.program)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.radialProgram.vertexBuffer)
+        self.radialProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.radialVertices.size, self.radialVertices.vertices, GLenum(GL_STATIC_DRAW))
         
-        //        let proj = GLSUniversalRenderer.sharedInstance.projection
-        let proj = self.projection
-        glUniformMatrix4fv(self.radialProgram.u_Projection, 1, 0, proj.values)
+        self.radialProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
-        self.pushTexture(self.gradient.textureName, atLocation: self.radialProgram.u_GradientInfo)
-        self.pushTexture(self.shadeTexture?.name ?? 0, atLocation: self.radialProgram.u_TextureInfo)
+        self.pushTexture(self.gradient.textureName, atLocation: self.radialProgram["u_GradientInfo"])
+        self.pushTexture(self.shadeTexture?.name ?? 0, atLocation: self.radialProgram["u_TextureInfo"])
         
         self.radialProgram.enableAttributes()
         self.radialProgram.bridgeAttributesWithSizes([2, 2, 2], stride: self.radialVertices.stride)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.radialVertices.count))
         
-        self.radialProgram.disableAttributes()
+        self.radialProgram.disable()
         self.framebufferStack?.popFramebuffer()
         
         self.popTextures()

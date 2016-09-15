@@ -58,24 +58,56 @@ public class ShaderHelper : NSObject {
 //        GLSFrameBuffer.globalContext.makeCurrentContext()
         #endif
         var basePaths:[String:String] = [:]
-        if let path = NSBundle.mainBundle().resourcePath,
-        let enumerator = NSFileManager.defaultManager().enumeratorAtPath(path) {
+        var vshURLs:[String:NSURL] = [:]
+        var fshURLs:[String:NSURL] = [:]
+        if let resourcePath = NSBundle.mainBundle().resourcePath,
+        let enumerator = NSFileManager.defaultManager().enumeratorAtPath(resourcePath) {
             while let currentPath = enumerator.nextObject() as? String {
                 if let (key, path) = self.keyAndPathForPath(currentPath) {
                     basePaths[key] = path
+                    if currentPath.hasSuffix(".vsh") {
+                        vshURLs[key] = NSURL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                    } else if currentPath.hasSuffix(".fsh") {
+                        fshURLs[key] = NSURL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                    }
                 }
             }
                 
         }
+        for (key, path) in basePaths {
+//            let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")
+//            let fshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).fsh")
+            guard let vshURL = vshURLs[key], fshURL = fshURLs[key] else {
+                print("Error: Failed to load shader (\(key)).")
+                continue
+            }
+            let program = self.buildProgramVertexURL(vshURL, fragmentURL: fshURL)
+            self.programs[key] = program
+            
+            self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
+        }
+        /*
         let frames = NSBundle.allFrameworks().filter() { $0.bundlePath.hasSuffix(("CoronaGL.framework")) }
         for frame in [frames[0], NSBundle.mainBundle()] {
             var basePaths:[String:String] = [:]
             guard let resourcePath = frame.resourcePath else {
                 return
             }
+            print(resourcePath)
             if let enumerator = NSFileManager.defaultManager().enumeratorAtPath(resourcePath) {
                 while let currentPath = enumerator.nextObject() as? String {
+                    if currentPath.containsString("Frameworks/") {
+                        //Since the main bundle's enumerator includes the CoronaGL framework as
+                        //a subdirectory, it tries to load all the shaders again, but the
+                        //keyAndPathForPath method strips all the extra information, so
+                        //it tries to load them from the project's own resource path, crashing
+                        //the app. We just ignore the CoronaGL framework (and other frameworks,
+                        //in case they contain shaders
+                        continue
+                    }
+                    print("\t\(currentPath)")
                     if let (key, path) = self.keyAndPathForPath(currentPath) {
+                        print("\t\(currentPath)")
                         basePaths[key] = path
                     }
                 }
@@ -90,6 +122,7 @@ public class ShaderHelper : NSObject {
                 self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
             }
         }
+        */
         /*
         let bundle = NSBundle(forClass: ShaderHelper.self)
         

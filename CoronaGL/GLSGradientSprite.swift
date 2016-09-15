@@ -17,44 +17,6 @@ import CoronaStructures
 ///Maps a gradient to a texture
 public class GLSGradientSprite: GLSSprite, DoubleBuffered {
    
-    // MARK: - Types
-    class GradientProgram: GLAttributeBridger {
-        let u_Projection:GLint
-        let u_TextureInfo:GLint
-        let u_GradientInfo:GLint
-        let a_Position:GLint
-        let a_Texture:GLint
-        
-        init(type:GradientType) {
-//            let program = ShaderHelper.programForString("Basic Gradient Shader")!
-            let program:GLuint
-            switch type {
-            case .Mapped:
-                program = ShaderHelper.programForString("Basic Gradient Shader")!
-            case .Radial:
-                program = ShaderHelper.programForString("Radial Gradient Shader")!
-            }
-            
-            self.u_Projection   = glGetUniformLocation(program, "u_Projection")
-            self.u_TextureInfo  = glGetUniformLocation(program, "u_TextureInfo")
-            self.u_GradientInfo = glGetUniformLocation(program, "u_GradientInfo")
-            self.a_Position     = glGetAttribLocation(program, "a_Position")
-            self.a_Texture      = glGetAttribLocation(program, "a_Texture")
-            
-            super.init(program: program)
-            
-            let atts = [self.a_Position, self.a_Texture]
-            self.addAttributes(atts)
-        }
-        
-    }
-    
-    ///The ways a *GLSGradientSprite* can render a gradient.
-    enum GradientType: String {
-        case Mapped = "Mapped"
-        case Radial = "Radial"
-    }
-    
     struct GradientVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
         var texture:(GLfloat, GLfloat)  = (0.0, 0.0)
@@ -62,24 +24,7 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Properties
     
-    private(set) var gradientProgram = GradientProgram(type: .Mapped)
-    
-    /**
-    How the sprite renders the gradient.
-    
-    If *.Mapped*, then *mapTexture* is used as a color map.
-    
-    If *.Radial*, then *mapTexture* is used as a mask and the
-    gradient is rendered radially (counterclockwise, starting at angle 0.0).
-    */
-    var gradientType:GradientType = .Mapped {
-        didSet {
-            if self.gradientType != oldValue {
-                self.gradientProgram = GradientProgram(type: self.gradientType)
-                self.bufferIsDirty = true
-            }
-        }
-    }
+    let gradientProgram = ShaderHelper.programDictionaryForString("Basic Gradient Shader")!
     
     ///Uses the R value to map colors to the gradient.
     public var mapTexture:CCTexture? = nil {
@@ -147,22 +92,20 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
             return
         }
         
-        glUseProgram(self.gradientProgram.program)
+        self.gradientProgram.use()
         self.gradientVertices.bufferDataWithVertexBuffer(self.gradientProgram.vertexBuffer)
         
-        //        let proj = GLSUniversalRenderer.sharedInstance.projection
-        let proj = self.projection
-        glUniformMatrix4fv(self.gradientProgram.u_Projection, 1, 0, proj.values)
+        self.gradientProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
-        self.pushTexture(self.mapTexture?.name ?? 0, atLocation: self.gradientProgram.u_TextureInfo)
-        self.pushTexture(self.gradient.textureName, atLocation: self.gradientProgram.u_GradientInfo)
+        self.pushTexture(self.mapTexture?.name ?? 0, atLocation: self.gradientProgram["u_TextureInfo"])
+        self.pushTexture(self.gradient.textureName, atLocation: self.gradientProgram["u_GradientInfo"])
        
         self.gradientProgram.enableAttributes()
         self.gradientProgram.bridgeAttributesWithSizes([2, 2], stride: self.gradientVertices.stride)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.gradientVertices.count))
         
-        self.gradientProgram.disableAttributes()
+        self.gradientProgram.disable()
         self.popTextures()
         self.framebufferStack?.popFramebuffer()
         

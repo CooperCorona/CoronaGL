@@ -33,7 +33,7 @@ public struct PEVertex: CustomStringConvertible {
     }
 }
 
-public class GLSParticleEmitter: GLSNode, DoubleBuffered {
+public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     // MARK: - Types
     
@@ -55,23 +55,6 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
             vertex.position = pos.getGLTuple()
             
         }//update vertex
-    }
-    
-    public class ParticleProgram: GLProgramDictionary {
-        
-        public init() {
-            let program = ShaderHelper.programForString("Universal Particle Shader")!
-            let locations = [
-                "u_Projection",
-                "u_TextureInfo",
-                "a_Position",
-                "a_Color",
-                "a_Size",
-                "a_TextureAnchor"
-            ]
-            super.init(program: program, locations: locations)
-        }
-        
     }
     
     // MARK: - Properties
@@ -110,7 +93,7 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
     public let bufferSize:CGFloat
     public let buffer:GLSFrameBuffer
     
-    public let particleProgram = ParticleProgram()
+    public let particleProgram = ShaderHelper.programDictionaryForString("Universal Particle Shader")!
     
     public private(set) var bufferIsDirty = false
     ///CURRENTLY DOES NOTHING. Other GLSNode subclasses invoke renderToTexture in update method if this is true.
@@ -152,18 +135,8 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
         
         let bufSize = CGSize(square: self.bufferSize)
         self.buffer = GLSFrameBuffer(size: bufSize)
-        //        self.buffer.clearColor = SCVector4.darkBlueColor
         
-        super.init(position: CGPoint.zero, size: bufSize)
-        
-        self.framebufferStack?.pushGLSFramebuffer(self.buffer)
-        self.buffer.bindClearColor()
-        self.framebufferStack?.popFramebuffer()
-        
-        self.vertices = self.buffer.sprite.vertices
-        self.texture = self.buffer.sprite.texture
-        
-//        ParticleEmitterBackgroundQueue.addEmitter(self)
+        super.init(position: CGPoint.zero, size: bufSize, texture: self.buffer.ccTexture)
     }//initialize
     
     // MARK: - Logic
@@ -233,48 +206,7 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
         
         self.bufferIsDirty = true
     }
-    /*
-    public func updateParticles(dt:CGFloat) -> (particles:[PEVertex], data:[PEVertexData]) {
-        
-        var storedData = self.particleData
-        var storedParticles = self.particles
-        
-        for iii in 0..<storedParticles.count {
-            
-            if (iii >= storedData.count) {
-                break
-            }
-            
-            storedData[iii].update(dt, vertex: &storedParticles[iii])
-            
-        }//update vertices
-        
-        var filteredParticles:[PEVertex] = []
-        for iii in 0..<storedParticles.count {
-            
-            if (iii >= storedData.count) {
-                break
-            }
-            
-            if (!storedData[iii].isFinished) {
-                filteredParticles.append(storedParticles[iii])
-            }
-        }
-        storedParticles/*self.particles*/ = filteredParticles
-        storedData/*self.particleData*/ = storedData.filter() { !$0.isFinished }
-        
-        self.updateDuration(dt)
-        
-        if (self.isEmitting) {
-            //            self.addParticles(dt)
-            let partsToAdd = self.addParticles(dt)
-            storedParticles/*self.particles*/ += partsToAdd.vertices
-            storedData/*self.particleData*/ += partsToAdd.data
-        }
-        
-        return (storedParticles, storedData)
-    }//potentially add particles
-    */
+
     public func addParticles(dt:CGFloat) -> (vertices:[PEVertex], data:[PEVertexData]) {
         
         self.spawnCount += dt
@@ -321,23 +253,14 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
         glBlendColor(0, 0, 0, 1.0);
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_CONSTANT_ALPHA));
         
-        glUseProgram(self.particleProgram.program)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.particleProgram.vertexBuffer)
+        self.particleProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(PEVertex) * self.particles.count, self.particles, GLenum(GL_STATIC_DRAW))
         
-        let proj = self.projection
-        glUniformMatrix4fv(self.particleProgram["u_Projection"], 1, 0, proj.values)
+        self.particleProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
         if let tex = self.particleTexture {
             glBindTexture(GLenum(GL_TEXTURE_2D), tex.name)
             glUniform1i(self.particleProgram["u_TextureInfo"], 0)
-            /*
-            let x = GLfloat(tex.frame.origin.x)
-            let y = GLfloat(tex.frame.origin.y)
-            let z = GLfloat(tex.frame.size.width)
-            let w = GLfloat(tex.frame.size.height)
-            glUniform4f(self.particleProgram["u_TextureAnchor"], x, y, z, w)
-            */
         }
         
         self.particleProgram.enableAttributes()
@@ -346,8 +269,10 @@ public class GLSParticleEmitter: GLSNode, DoubleBuffered {
         glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(self.particles.count))
         
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
-        self.particleProgram.disableAttributes()
+        self.particleProgram.disable()
         self.framebufferStack?.popFramebuffer()
+        
+        self.bufferIsDirty = false
     }
     
     

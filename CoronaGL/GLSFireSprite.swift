@@ -16,48 +16,6 @@ import CoronaConvenience
 ///Uses 2D Noise to create and animate a colorable fire.
 public class GLSFireSprite: GLSSprite, DoubleBuffered {
     
-    // MARK: - Types
-    
-    public class FireProgram {
-        
-        let program:GLuint
-        let attributeBridger:GLAttributeBridger
-        let u_Projection:GLint
-        let u_Offset:GLint
-        let u_NoiseDivisor:GLint
-        let u_NoiseCenter:GLint
-        let u_NoiseRange:GLint
-        let u_AttenuateAlpha:GLint
-        let u_NoiseTextureInfo:GLint
-        let u_PermutationInfo:GLint
-        let u_GradientInfo:GLint
-        let a_Position:GLint
-        let a_NoiseTexture:GLint
-        
-        init() {
-            let program = ShaderHelper.programForString("Fire Shader")!
-            
-            self.u_Projection       = glGetUniformLocation(program, "u_Projection")
-            self.u_NoiseTextureInfo = glGetUniformLocation(program, "u_NoiseTextureInfo")
-            self.u_PermutationInfo  = glGetUniformLocation(program, "u_PermutationInfo")
-            self.u_GradientInfo     = glGetUniformLocation(program, "u_GradientInfo")
-            self.u_Offset           = glGetUniformLocation(program, "u_Offset")
-            self.u_NoiseDivisor     = glGetUniformLocation(program, "u_NoiseDivisor")
-            self.u_NoiseCenter      = glGetUniformLocation(program, "u_NoiseCenter")
-            self.u_NoiseRange       = glGetUniformLocation(program, "u_NoiseRange")
-            self.u_AttenuateAlpha   = glGetUniformLocation(program, "u_AttenuateAlpha")
-            self.a_Position     = glGetAttribLocation(program, "a_Position")
-            self.a_NoiseTexture = glGetAttribLocation(program, "a_NoiseTexture")
-            
-            self.program = program
-            self.attributeBridger = GLAttributeBridger(program: program)
-            
-            let atts = [self.a_Position, self.a_NoiseTexture]
-            self.attributeBridger.addAttributes(atts)
-        }
-        
-    }
-    
     public struct FireVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
         var noiseTexture:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -73,7 +31,7 @@ public class GLSFireSprite: GLSSprite, DoubleBuffered {
     
     public let buffer:GLSFrameBuffer
     
-    public let fireProgram = FireProgram()
+    public let fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
     public let fireVertices = TexturedQuadVertices(vertex: FireVertex())
     
     ///How much noise (how many peaks/troughs).
@@ -149,34 +107,30 @@ Initialize a Fire sprite.
   
     ///Renders the fire to the background buffer
     public func renderToTexture() {
-        
         self.framebufferStack?.pushGLSFramebuffer(self.buffer)
         self.buffer.bindClearColor()
         
-        glUseProgram(self.fireProgram.program)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.fireProgram.attributeBridger.vertexBuffer)
+        self.fireProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.fireVertices.size, self.fireVertices.vertices, GLenum(GL_STATIC_DRAW))
         
-        //        let proj = GLSUniversalRenderer.sharedInstance.projection
-        let proj = self.projection
-        glUniformMatrix4fv(self.fireProgram.u_Projection, 1, 0, proj.values)
+        self.fireProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
-        glUniform2f(self.fireProgram.u_Offset, GLfloat(self.offset.x), GLfloat(self.offset.y))
-        glUniform1f(self.fireProgram.u_NoiseDivisor, GLfloat(self.noiseDivisor))
-        glUniform1f(self.fireProgram.u_NoiseCenter, GLfloat(self.noiseCenter))
-        glUniform1f(self.fireProgram.u_NoiseRange, GLfloat(self.noiseRange))
-        glUniform1f(self.fireProgram.u_AttenuateAlpha, self.attenuateAlpha ? 1.0 : 0.0)
+        self.fireProgram.uniform2f("u_Offset", value: self.offset)
+        self.fireProgram.uniform1f("u_NoiseDivisor", value: self.noiseDivisor)
+        self.fireProgram.uniform1f("u_NoiseCenter", value: self.noiseCenter)
+        self.fireProgram.uniform1f("u_NoiseRange", value: self.noiseRange)
+        self.fireProgram.uniform1f("u_AttenuateAlpha", value: self.attenuateAlpha ? 1.0 : 0.0)
         
-        self.pushTexture(self.noiseTexture.permutationTexture, atLocation: self.fireProgram.u_PermutationInfo)
-        self.pushTexture(self.noiseTexture.noiseTexture, atLocation: self.fireProgram.u_NoiseTextureInfo)
-        self.pushTexture(self.gradient.textureName, atLocation: self.fireProgram.u_GradientInfo)
+        self.pushTexture(self.noiseTexture.permutationTexture, atLocation: self.fireProgram["u_PermutationInfo"])
+        self.pushTexture(self.noiseTexture.noiseTexture, atLocation: self.fireProgram["u_NoiseTextureInfo"])
+        self.pushTexture(self.gradient.textureName, atLocation: self.fireProgram["u_GradientInfo"])
         
-        self.fireProgram.attributeBridger.enableAttributes()
-        self.fireProgram.attributeBridger.bridgeAttributesWithSizes([2, 2], stride: self.fireVertices.stride)
+        self.fireProgram.enableAttributes()
+        self.fireProgram.bridgeAttributesWithSizes([2, 2], stride: self.fireVertices.stride)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.fireVertices.count))
         
-        self.fireProgram.attributeBridger.disableAttributes()
+        self.fireProgram.disable()
         self.popTextures()
         
         self.framebufferStack?.popFramebuffer()

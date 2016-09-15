@@ -162,6 +162,11 @@ public class GLProgramDictionary: GLAttributeBridger {
     }
     
     
+    ///Invokes glUniform1f with the given location and value, casting to GLfloat.
+    public func uniform1f(location:String, value:CGFloat) {
+        glUniform1f(self[location], GLfloat(value))
+    }
+    
     ///Invokes glUniform2f with the given location and value.
     public func uniform2f(location:String, value:CGPoint) {
         glUniform2f(self[location], GLfloat(value.x), GLfloat(value.y))
@@ -181,11 +186,11 @@ public class GLProgramDictionary: GLAttributeBridger {
         glUniformMatrix4fv(self[location], 1, 0, matrix.values)
     }
 
-    #if os(OSX)
     public func disable() {
         super.disableAttributes()
         glUseProgram(0)
-        glBindVertexArray(0)
+        #if os(OSX)
+            glBindVertexArray(0)
+        #endif
     }
-    #endif
 }

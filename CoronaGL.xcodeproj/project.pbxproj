@@ -53,6 +53,44 @@
 		DC5CDCFE1D80B6D1008C2A8D /* SmoothingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */; };
 		DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */; };
 		DC806F371D8202A9006F95F7 /* GLSBoolList2DSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */; };
+		DCB587321D8A467B00194959 /* AlphaHoleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */; };
+		DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */; };
+		DCB587341D8A467B00194959 /* BasicGradientShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870E1D8A467B00194959 /* BasicGradientShader.fsh */; };
+		DCB587351D8A467B00194959 /* BasicGradientShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870F1D8A467B00194959 /* BasicGradientShader.vsh */; };
+		DCB587361D8A467B00194959 /* BasicShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587101D8A467B00194959 /* BasicShader.fsh */; };
+		DCB587371D8A467B00194959 /* BasicShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587111D8A467B00194959 /* BasicShader.vsh */; };
+		DCB587381D8A467B00194959 /* ColorShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587121D8A467B00194959 /* ColorShader.fsh */; };
+		DCB587391D8A467B00194959 /* ColorShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587131D8A467B00194959 /* ColorShader.vsh */; };
+		DCB5873A1D8A467B00194959 /* DoubleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587141D8A467B00194959 /* DoubleShader.fsh */; };
+		DCB5873B1D8A467B00194959 /* DoubleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587151D8A467B00194959 /* DoubleShader.vsh */; };
+		DCB5873C1D8A467B00194959 /* DummyShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587161D8A467B00194959 /* DummyShader.fsh */; };
+		DCB5873D1D8A467B00194959 /* DummyShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587171D8A467B00194959 /* DummyShader.vsh */; };
+		DCB5873E1D8A467B00194959 /* FastBlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587181D8A467B00194959 /* FastBlurShader.fsh */; };
+		DCB5873F1D8A467B00194959 /* FastBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587191D8A467B00194959 /* FastBlurShader.vsh */; };
+		DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */; };
+		DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */; };
+		DCB587421D8A467B00194959 /* FireShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871C1D8A467B00194959 /* FireShader.fsh */; };
+		DCB587431D8A467B00194959 /* FireShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871D1D8A467B00194959 /* FireShader.vsh */; };
+		DCB587441D8A467B00194959 /* HardBlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */; };
+		DCB587451D8A467B00194959 /* HardBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */; };
+		DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587201D8A467B00194959 /* NoiseShader.fsh */; };
+		DCB587471D8A467B00194959 /* NoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587211D8A467B00194959 /* NoiseShader.vsh */; };
+		DCB587481D8A467B00194959 /* PerlinAbsNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */; };
+		DCB587491D8A467B00194959 /* PerlinAbsNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */; };
+		DCB5874A1D8A467B00194959 /* PerlinFractalNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */; };
+		DCB5874B1D8A467B00194959 /* PerlinFractalNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */; };
+		DCB5874C1D8A467B00194959 /* PerlinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */; };
+		DCB5874D1D8A467B00194959 /* PerlinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */; };
+		DCB5874E1D8A467B00194959 /* PerlinSinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */; };
+		DCB5874F1D8A467B00194959 /* PerlinSinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */; };
+		DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */; };
+		DCB587511D8A467B00194959 /* RadialGradientShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */; };
+		DCB587521D8A467B00194959 /* SoftBlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */; };
+		DCB587531D8A467B00194959 /* SoftBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872D1D8A467B00194959 /* SoftBlurShader.vsh */; };
+		DCB587541D8A467B00194959 /* Universal2DShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872E1D8A467B00194959 /* Universal2DShader.fsh */; };
+		DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872F1D8A467B00194959 /* Universal2DShader.vsh */; };
+		DCB587561D8A467B00194959 /* UniversalParticleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */; };
+		DCB587571D8A467B00194959 /* UniversalParticleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */; };
 		DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */; };
 /* End PBXBuildFile section */
 
@@ -122,6 +160,44 @@
 		DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothingFunctions.swift; sourceTree = "<group>"; };
 		DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrilinearArray.swift; sourceTree = "<group>"; };
 		DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSBoolList2DSprite.swift; sourceTree = "<group>"; };
+		DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.fsh; sourceTree = "<group>"; };
+		DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.vsh; sourceTree = "<group>"; };
+		DCB5870E1D8A467B00194959 /* BasicGradientShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BasicGradientShader.fsh; sourceTree = "<group>"; };
+		DCB5870F1D8A467B00194959 /* BasicGradientShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BasicGradientShader.vsh; sourceTree = "<group>"; };
+		DCB587101D8A467B00194959 /* BasicShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BasicShader.fsh; sourceTree = "<group>"; };
+		DCB587111D8A467B00194959 /* BasicShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BasicShader.vsh; sourceTree = "<group>"; };
+		DCB587121D8A467B00194959 /* ColorShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorShader.fsh; sourceTree = "<group>"; };
+		DCB587131D8A467B00194959 /* ColorShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorShader.vsh; sourceTree = "<group>"; };
+		DCB587141D8A467B00194959 /* DoubleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DoubleShader.fsh; sourceTree = "<group>"; };
+		DCB587151D8A467B00194959 /* DoubleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DoubleShader.vsh; sourceTree = "<group>"; };
+		DCB587161D8A467B00194959 /* DummyShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DummyShader.fsh; sourceTree = "<group>"; };
+		DCB587171D8A467B00194959 /* DummyShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DummyShader.vsh; sourceTree = "<group>"; };
+		DCB587181D8A467B00194959 /* FastBlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastBlurShader.fsh; sourceTree = "<group>"; };
+		DCB587191D8A467B00194959 /* FastBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastBlurShader.vsh; sourceTree = "<group>"; };
+		DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastFractalShader.fsh; sourceTree = "<group>"; };
+		DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastFractalShader.vsh; sourceTree = "<group>"; };
+		DCB5871C1D8A467B00194959 /* FireShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.fsh; sourceTree = "<group>"; };
+		DCB5871D1D8A467B00194959 /* FireShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.vsh; sourceTree = "<group>"; };
+		DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HardBlurShader.fsh; sourceTree = "<group>"; };
+		DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HardBlurShader.vsh; sourceTree = "<group>"; };
+		DCB587201D8A467B00194959 /* NoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoiseShader.fsh; sourceTree = "<group>"; };
+		DCB587211D8A467B00194959 /* NoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoiseShader.vsh; sourceTree = "<group>"; };
+		DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.fsh; sourceTree = "<group>"; };
+		DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.vsh; sourceTree = "<group>"; };
+		DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.fsh; sourceTree = "<group>"; };
+		DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.vsh; sourceTree = "<group>"; };
+		DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.fsh; sourceTree = "<group>"; };
+		DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.vsh; sourceTree = "<group>"; };
+		DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.fsh; sourceTree = "<group>"; };
+		DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.vsh; sourceTree = "<group>"; };
+		DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RadialGradientShader.fsh; sourceTree = "<group>"; };
+		DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RadialGradientShader.vsh; sourceTree = "<group>"; };
+		DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SoftBlurShader.fsh; sourceTree = "<group>"; };
+		DCB5872D1D8A467B00194959 /* SoftBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SoftBlurShader.vsh; sourceTree = "<group>"; };
+		DCB5872E1D8A467B00194959 /* Universal2DShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Universal2DShader.fsh; sourceTree = "<group>"; };
+		DCB5872F1D8A467B00194959 /* Universal2DShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Universal2DShader.vsh; sourceTree = "<group>"; };
+		DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UniversalParticleShader.fsh; sourceTree = "<group>"; };
+		DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UniversalParticleShader.vsh; sourceTree = "<group>"; };
 		DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient1D.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +217,44 @@
 		DC087D821D86082700104A84 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */,
+				DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */,
+				DCB5870E1D8A467B00194959 /* BasicGradientShader.fsh */,
+				DCB5870F1D8A467B00194959 /* BasicGradientShader.vsh */,
+				DCB587101D8A467B00194959 /* BasicShader.fsh */,
+				DCB587111D8A467B00194959 /* BasicShader.vsh */,
+				DCB587121D8A467B00194959 /* ColorShader.fsh */,
+				DCB587131D8A467B00194959 /* ColorShader.vsh */,
+				DCB587141D8A467B00194959 /* DoubleShader.fsh */,
+				DCB587151D8A467B00194959 /* DoubleShader.vsh */,
+				DCB587161D8A467B00194959 /* DummyShader.fsh */,
+				DCB587171D8A467B00194959 /* DummyShader.vsh */,
+				DCB587181D8A467B00194959 /* FastBlurShader.fsh */,
+				DCB587191D8A467B00194959 /* FastBlurShader.vsh */,
+				DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */,
+				DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */,
+				DCB5871C1D8A467B00194959 /* FireShader.fsh */,
+				DCB5871D1D8A467B00194959 /* FireShader.vsh */,
+				DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */,
+				DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */,
+				DCB587201D8A467B00194959 /* NoiseShader.fsh */,
+				DCB587211D8A467B00194959 /* NoiseShader.vsh */,
+				DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */,
+				DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */,
+				DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */,
+				DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */,
+				DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */,
+				DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */,
+				DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */,
+				DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */,
+				DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */,
+				DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */,
+				DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */,
+				DCB5872D1D8A467B00194959 /* SoftBlurShader.vsh */,
+				DCB5872E1D8A467B00194959 /* Universal2DShader.fsh */,
+				DCB5872F1D8A467B00194959 /* Universal2DShader.vsh */,
+				DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */,
+				DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -343,6 +457,44 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCB5874A1D8A467B00194959 /* PerlinFractalNoiseShader.fsh in Resources */,
+				DCB587381D8A467B00194959 /* ColorShader.fsh in Resources */,
+				DCB587481D8A467B00194959 /* PerlinAbsNoiseShader.fsh in Resources */,
+				DCB587341D8A467B00194959 /* BasicGradientShader.fsh in Resources */,
+				DCB587431D8A467B00194959 /* FireShader.vsh in Resources */,
+				DCB587361D8A467B00194959 /* BasicShader.fsh in Resources */,
+				DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */,
+				DCB5874B1D8A467B00194959 /* PerlinFractalNoiseShader.vsh in Resources */,
+				DCB587471D8A467B00194959 /* NoiseShader.vsh in Resources */,
+				DCB587511D8A467B00194959 /* RadialGradientShader.vsh in Resources */,
+				DCB587521D8A467B00194959 /* SoftBlurShader.fsh in Resources */,
+				DCB587451D8A467B00194959 /* HardBlurShader.vsh in Resources */,
+				DCB5873E1D8A467B00194959 /* FastBlurShader.fsh in Resources */,
+				DCB5874D1D8A467B00194959 /* PerlinNoiseShader.vsh in Resources */,
+				DCB587351D8A467B00194959 /* BasicGradientShader.vsh in Resources */,
+				DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */,
+				DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */,
+				DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */,
+				DCB587571D8A467B00194959 /* UniversalParticleShader.vsh in Resources */,
+				DCB587561D8A467B00194959 /* UniversalParticleShader.fsh in Resources */,
+				DCB587391D8A467B00194959 /* ColorShader.vsh in Resources */,
+				DCB587321D8A467B00194959 /* AlphaHoleShader.fsh in Resources */,
+				DCB5873F1D8A467B00194959 /* FastBlurShader.vsh in Resources */,
+				DCB587541D8A467B00194959 /* Universal2DShader.fsh in Resources */,
+				DCB5874E1D8A467B00194959 /* PerlinSinNoiseShader.fsh in Resources */,
+				DCB5874C1D8A467B00194959 /* PerlinNoiseShader.fsh in Resources */,
+				DCB587421D8A467B00194959 /* FireShader.fsh in Resources */,
+				DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */,
+				DCB5874F1D8A467B00194959 /* PerlinSinNoiseShader.vsh in Resources */,
+				DCB5873C1D8A467B00194959 /* DummyShader.fsh in Resources */,
+				DCB5873A1D8A467B00194959 /* DoubleShader.fsh in Resources */,
+				DCB5873D1D8A467B00194959 /* DummyShader.vsh in Resources */,
+				DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */,
+				DCB587491D8A467B00194959 /* PerlinAbsNoiseShader.vsh in Resources */,
+				DCB587441D8A467B00194959 /* HardBlurShader.fsh in Resources */,
+				DCB587531D8A467B00194959 /* SoftBlurShader.vsh in Resources */,
+				DCB587371D8A467B00194959 /* BasicShader.vsh in Resources */,
+				DCB5873B1D8A467B00194959 /* DoubleShader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

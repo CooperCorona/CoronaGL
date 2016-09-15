@@ -14,7 +14,7 @@ import Cocoa
 import CoronaConvenience
 
 ///Code for shader and coefficents for .FastBlur comes from http://xissburg.com/faster-gaussian-blur-in-glsl/
-public class GLSBlurSprite: GLSSprite {
+public class GLSBlurSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Types
     
@@ -40,48 +40,6 @@ public class GLSBlurSprite: GLSSprite {
         public var description:String { return self.rawValue }
     }
     
-    private class BlurProgram: GLAttributeBridger {
-        
-        let type:BlurType
-        
-        let u_Projection:GLint
-        let u_DirectionVector:GLint
-        let u_Size:GLint
-        let u_BlurFactor:GLint
-        let u_TextureInfo:GLint
-        let a_Position:GLint
-        let a_Texture:GLint
-        
-        init(type:BlurType) {
-            
-            let program:GLuint
-            
-            self.type = type
-            switch self.type {
-            case .FastBlur:
-                program = ShaderHelper.programForString("Fast Blur Shader")!
-            case .SoftBlur:
-                program = ShaderHelper.programForString("Soft Blur Shader")!
-            case .HardBlur:
-                program = ShaderHelper.programForString("Hard Blur Shader")!
-            }
-            
-            self.u_Projection = glGetUniformLocation(program, "u_Projection")
-            self.u_DirectionVector = glGetUniformLocation(program, "u_DirectionVector")
-            self.u_TextureInfo = glGetUniformLocation(program, "u_TextureInfo")
-            self.u_Size = glGetUniformLocation(program, "u_Size")
-            self.u_BlurFactor = glGetUniformLocation(program, "u_BlurFactor")
-            self.a_Position = glGetAttribLocation(program, "a_Position")
-            self.a_Texture = glGetAttribLocation(program, "a_Texture")
-            
-            super.init(program: program)
-            
-            let atts = [self.a_Position, self.a_Texture]
-            self.addAttributes(atts)
-        }
-        
-    }
-    
     // MARK: - Properties
     
     ///The texture to blur
@@ -94,16 +52,32 @@ public class GLSBlurSprite: GLSSprite {
     public let horizontalBuffer:GLSFrameBuffer
     ///The framebuffer that contains the totally blurred texture.
     public let verticalBuffer:GLSFrameBuffer
+    ///DoubleBuffered Conformance. Returns verticalBuffer,
+    ///because that is the buffer that contains the final texture.
+    public var buffer:GLSFrameBuffer { return self.verticalBuffer }
+    
+    public var shouldRedraw = true
+    public var bufferIsDirty = false
     
     ///What type of blur to use (changes shader program).
     public var blurType:BlurType = .FastBlur {
         didSet {
             if self.blurType != oldValue {
-                self.blurProgram = BlurProgram(type: self.blurType)
+                switch self.blurType {
+                case .FastBlur:
+                    self.blurProgram = ShaderHelper.programDictionaryForString("Fast Blur Shader")!
+                case .HardBlur:
+                    self.blurProgram = ShaderHelper.programDictionaryForString("Hard Blur Shader")!
+                case .SoftBlur:
+                    self.blurProgram = ShaderHelper.programDictionaryForString("Soft Blur Shader")!
+                }
+                if self.shouldRedraw {
+                    self.renderToTexture()
+                }
             }
         }
     }
-    private var blurProgram = BlurProgram(type: .FastBlur)
+    private var blurProgram = ShaderHelper.programDictionaryForString("Fast Blur Shader")!
     private let horizontalBlurVertices  = TexturedQuadVertices(vertex: UVertex())
     private let verticalBlurVertices    = TexturedQuadVertices(vertex: UVertex())
     
@@ -122,6 +96,9 @@ public class GLSBlurSprite: GLSSprite {
             if self.inAnimationBlock {
                 self.add1Animation(oldValue, end: self.blurFactor) { [unowned self] in self.blurFactor = $0 }
                 self.blurFactor = oldValue
+            }
+            if self.shouldRedraw && !(self.blurFactor ~= oldValue) {
+                self.renderToTexture()
             }
         }
     }
@@ -161,29 +138,27 @@ public class GLSBlurSprite: GLSSprite {
         
         buffer.bindClearColor()
         
-        let dVecX:GLfloat = horizontal ? 1.0 : 0.0
-        let dVecY:GLfloat = horizontal ? 0.0 : 1.0
+        let dVecX:CGFloat = horizontal ? 1.0 : 0.0
+        let dVecY:CGFloat = horizontal ? 0.0 : 1.0
         
-        glUseProgram(self.blurProgram.program)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.blurProgram.vertexBuffer)
+        self.blurProgram.use()
         
         if horizontal {
             glBufferData(GLenum(GL_ARRAY_BUFFER), self.horizontalBlurVertices.size, self.horizontalBlurVertices.vertices, GLenum(GL_STATIC_DRAW))
         } else {
             glBufferData(GLenum(GL_ARRAY_BUFFER), self.verticalBlurVertices.size, self.verticalBlurVertices.vertices, GLenum(GL_STATIC_DRAW))
         }
-//        let proj = GLSUniversalRenderer.sharedInstance.projection
-        let proj = self.projection
-        glUniformMatrix4fv(self.blurProgram.u_Projection, 1, 0, proj.values)
         
-        glUniform1f(self.blurProgram.u_BlurFactor, GLfloat(self.blurFactor))
-        glUniform2f(self.blurProgram.u_Size, GLfloat(self.contentSize.width), GLfloat(self.contentSize.height))
-        glUniform2f(self.blurProgram.u_DirectionVector, dVecX, dVecY)
+        self.blurProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
+        
+        self.blurProgram.uniform1f("u_BlurFactor", value: self.blurFactor)
+        self.blurProgram.uniform2f("u_Size", value: self.contentSize.getCGPoint())
+        self.blurProgram.uniform2f("u_DirectionVector", value: CGPoint(x: dVecX, y: dVecY))
         
         if horizontal {
-            self.pushTexture(self.blurTexture?.name ?? 0, atLocation: self.blurProgram.u_TextureInfo)
+            self.pushTexture(self.blurTexture?.name ?? 0, atLocation: self.blurProgram["u_TextureInfo"])
         } else {
-            self.pushTexture(self.horizontalBuffer.ccTexture.name, atLocation: self.blurProgram.u_TextureInfo)
+            self.pushTexture(self.horizontalBuffer.ccTexture.name, atLocation: self.blurProgram["u_TextureInfo"])
         }
         self.blurProgram.enableAttributes()
         //Stride for both horizontal & vertical is same
@@ -192,18 +167,16 @@ public class GLSBlurSprite: GLSSprite {
         //Count for both horizontal & vertical is same
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.horizontalBlurVertices.count))
         
-        
-        self.blurProgram.disableAttributes()
+        self.blurProgram.disable()
         self.popTextures()
         self.framebufferStack?.popFramebuffer()
     }//render to framebuffer
     
     ///Renders the blurred textures to the background buffers.
-    public func renderToTextures() {
-        
+    public func renderToTexture() {
         self.renderToBuffer(self.horizontalBuffer, horizontal: true)
         self.renderToBuffer(self.verticalBuffer, horizontal: false)
-        
+        self.bufferIsDirty = false
     }//render to textures
     
     private func blurTextureChanged() {
