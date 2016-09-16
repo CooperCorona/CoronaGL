@@ -1,4 +1,5 @@
 precision mediump float;
+
 #define LERP float
 #define Setup(pval, indexL, indexU, distL, distU)\
 indexL = int(floor(pval));\
@@ -13,9 +14,14 @@ uniform sampler2D u_PermutationInfo;
 uniform vec3 u_Offset;
 uniform float u_NoiseDivisor;
 uniform float u_Alpha;
+uniform ivec3 u_Period;
 
 varying vec2 v_Texture;
 varying highp vec3 v_NoiseTexture;
+
+int modulus(int x, int y) {
+    return x - (x / y) * y;
+}
 
 LERP linearlyInterpolate(float weight, LERP low, LERP high) {
     return low * (1.0 - weight) + high * weight;
@@ -60,6 +66,12 @@ float noiseAt(vec3 pos) {
     Setup(pos.x, xIndexL, xIndexU, xDistL, xDistU);
     Setup(pos.y, yIndexL, yIndexU, yDistL, yDistU);
     Setup(pos.z, zIndexL, zIndexU, zDistL, zDistU);
+    xIndexL = modulus(xIndexL, u_Period.x);
+    xIndexU = modulus(xIndexU, u_Period.x);
+    yIndexL = modulus(yIndexL, u_Period.y);
+    yIndexU = modulus(yIndexU, u_Period.y);
+    zIndexL = modulus(zIndexL, u_Period.z);
+    zIndexU = modulus(zIndexU, u_Period.z);
     
     int xPermIndexL = permAtIndex(xIndexL);
     int xPermIndexU = permAtIndex(xIndexU);
@@ -101,6 +113,26 @@ float noiseAt(vec3 pos) {
     vec3 weight = smoothstep(vec3(0.0), vec3(1.0), offsetLLL);
     
     return trilinearlyInterpolate(weight, lll, ull, lul, uul, llu, ulu, luu, uuu);
+    
+    if (v_NoiseTexture.x > 0.5) {
+        
+        return float(xIndexU) / 255.0;
+        if (v_NoiseTexture.y > 0.5) {
+            return float(yPermIndexUU) / 255.0;
+        } else {
+            return float(yPermIndexUL) / 255.0;
+        }
+        
+    } else {
+        
+        return float(xIndexL) / 255.0;
+        if (v_NoiseTexture.y > 0.5) {
+            return float(yPermIndexLU) / 255.0;
+        } else {
+            return float(yPermIndexLL) / 255.0;
+        }
+        
+    }
 }
 
 void main(void) {

@@ -13,9 +13,16 @@ uniform sampler2D u_PermutationInfo;
 uniform vec3 u_Offset;
 uniform float u_NoiseDivisor;
 uniform float u_Alpha;
+uniform ivec3 u_Period;
+
+uniform float u_NoiseAngle;
 
 varying vec2 v_Texture;
 varying highp vec3 v_NoiseTexture;
+
+int modulus(int x, int y) {
+    return x - (x / y) * y;
+}
 
 LERP linearlyInterpolate(float weight, LERP low, LERP high) {
     return low * (1.0 - weight) + high * weight;
@@ -140,12 +147,74 @@ float noiseAt(vec3 pos) {
     return trilinearlyInterpolate(weight, lll, ull, lul, uul, llu, ulu, luu, uuu);
 }
 
-float fractalNoiseAt(vec3 pos) {
+float slowNoiseAt(vec3 pos, int periodFactor) {
     
-    float noise = noiseAt(pos);
-    noise += noiseAt(2.0 * pos) / 2.0;
-    noise += noiseAt(4.0 * pos) / 4.0;
-    noise += noiseAt(8.0 * pos) / 8.0;
+    int xIndexL, xIndexU, yIndexL, yIndexU, zIndexL, zIndexU;
+    float xDistL, xDistU, yDistL, yDistU, zDistL, zDistU;
+    
+    Setup(pos.x, xIndexL, xIndexU, xDistL, xDistU);
+    Setup(pos.y, yIndexL, yIndexU, yDistL, yDistU);
+    Setup(pos.z, zIndexL, zIndexU, zDistL, zDistU);
+    xIndexL = modulus(xIndexL, u_Period.x * periodFactor);
+    xIndexU = modulus(xIndexU, u_Period.x * periodFactor);
+    yIndexL = modulus(yIndexL, u_Period.y * periodFactor);
+    yIndexU = modulus(yIndexU, u_Period.y * periodFactor);
+    zIndexL = modulus(zIndexL, u_Period.z * periodFactor);
+    zIndexU = modulus(zIndexU, u_Period.z * periodFactor);
+    
+    int xPermIndexL = permAtIndex(xIndexL);
+    int xPermIndexU = permAtIndex(xIndexU);
+    
+    int yPermIndexLL = permAtIndex(xPermIndexL + yIndexL);
+    int yPermIndexUL = permAtIndex(xPermIndexU + yIndexL);
+    int yPermIndexLU = permAtIndex(xPermIndexL + yIndexU);
+    int yPermIndexUU = permAtIndex(xPermIndexU + yIndexU);
+    
+    int zPermIndexLLL = permAtIndex(yPermIndexLL + zIndexL);
+    int zPermIndexULL = permAtIndex(yPermIndexUL + zIndexL);
+    int zPermIndexLUL = permAtIndex(yPermIndexLU + zIndexL);
+    int zPermIndexUUL = permAtIndex(yPermIndexUU + zIndexL);
+    int zPermIndexLLU = permAtIndex(yPermIndexLL + zIndexU);
+    int zPermIndexULU = permAtIndex(yPermIndexUL + zIndexU);
+    int zPermIndexLUU = permAtIndex(yPermIndexLU + zIndexU);
+    int zPermIndexUUU = permAtIndex(yPermIndexUU + zIndexU);
+    
+    
+    vec3 offsetLLL = vec3(xDistL, yDistL, zDistL);
+    vec3 offsetULL = vec3(xDistU, yDistL, zDistL);
+    vec3 offsetLUL = vec3(xDistL, yDistU, zDistL);
+    vec3 offsetUUL = vec3(xDistU, yDistU, zDistL);
+    vec3 offsetLLU = vec3(xDistL, yDistL, zDistU);
+    vec3 offsetULU = vec3(xDistU, yDistL, zDistU);
+    vec3 offsetLUU = vec3(xDistL, yDistU, zDistU);
+    vec3 offsetUUU = vec3(xDistU, yDistU, zDistU);
+    
+    
+    float lll = getDotAtIndex(zPermIndexLLL, offsetLLL);
+    float ull = getDotAtIndex(zPermIndexULL, offsetULL);
+    float lul = getDotAtIndex(zPermIndexLUL, offsetLUL);
+    float uul = getDotAtIndex(zPermIndexUUL, offsetUUL);
+    float llu = getDotAtIndex(zPermIndexLLU, offsetLLU);
+    float ulu = getDotAtIndex(zPermIndexULU, offsetULU);
+    float luu = getDotAtIndex(zPermIndexLUU, offsetLUU);
+    float uuu = getDotAtIndex(zPermIndexUUU, offsetUUU);
+    
+    vec3 weight = smoothstep(vec3(0.0), vec3(1.0), offsetLLL);
+    
+    return trilinearlyInterpolate(weight, lll, ull, lul, uul, llu, ulu, luu, uuu);
+}
+
+float fractalNoiseAt(vec3 pos) {
+    /*
+     float noise = noiseAt(pos, 1);
+     noise += noiseAt(2.0 * pos, 2) / 2.0;
+     noise += noiseAt(4.0 * pos, 4) / 4.0;
+     noise += noiseAt(8.0 * pos, 8) / 8.0;
+     */
+    float noise = slowNoiseAt(pos, 1);
+    noise += slowNoiseAt(2.0 * pos, 2) / 2.0;
+    noise += slowNoiseAt(4.0 * pos, 4) / 4.0;
+    noise += slowNoiseAt(8.0 * pos, 8) / 8.0;
     
     return noise;
 }
@@ -156,7 +225,8 @@ void main(void) {
     
     vec3 noiseTex = v_NoiseTexture + u_Offset;
     highp float noise = abs(fractalNoiseAt(noiseTex) / u_NoiseDivisor);
-    noise = 0.5 - cos(3.14159265 * (noiseTex.x + noise)) / 2.0;
+    float cosArg = (noiseTex.x * cos(u_NoiseAngle) + noiseTex.y * sin(u_NoiseAngle));
+    noise = 0.5 - cos(3.14159265 * (cosArg/*noiseTex.x*/ + noise)) / 2.0;
     vec4 graColor = texture2D(u_GradientInfo, vec2(noise, 0.0));
     
     graColor.rgb = mix(vec3(1.0, 1.0, 1.0), graColor.rgb, u_Alpha);

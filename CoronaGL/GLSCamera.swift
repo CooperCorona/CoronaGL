@@ -11,13 +11,13 @@ import UIKit
 import CoronaConvenience
 import CoronaStructures
 
-public class GLSCamera: NSObject {
+open class GLSCamera: NSObject {
     
-    public var position:CGPoint { return self.controller?.container.position ?? CGPoint.zero }
-    public var size = CGSize.zero
-    public weak var controller:GLKOmniController? = nil
+    open var position:CGPoint { return self.controller?.container.position ?? CGPoint.zero }
+    open var size = CGSize.zero
+    open weak var controller:GLKOmniController? = nil
     
-    public func centerForPosition(position:CGPoint) -> CGPoint {
+    open func centerForPosition(position:CGPoint) -> CGPoint {
         
         if let cont = self.controller {
             
@@ -30,7 +30,7 @@ public class GLSCamera: NSObject {
         
     }//get center of container (so that 'position' is in center of screen)
     
-    public func clampCenter(center:CGPoint) -> CGPoint {
+    open func clampCenter(center:CGPoint) -> CGPoint {
         
         if let cont = self.controller {
             
@@ -53,12 +53,9 @@ public class GLSCamera: NSObject {
         }
         
     }//clamp center so you never see off-screen
-
-}
-
-public extension GLSCamera {
     
-    public func convertPointToOpenGL(point:CGPoint) -> CGPoint {
+    
+    open func convertPointToOpenGL(point:CGPoint) -> CGPoint {
         
         var glPoint = point
         if let vSize = self.controller?.getFrame().size {
@@ -68,7 +65,7 @@ public extension GLSCamera {
         return glPoint - self.position
     }//convert UI point to GL point
     
-    public func convertPointFromOpenGL(point:CGPoint) -> CGPoint {
+    open func convertPointFromOpenGL(point:CGPoint) -> CGPoint {
         
         var glPoint = point + self.position
         
@@ -79,7 +76,7 @@ public extension GLSCamera {
         return glPoint
     }//convert GL point to UI point
     
-    public func convertRectToOpenGL(rect:CGRect) -> CGRect {
+    open func convertRectToOpenGL(rect:CGRect) -> CGRect {
         var origin = rect.origin
         var maxPoint = origin + rect.size.getCGPoint()
         
@@ -90,7 +87,7 @@ public extension GLSCamera {
         return glRect.standardized
     }//convert rect to OpenGL
     
-    public func convertRectFromOpenGL(rect:CGRect) -> CGRect {
+    open func convertRectFromOpenGL(rect:CGRect) -> CGRect {
         var origin = rect.origin
         var maxPoint = origin + rect.size.getCGPoint()
         
@@ -100,6 +97,6 @@ public extension GLSCamera {
         var uiRect = CGRect(x: origin.x, y: origin.y, width: maxPoint.x - origin.x, height: maxPoint.y - origin.y)
         return uiRect.standardized
     }//convert rect to OpenGL
-    
-}//Conversions
+}
+
 #endif

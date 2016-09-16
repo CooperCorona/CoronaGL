@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		DC0266011D84B48400D763CC /* StaticRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0266001D84B48400D763CC /* StaticRenderer.swift */; };
 		DC087D471D85F76800104A84 /* HealthBarSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC087D461D85F76800104A84 /* HealthBarSprite.swift */; };
+		DC4054251D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC40541D1D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh */; };
+		DC4054261D8C6B0D00608A8F /* PerlinAbsNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC40541E1D8C6B0D00608A8F /* PerlinAbsNoiseShader.vsh */; };
+		DC4054271D8C6B0D00608A8F /* PerlinFractalNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC40541F1D8C6B0D00608A8F /* PerlinFractalNoiseShader.fsh */; };
+		DC4054281D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054201D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh */; };
+		DC4054291D8C6B0D00608A8F /* PerlinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054211D8C6B0D00608A8F /* PerlinNoiseShader.fsh */; };
+		DC40542A1D8C6B0D00608A8F /* PerlinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054221D8C6B0D00608A8F /* PerlinNoiseShader.vsh */; };
+		DC40542B1D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054231D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh */; };
+		DC40542C1D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054241D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh */; };
 		DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */; };
 		DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */; };
 		DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */; };
@@ -78,14 +86,6 @@
 		DCB587451D8A467B00194959 /* HardBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */; };
 		DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587201D8A467B00194959 /* NoiseShader.fsh */; };
 		DCB587471D8A467B00194959 /* NoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587211D8A467B00194959 /* NoiseShader.vsh */; };
-		DCB587481D8A467B00194959 /* PerlinAbsNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */; };
-		DCB587491D8A467B00194959 /* PerlinAbsNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */; };
-		DCB5874A1D8A467B00194959 /* PerlinFractalNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */; };
-		DCB5874B1D8A467B00194959 /* PerlinFractalNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */; };
-		DCB5874C1D8A467B00194959 /* PerlinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */; };
-		DCB5874D1D8A467B00194959 /* PerlinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */; };
-		DCB5874E1D8A467B00194959 /* PerlinSinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */; };
-		DCB5874F1D8A467B00194959 /* PerlinSinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */; };
 		DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */; };
 		DCB587511D8A467B00194959 /* RadialGradientShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */; };
 		DCB587521D8A467B00194959 /* SoftBlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */; };
@@ -115,6 +115,14 @@
 /* Begin PBXFileReference section */
 		DC0266001D84B48400D763CC /* StaticRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRenderer.swift; sourceTree = "<group>"; };
 		DC087D461D85F76800104A84 /* HealthBarSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthBarSprite.swift; sourceTree = "<group>"; };
+		DC40541D1D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.fsh; sourceTree = "<group>"; };
+		DC40541E1D8C6B0D00608A8F /* PerlinAbsNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.vsh; sourceTree = "<group>"; };
+		DC40541F1D8C6B0D00608A8F /* PerlinFractalNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.fsh; sourceTree = "<group>"; };
+		DC4054201D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.vsh; sourceTree = "<group>"; };
+		DC4054211D8C6B0D00608A8F /* PerlinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.fsh; sourceTree = "<group>"; };
+		DC4054221D8C6B0D00608A8F /* PerlinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.vsh; sourceTree = "<group>"; };
+		DC4054231D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.fsh; sourceTree = "<group>"; };
+		DC4054241D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.vsh; sourceTree = "<group>"; };
 		DC5CDC891D80B30F008C2A8D /* CoronaGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5CDC8E1D80B30F008C2A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSTileSprite.swift; sourceTree = "<group>"; };
@@ -184,14 +192,6 @@
 		DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HardBlurShader.vsh; sourceTree = "<group>"; };
 		DCB587201D8A467B00194959 /* NoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoiseShader.fsh; sourceTree = "<group>"; };
 		DCB587211D8A467B00194959 /* NoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoiseShader.vsh; sourceTree = "<group>"; };
-		DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.fsh; sourceTree = "<group>"; };
-		DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinAbsNoiseShader.vsh; sourceTree = "<group>"; };
-		DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.fsh; sourceTree = "<group>"; };
-		DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinFractalNoiseShader.vsh; sourceTree = "<group>"; };
-		DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.fsh; sourceTree = "<group>"; };
-		DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.vsh; sourceTree = "<group>"; };
-		DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.fsh; sourceTree = "<group>"; };
-		DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.vsh; sourceTree = "<group>"; };
 		DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RadialGradientShader.fsh; sourceTree = "<group>"; };
 		DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RadialGradientShader.vsh; sourceTree = "<group>"; };
 		DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SoftBlurShader.fsh; sourceTree = "<group>"; };
@@ -242,14 +242,14 @@
 				DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */,
 				DCB587201D8A467B00194959 /* NoiseShader.fsh */,
 				DCB587211D8A467B00194959 /* NoiseShader.vsh */,
-				DCB587221D8A467B00194959 /* PerlinAbsNoiseShader.fsh */,
-				DCB587231D8A467B00194959 /* PerlinAbsNoiseShader.vsh */,
-				DCB587241D8A467B00194959 /* PerlinFractalNoiseShader.fsh */,
-				DCB587251D8A467B00194959 /* PerlinFractalNoiseShader.vsh */,
-				DCB587261D8A467B00194959 /* PerlinNoiseShader.fsh */,
-				DCB587271D8A467B00194959 /* PerlinNoiseShader.vsh */,
-				DCB587281D8A467B00194959 /* PerlinSinNoiseShader.fsh */,
-				DCB587291D8A467B00194959 /* PerlinSinNoiseShader.vsh */,
+				DC40541D1D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh */,
+				DC40541E1D8C6B0D00608A8F /* PerlinAbsNoiseShader.vsh */,
+				DC40541F1D8C6B0D00608A8F /* PerlinFractalNoiseShader.fsh */,
+				DC4054201D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh */,
+				DC4054211D8C6B0D00608A8F /* PerlinNoiseShader.fsh */,
+				DC4054221D8C6B0D00608A8F /* PerlinNoiseShader.vsh */,
+				DC4054231D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh */,
+				DC4054241D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh */,
 				DCB5872A1D8A467B00194959 /* RadialGradientShader.fsh */,
 				DCB5872B1D8A467B00194959 /* RadialGradientShader.vsh */,
 				DCB5872C1D8A467B00194959 /* SoftBlurShader.fsh */,
@@ -472,42 +472,42 @@
 			files = (
 				DC8EC0581D8C435800CA55AD /* UniversalParticleShader.fsh in Resources */,
 				DC8EC0591D8C435800CA55AD /* UniversalParticleShader.vsh in Resources */,
-				DCB5874A1D8A467B00194959 /* PerlinFractalNoiseShader.fsh in Resources */,
 				DCB587381D8A467B00194959 /* ColorShader.fsh in Resources */,
-				DCB587481D8A467B00194959 /* PerlinAbsNoiseShader.fsh in Resources */,
 				DCB587341D8A467B00194959 /* BasicGradientShader.fsh in Resources */,
 				DCB587431D8A467B00194959 /* FireShader.vsh in Resources */,
 				DCB587361D8A467B00194959 /* BasicShader.fsh in Resources */,
 				DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */,
-				DCB5874B1D8A467B00194959 /* PerlinFractalNoiseShader.vsh in Resources */,
 				DCB587471D8A467B00194959 /* NoiseShader.vsh in Resources */,
 				DCB587511D8A467B00194959 /* RadialGradientShader.vsh in Resources */,
 				DCB587521D8A467B00194959 /* SoftBlurShader.fsh in Resources */,
 				DCB587451D8A467B00194959 /* HardBlurShader.vsh in Resources */,
 				DCB5873E1D8A467B00194959 /* FastBlurShader.fsh in Resources */,
-				DCB5874D1D8A467B00194959 /* PerlinNoiseShader.vsh in Resources */,
+				DC4054261D8C6B0D00608A8F /* PerlinAbsNoiseShader.vsh in Resources */,
 				DCB587351D8A467B00194959 /* BasicGradientShader.vsh in Resources */,
 				DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */,
 				DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */,
+				DC4054291D8C6B0D00608A8F /* PerlinNoiseShader.fsh in Resources */,
 				DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */,
 				DCB587391D8A467B00194959 /* ColorShader.vsh in Resources */,
+				DC4054271D8C6B0D00608A8F /* PerlinFractalNoiseShader.fsh in Resources */,
 				DCB587321D8A467B00194959 /* AlphaHoleShader.fsh in Resources */,
 				DCB5873F1D8A467B00194959 /* FastBlurShader.vsh in Resources */,
+				DC4054281D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh in Resources */,
 				DCB587541D8A467B00194959 /* Universal2DShader.fsh in Resources */,
-				DCB5874E1D8A467B00194959 /* PerlinSinNoiseShader.fsh in Resources */,
-				DCB5874C1D8A467B00194959 /* PerlinNoiseShader.fsh in Resources */,
+				DC4054251D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh in Resources */,
 				DCB587421D8A467B00194959 /* FireShader.fsh in Resources */,
 				DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */,
-				DCB5874F1D8A467B00194959 /* PerlinSinNoiseShader.vsh in Resources */,
+				DC40542B1D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh in Resources */,
+				DC40542C1D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh in Resources */,
 				DCB5873C1D8A467B00194959 /* DummyShader.fsh in Resources */,
 				DCB5873A1D8A467B00194959 /* DoubleShader.fsh in Resources */,
 				DCB5873D1D8A467B00194959 /* DummyShader.vsh in Resources */,
 				DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */,
-				DCB587491D8A467B00194959 /* PerlinAbsNoiseShader.vsh in Resources */,
 				DCB587441D8A467B00194959 /* HardBlurShader.fsh in Resources */,
 				DCB587531D8A467B00194959 /* SoftBlurShader.vsh in Resources */,
 				DCB587371D8A467B00194959 /* BasicShader.vsh in Resources */,
 				DCB5873B1D8A467B00194959 /* DoubleShader.vsh in Resources */,
+				DC40542A1D8C6B0D00608A8F /* PerlinNoiseShader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
