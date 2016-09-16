@@ -164,7 +164,7 @@ open class ColorGradient1D: NSObject {
     
     #if os(iOS)
     // MARK: - Quick Look Debug
-    public func getImage(height:CGFloat = 32.0) -> UIImage {
+    open func getImage(height:CGFloat = 32.0) -> UIImage {
         
         UIGraphicsBeginImageContext(CGSize(width: CGFloat(self.size), height: height))
         let context = UIGraphicsGetCurrentContext()!
@@ -184,7 +184,7 @@ open class ColorGradient1D: NSObject {
         return im
     }
     
-    public func debugQuickLookObject() -> AnyObject {
+    open func debugQuickLookObject() -> AnyObject {
         return self.getImage()
     }
     #endif
