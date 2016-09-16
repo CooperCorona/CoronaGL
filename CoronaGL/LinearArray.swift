@@ -14,20 +14,20 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class LinearArray<T: Interpolatable>: CustomStringConvertible {
+open class LinearArray<T: Interpolatable>: CustomStringConvertible {
     
-    private var values:[T] = []
+    fileprivate var values:[T] = []
     
     ///Contains uniform (0-1) value of vertex at corresponding index.
-    public let vertexValues:[CGFloat] = [0.0, 1.0]
+    open let vertexValues:[CGFloat] = [0.0, 1.0]
     
     ///If true, then interpolation calculates proper midpoint by smoothstep(mid)
-    public var shouldSmooth = true
+    open var shouldSmooth = true
     
     // MARK: - Vertex Properties
     
     ///Index 0
-    public var left:T {
+    open var left:T {
         get {
             return self.values[0]
         }
@@ -35,7 +35,7 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
             self.values[0] = newValue
         }
     }
-    public var right:T {
+    open var right:T {
         get {
             return self.values[1]
         }
@@ -55,7 +55,7 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
     
     public init(populate:(Int, CGFloat) -> T) {
         
-        for (iii, vec) in self.vertexValues.enumerate() {
+        for (iii, vec) in self.vertexValues.enumerated() {
             self.values.append(populate(iii, vec))
         }
         
@@ -69,7 +69,7 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
     - parameter mid: 2-component vector with ranges in [0.0, 1.0] determining point to interpolate to.
     - returns: Bilinearly interpolated value.
     */
-    public func interpolate(mid:CGFloat) -> T {
+    open func interpolate(_ mid:CGFloat) -> T {
         
         let midVec:CGFloat
         if self.shouldSmooth {
@@ -84,7 +84,7 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
     }//trilinearly interpolate
     
     ///Subscripted access to values array.
-    public subscript(index:Int) -> T? {
+    open subscript(index:Int) -> T? {
         get {
             if index < 0 || index >= self.values.count {
                 return nil
@@ -92,7 +92,7 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
             return self.values[index]
         }
         set {
-            if let val = newValue where (index >= 0 && index < self.values.count) {
+            if let val = newValue , (index >= 0 && index < self.values.count) {
                 self.values[index] = val
             }
         }
@@ -100,6 +100,6 @@ public class LinearArray<T: Interpolatable>: CustomStringConvertible {
     
     
     // MARK: - CustomStringConvertible
-    public var description:String { return "\(self.values)" }
+    open var description:String { return "\(self.values)" }
     
 }

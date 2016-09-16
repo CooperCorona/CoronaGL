@@ -13,30 +13,30 @@ import Cocoa
 #endif
 
 
-public class GLSFrameSprite: GLSSprite {
+open class GLSFrameSprite: GLSSprite {
    
     // MARK: - Types
     
     public enum IncrementStyle {
-        case Manual
-        case Automatic(CGFloat)
-        case AutomaticBackwards(CGFloat)
-        case AutomaticReverse(CGFloat)
+        case manual
+        case automatic(CGFloat)
+        case automaticBackwards(CGFloat)
+        case automaticReverse(CGFloat)
     }
     
     // MARK: - Properties
     
-    public let textures:[CCTexture?]
-    public let sizes:[CGSize]
+    open let textures:[CCTexture?]
+    open let sizes:[CGSize]
     
-    public var incrementStyle = IncrementStyle.Manual {
+    open var incrementStyle = IncrementStyle.manual {
         didSet {
             switch self.incrementStyle {
-            case .Automatic:
+            case .automatic:
                 self.frameDelta = 1
-            case .AutomaticBackwards:
+            case .automaticBackwards:
                 self.frameDelta = -1
-            case .AutomaticReverse:
+            case .automaticReverse:
                 if (self.textureIndex >= self.textures.count - 1) {
                     self.frameDelta = -1
                 } else {
@@ -47,12 +47,12 @@ public class GLSFrameSprite: GLSSprite {
             }
         }
     }
-    public private(set) var incrementCount:CGFloat = 0.0
+    open fileprivate(set) var incrementCount:CGFloat = 0.0
     ///What to increment the frame index by.
-    private var frameDelta = 0
+    fileprivate var frameDelta = 0
     
-    public private(set) var textureIndex = 0
-    public var currentTexture:CCTexture? { return self.textures[self.textureIndex] }
+    open fileprivate(set) var textureIndex = 0
+    open var currentTexture:CCTexture? { return self.textures[self.textureIndex] }
     
     // MARK: - Setup
     
@@ -86,7 +86,7 @@ public class GLSFrameSprite: GLSSprite {
     
     // MARK: - Logic
     
-    public override func update(dt: CGFloat) {
+    open override func update(_ dt: CGFloat) {
         super.update(dt)
         
         if (self.textures.count > 1) {
@@ -94,10 +94,10 @@ public class GLSFrameSprite: GLSSprite {
         }
     }//update
     
-    public func updateFrame(dt:CGFloat) {
+    open func updateFrame(_ dt:CGFloat) {
         
         switch self.incrementStyle {
-        case let .Automatic(frequency):
+        case let .automatic(frequency):
             
             if (self.incrementFrame(dt, frequency: frequency)) {
                 
@@ -108,7 +108,7 @@ public class GLSFrameSprite: GLSSprite {
                 self.textureIndexChanged()
             }
             
-        case let .AutomaticBackwards(frequency):
+        case let .automaticBackwards(frequency):
             
             if (self.incrementFrame(dt, frequency: frequency)) {
                 
@@ -119,7 +119,7 @@ public class GLSFrameSprite: GLSSprite {
                 self.textureIndexChanged()
             }
             
-        case let .AutomaticReverse(frequency):
+        case let .automaticReverse(frequency):
             
             if (self.incrementFrame(dt, frequency: frequency)) {
                 
@@ -141,7 +141,7 @@ public class GLSFrameSprite: GLSSprite {
         }
     }
     
-    private func incrementFrame(dt:CGFloat, frequency:CGFloat) -> Bool {
+    fileprivate func incrementFrame(_ dt:CGFloat, frequency:CGFloat) -> Bool {
         
         self.incrementCount += dt
         
@@ -154,7 +154,7 @@ public class GLSFrameSprite: GLSSprite {
         return false
     }
     
-    private func textureIndexChanged() -> Bool {
+    fileprivate func textureIndexChanged() -> Bool {
         
         if (self.textureIndex < 0 || self.textureIndex >= self.textures.count) {
             return false

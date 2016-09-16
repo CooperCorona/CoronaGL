@@ -13,12 +13,12 @@ import Cocoa
 #endif
 import CoronaStructures
 
-public class AnimationStructContainer {
+open class AnimationStructContainer {
     
-    public var inAnimationBlock = false
-    public var animationMode:AnimationModes = .Linear
-    public var animationDuration:CGFloat? = nil
-    public var animationSpeed:CGFloat = 1.0
+    open var inAnimationBlock = false
+    open var animationMode:AnimationModes = .linear
+    open var animationDuration:CGFloat? = nil
+    open var animationSpeed:CGFloat = 1.0
     
 }
 
@@ -27,8 +27,8 @@ public extension GLSNode {
     // MARK: - Types
     
     enum Timing {
-        case After
-        case With
+        case after
+        case with
     }
     typealias AnimationDictionary = [String:Any]
     
@@ -75,7 +75,7 @@ public extension GLSNode {
     
     // MARK: - Initiating Animations
     
-    public class func animateWithDuration(duration:CGFloat?, mode:AnimationModes, block:() -> (), complete:() -> ()) {
+    public class func animateWithDuration(_ duration:CGFloat?, mode:AnimationModes, block:() -> (), complete:@escaping () -> ()) {
         
         GLSNode.animationInstance.animationDuration = duration
         GLSNode.animationInstance.animationMode = mode
@@ -86,15 +86,15 @@ public extension GLSNode {
         GLSNode.animationInstance.inAnimationBlock = false
         
         if let dur = duration {
-            let dTime = dispatch_time(DISPATCH_TIME_NOW, Int64(CGFloat(NSEC_PER_SEC) * dur))
-            dispatch_after(dTime, dispatch_get_main_queue(), {
+            let dTime = DispatchTime.now() + Double(Int64(CGFloat(NSEC_PER_SEC) * dur)) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: dTime, execute: {
                 complete()
             })
         }//valid duration
 
     }//animate with duration
     
-    public class func animateWithDuration(duration:CGFloat?, mode:AnimationModes, block:() -> ()) {
+    public class func animateWithDuration(_ duration:CGFloat?, mode:AnimationModes, block:() -> ()) {
         self.animateWithDuration(duration, mode: mode, block: block) {
             //Do nothing...
         }
@@ -110,16 +110,16 @@ public extension GLSNode {
     }//animate with duration
     
     ///Uses .EaseInOut mode and default speed of 1.0
-    public class func animateWithDuration(duration:CGFloat, block:() -> ()) {
-        GLSNode.animateWithDuration(duration, mode: .EaseInOut, block: block)
+    public class func animateWithDuration(_ duration:CGFloat, block:() -> ()) {
+        GLSNode.animateWithDuration(duration, mode: .easeInOut, block: block)
     }
     
-    public class func performAnimation(animation:AnimationDictionary) {
+    public class func performAnimation(_ animation:AnimationDictionary) {
         guard let block = animation["Block"] as? () -> () else {
             return
         }
         
-        func parseCGFloat(key:String) -> CGFloat? {
+        func parseCGFloat(_ key:String) -> CGFloat? {
             switch animation[key] {
             case let dur as CGFloat:
                 return dur
@@ -135,7 +135,7 @@ public extension GLSNode {
         }
         
         let duration    = parseCGFloat("Duration")
-        let mode        = animation["Mode"] as? AnimationModes ?? .Smoothstep
+        let mode        = animation["Mode"] as? AnimationModes ?? .smoothstep
         let complete    = animation["Complete"] as? () -> ()
 //        let timing      = animation["Timing"] as? Timing ?? .After
         let delay       = parseCGFloat("Delay")
@@ -157,7 +157,7 @@ public extension GLSNode {
         }
     }
     
-    public class func performAnimations(initialAnimations:[AnimationDictionary]) {
+    public class func performAnimations(_ initialAnimations:[AnimationDictionary]) {
         var animations = initialAnimations
         guard var animation = animations.first else {
             return
@@ -166,10 +166,10 @@ public extension GLSNode {
         animations.removeFirst()
         if let nextAnimation = animations.first {
             switch nextAnimation["Timing"] as? Timing {
-            case .With?:
+            case .with?:
                 GLSNode.performAnimation(animation)
                 GLSNode.performAnimations(animations)
-            case .After?:
+            case .after?:
                 fallthrough
             default:
                 let oldCompleteBlock = animation["Complete"] as? () -> ()
@@ -188,7 +188,7 @@ public extension GLSNode {
     
     // MARK: - Handling Animations
     
-    public func updateAnimations(dt:CGFloat) {
+    public func updateAnimations(_ dt:CGFloat) {
         
         var indicesToRemove:[Int] = []
         
@@ -207,7 +207,7 @@ public extension GLSNode {
         let count = indicesToRemove.count
         for i in 0..<count {
             let j = count - i - 1
-            self.animations.removeAtIndex(indicesToRemove[j])
+            self.animations.remove(at: indicesToRemove[j])
         }//remove animations
         
     }//update animations
@@ -220,31 +220,31 @@ public extension GLSNode {
             
         }//stop animations
         */
-        animations.removeAll(keepCapacity: false)
+        animations.removeAll(keepingCapacity: false)
         
     }//stop animations from animating
     
     // MARK: - Adding Animations
     
-    public func add1Animation(start:CGFloat, end:CGFloat, function:(CGFloat) -> ()) {
+    public func add1Animation(_ start:CGFloat, end:CGFloat, function:@escaping (CGFloat) -> ()) {
 //        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, floatFunction: function))
         let animation = GLSFloatAnimator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
         self.animations.append(animation)
     }//add animation-1
     
-    public func add2Animation(start:CGPoint, end:CGPoint, function:(CGPoint) -> ()) {
+    public func add2Animation(_ start:CGPoint, end:CGPoint, function:@escaping (CGPoint) -> ()) {
         //        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, pointFunction: function))
         let animation = GLSPointAnimator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
         self.animations.append(animation)
     }//add animation-2
     
-    public func add3Animation(start:SCVector3, end:SCVector3, function:(SCVector3) -> ()) {
+    public func add3Animation(_ start:SCVector3, end:SCVector3, function:@escaping (SCVector3) -> ()) {
 //        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, vector3Function: function))
         let animation = GLSVector3Animator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
         self.animations.append(animation)
     }//add animation-3
     
-    public func add4Animation(start:SCVector4, end:SCVector4, function:(SCVector4) -> ()) {
+    public func add4Animation(_ start:SCVector4, end:SCVector4, function:@escaping (SCVector4) -> ()) {
 //        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, vector4Function: function))
         let animation = GLSVector4Animator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
         self.animations.append(animation)

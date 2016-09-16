@@ -19,12 +19,12 @@ Wrapper for array of interpolatable type.
 Provides convenience properties, subscript,
 and methods to get trilinearly interpolated value.
 */
-public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
+open class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     
-    private var values:[T] = []
+    fileprivate var values:[T] = []
     
     ///Contains uniform (0-1) value of vertex at corresponding index.
-    public let vertexValues = [
+    open let vertexValues = [
         SCVector3(x: 0.0, y: 0.0, z: 0.0),
         SCVector3(x: 1.0, y: 0.0, z: 0.0),
         SCVector3(x: 0.0, y: 1.0, z: 0.0),
@@ -36,12 +36,12 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     ]
     
     ///If true, then interpolation calculates proper midpoint by smoothstep(mid)
-    public var shouldSmooth = true
+    open var shouldSmooth = true
     
     // MARK: - Vertex Properties
     
     ///Index 0
-    public var bottomLeftBehind:T {
+    open var bottomLeftBehind:T {
         get {
             return self.values[0]
         }
@@ -51,7 +51,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 1
-    public var bottomRightBehind:T {
+    open var bottomRightBehind:T {
         get {
             return self.values[1]
         }
@@ -61,7 +61,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 2
-    public var topLeftBehind:T {
+    open var topLeftBehind:T {
         get {
             return self.values[2]
         }
@@ -71,7 +71,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 3
-    public var topRightBehind:T {
+    open var topRightBehind:T {
         get {
             return self.values[3]
         }
@@ -81,7 +81,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 4
-    public var bottomLeftFront:T {
+    open var bottomLeftFront:T {
         get {
             return self.values[4]
         }
@@ -91,7 +91,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 5
-    public var bottomRightFront:T {
+    open var bottomRightFront:T {
         get {
             return self.values[5]
         }
@@ -101,7 +101,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 6
-    public var topLeftFront:T {
+    open var topLeftFront:T {
         get {
             return self.values[6]
         }
@@ -111,7 +111,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 7
-    public var topRightFront:T {
+    open var topRightFront:T {
         get {
             return self.values[7]
         }
@@ -131,7 +131,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     
     public init(populate:(Int, SCVector3) -> T) {
         
-        for (iii, vec) in self.vertexValues.enumerate() {
+        for (iii, vec) in self.vertexValues.enumerated() {
             self.values.append(populate(iii, vec))
         }
         
@@ -145,7 +145,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     - parameter mid: 3-component vector with ranges in [0.0, 1.0] determining point to interpolate to.
     - returns: Trilinearly interpolated value.
     */
-    public func interpolate(mid:SCVector3) -> T {
+    open func interpolate(_ mid:SCVector3) -> T {
         
         let midVec:SCVector3
         if self.shouldSmooth {
@@ -172,12 +172,12 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     - parameter z: Z-component with range in [0.0, 1.0] to interpolate to.
     - returns: Trilinearly interpolated value.
     */
-    public func interpolateX(x:CGFloat, y:CGFloat, z:CGFloat) -> T {
+    open func interpolateX(_ x:CGFloat, y:CGFloat, z:CGFloat) -> T {
         return self.interpolate(SCVector3(x: x, y: y, z: z))
     }
     
     ///Subscripted access to values array.
-    public subscript(index:Int) -> T? {
+    open subscript(index:Int) -> T? {
         get {
             if index < 0 || index >= self.values.count {
                 return nil
@@ -185,7 +185,7 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
             return self.values[index]
         }
         set {
-            if let val = newValue where (index >= 0 && index < self.values.count) {
+            if let val = newValue , (index >= 0 && index < self.values.count) {
                 self.values[index] = val
             }
         }
@@ -193,6 +193,6 @@ public class TrilinearArray<T: Interpolatable>: CustomStringConvertible {
     
     
     // MARK: - CustomStringConvertible
-    public var description:String { return "\(self.values)" }
+    open var description:String { return "\(self.values)" }
     
 }

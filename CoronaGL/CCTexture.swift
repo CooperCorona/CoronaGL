@@ -8,12 +8,12 @@
 
 import GLKit
 
-public class CCTexture: NSObject, StringLiteralConvertible {
+open class CCTexture: NSObject, ExpressibleByStringLiteral {
     
     // MARK: - Properties
     
-    public let name:GLuint
-    public let frame:CGRect
+    open let name:GLuint
+    open let frame:CGRect
     
     // MARK: - Setup
     
@@ -49,7 +49,7 @@ public class CCTexture: NSObject, StringLiteralConvertible {
     
     // MARK: - Logic
     
-    public func makeRepeating() {
+    open func makeRepeating() {
         glBindTexture(GLenum(GL_TEXTURE_2D), self.name)
         glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_REPEAT)
         glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_REPEAT)
@@ -57,7 +57,7 @@ public class CCTexture: NSObject, StringLiteralConvertible {
     
     // MARK: - CustomStringConvertible
     
-    override public var description:String {
+    override open var description:String {
         return "\(name)-\(frame)"
     }
     

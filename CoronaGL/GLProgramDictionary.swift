@@ -14,17 +14,17 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class GLProgramDictionary: GLAttributeBridger {
+open class GLProgramDictionary: GLAttributeBridger {
     
     // MARK: - Properties
     
-    private var dict:[String:GLint] = [:]
-    public let locations:[String]
+    fileprivate var dict:[String:GLint] = [:]
+    open let locations:[String]
     
-    public var attributeSizes:[Int]? = nil
+    open var attributeSizes:[Int]? = nil
     
     #if os(OSX)
-    private(set) public var vertexArray:GLuint = 0
+    fileprivate(set) open var vertexArray:GLuint = 0
     #endif
     
     // MARK: - Setup
@@ -85,37 +85,37 @@ public class GLProgramDictionary: GLAttributeBridger {
         self.attributeSizes = attributeSizes
     }
     
-    private class func bridgeLocationsForFile(file:String, shaderType:GLenum) -> (uniforms:[String], attributes:[String], attributeSizes:[Int]) {
+    fileprivate class func bridgeLocationsForFile(_ file:String, shaderType:GLenum) -> (uniforms:[String], attributes:[String], attributeSizes:[Int]) {
         
-        func isUniform(line:String) -> Bool {
+        func isUniform(_ line:String) -> Bool {
             return line.hasPrefix("uniform")
         }
         
-        func isAttribute(line:String) -> Bool {
+        func isAttribute(_ line:String) -> Bool {
             return line.hasPrefix("attribute") || (line.hasPrefix("in") && shaderType == GLenum(GL_VERTEX_SHADER))
         }
         
         guard let uniformRegex = NSRegularExpression(regex: "u_.*[^;]"),
-            attributeRegex = NSRegularExpression(regex: "a_.*[^;]"),
-            varyingRegex = NSRegularExpression(regex: "v_.*[^;]") else {
+            let attributeRegex = NSRegularExpression(regex: "a_.*[^;]"),
+            let varyingRegex = NSRegularExpression(regex: "v_.*[^;]") else {
                 return ([], [], [])
         }
         var uniforms:[String] = []
         var attributes:[String] = []
         var attributeSizes:[Int] = []
-        let lines = file.componentsSeparatedByString("\n")
-        for (i, line) in lines.enumerate() {
-            if let uniform = uniformRegex.matchedStringsInString(line).first where isUniform(line) {
+        let lines = file.components(separatedBy: "\n")
+        for (i, line) in lines.enumerated() {
+            if let uniform = uniformRegex.matchedStringsInString(line).first , isUniform(line) {
                 uniforms.append(uniform)
-            } else if let attribute = attributeRegex.matchedStringsInString(line).first where isAttribute(line) {
+            } else if let attribute = attributeRegex.matchedStringsInString(line).first , isAttribute(line) {
                 attributes.append(attribute)
-                if line.containsString("float") {
+                if line.contains("float") {
                     attributeSizes.append(1)
-                } else if line.containsString("vec2") {
+                } else if line.contains("vec2") {
                     attributeSizes.append(2)
-                } else if line.containsString("vec3") {
+                } else if line.contains("vec3") {
                     attributeSizes.append(3)
-                } else if line.containsString("vec4") {
+                } else if line.contains("vec4") {
                     attributeSizes.append(4)
                 } else {
                     print("Error: invalid attribute size for line #\(i) \"\(line)\"")
@@ -133,7 +133,7 @@ public class GLProgramDictionary: GLAttributeBridger {
     - parameter key: The key for the desired value.
     - returns: The value corresponding to the key, if it exists.
     */
-    public func locationForKey(key:String) -> GLint? {
+    open func locationForKey(_ key:String) -> GLint? {
         return self.dict[key]
     }
     
@@ -143,7 +143,7 @@ public class GLProgramDictionary: GLAttributeBridger {
     - parameter key: The key for the desired value.
     - returns: The value corresponding to the key. Crashes if it doesn't exist.
     */
-    public subscript(key:String) -> GLint {
+    open subscript(key:String) -> GLint {
         return self.dict[key]!
     }
     
@@ -153,7 +153,7 @@ public class GLProgramDictionary: GLAttributeBridger {
         glUseProgram(self.program)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), self.vertexBuffer)
     */
-    public func use() {
+    open func use() {
         glUseProgram(self.program)
         #if os(OSX)
         glBindVertexArray(self.vertexArray)
@@ -163,30 +163,30 @@ public class GLProgramDictionary: GLAttributeBridger {
     
     
     ///Invokes glUniform1f with the given location and value, casting to GLfloat.
-    public func uniform1f(location:String, value:CGFloat) {
+    open func uniform1f(_ location:String, value:CGFloat) {
         glUniform1f(self[location], GLfloat(value))
     }
     
     ///Invokes glUniform2f with the given location and value.
-    public func uniform2f(location:String, value:CGPoint) {
+    open func uniform2f(_ location:String, value:CGPoint) {
         glUniform2f(self[location], GLfloat(value.x), GLfloat(value.y))
     }
     
     ///Invokes glUniform3f with the given location and value.
-    public func uniform3f(location:String, value:SCVector3) {
+    open func uniform3f(_ location:String, value:SCVector3) {
         glUniform3f(self[location], GLfloat(value.x), GLfloat(value.y), GLfloat(value.z))
     }
     
     ///Invokes glUniform4f with the given location and value.
-    public func uniform4f(location:String, value:SCVector4) {
+    open func uniform4f(_ location:String, value:SCVector4) {
         glUniform4f(self[location], GLfloat(value.x), GLfloat(value.y), GLfloat(value.z), GLfloat(value.w))
     }
    
-    public func uniformMatrix4fv(location:String, matrix:SCMatrix4) {
+    open func uniformMatrix4fv(_ location:String, matrix:SCMatrix4) {
         glUniformMatrix4fv(self[location], 1, 0, matrix.values)
     }
 
-    public func disable() {
+    open func disable() {
         super.disableAttributes()
         glUseProgram(0)
         #if os(OSX)

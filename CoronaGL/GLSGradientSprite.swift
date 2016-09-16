@@ -15,7 +15,7 @@ import CoronaConvenience
 import CoronaStructures
 
 ///Maps a gradient to a texture
-public class GLSGradientSprite: GLSSprite, DoubleBuffered {
+open class GLSGradientSprite: GLSSprite, DoubleBuffered {
    
     struct GradientVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -27,7 +27,7 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
     let gradientProgram = ShaderHelper.programDictionaryForString("Basic Gradient Shader")!
     
     ///Uses the R value to map colors to the gradient.
-    public var mapTexture:CCTexture? = nil {
+    open var mapTexture:CCTexture? = nil {
         didSet {
             self.mapTextureChanged()
             self.bufferIsDirty = true
@@ -35,16 +35,16 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
     }
     
     ///The gradient of colors to use.
-    public var gradient:GLGradientTexture2D {
+    open var gradient:GLGradientTexture2D {
         didSet {
             self.bufferIsDirty = true
         }
     }
     
     ///The background buffer that the sprite is drawn to.
-    public let buffer:GLSFrameBuffer
-    public var shouldRedraw = false
-    public private(set) var bufferIsDirty = false
+    open let buffer:GLSFrameBuffer
+    open var shouldRedraw = false
+    open fileprivate(set) var bufferIsDirty = false
     
     ///The vertices used to draw the sprite.
     let gradientVertices = TexturedQuadVertices(vertex: GradientVertex())
@@ -80,9 +80,9 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
 
     - returns: *true* if the sprite was rendered, *false* if the framebuffer could not be pushed.
     */
-    public func renderToTexture() {
+    open func renderToTexture() {
         
-        if let didPush = self.framebufferStack?.pushGLSFramebuffer(self.buffer) {
+        if let didPush = self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer) {
             if !didPush {
                 print("Error! Could not push framebuffer!")
                 return
@@ -112,7 +112,7 @@ public class GLSGradientSprite: GLSSprite, DoubleBuffered {
         self.bufferIsDirty = false
     }
     
-    private func mapTextureChanged() {
+    fileprivate func mapTextureChanged() {
         let frame = self.mapTexture?.frame ?? CGRect(square: 1.0)
         self.gradientVertices.alterWithFrame(frame) { point, vertex in
             let tuple = point.getGLTuple()

@@ -16,11 +16,11 @@ import CoronaConvenience
 ///Tiles a texture across the entire sprite.
 ///Does not (cannot) take into account textures in atlases.
 ///Thus, it assumes the texture is mapped 0.0 - 1.0 on x and y.
-public class GLSTileSprite: GLSSprite {
+open class GLSTileSprite: GLSSprite {
 
     // MARK: - Properties
     
-    public var textureSize:CGSize = CGSize(square: 1.0) {
+    open var textureSize:CGSize = CGSize(square: 1.0) {
         didSet {
             self.setTextureOfVertices()
         }
@@ -36,12 +36,12 @@ public class GLSTileSprite: GLSSprite {
     
     // MARK: - Logic
     
-    public override func contentSizeChanged() {
+    open override func contentSizeChanged() {
         super.contentSizeChanged()
         self.setTextureOfVertices()
     }
     
-    public func setTextureOfVertices() {
+    open func setTextureOfVertices() {
 
         let verts = TexturedQuadVertices(vertices: self.vertices)
         verts.iterateWithHandler() { index, vertex in

@@ -15,9 +15,7 @@ void main(void) {
     gl_Position = pos;
     
     gl_PointSize = a_Size;
-//    gl_PointSize = 32.0;
     
     v_Color = a_Color;
     v_TextureAnchor = a_TextureAnchor;
-//    v_TextureAnchor = vec4(0.0, 0.0, 1.0, 1.0);
 }

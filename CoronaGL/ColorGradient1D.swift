@@ -14,7 +14,7 @@
 import CoronaConvenience
 import CoronaStructures
 
-public class ColorGradient1D: NSObject {
+open class ColorGradient1D: NSObject {
     
     // MARK: - Types
     public typealias ColorArray = [(color:SCVector4, weight:CGFloat)]
@@ -22,11 +22,11 @@ public class ColorGradient1D: NSObject {
     
     // MARK: - Properties
     
-    public let anchors:ColorArray
-    public let colorArray:[ColorType]
-    public let size = 256
+    open let anchors:ColorArray
+    open let colorArray:[ColorType]
+    open let size = 256
     
-    public let isSmoothed:Bool
+    open let isSmoothed:Bool
     
     // MARK: - Setup
     
@@ -47,7 +47,7 @@ public class ColorGradient1D: NSObject {
         }
         
         //Create Array (multiply by 4 because their are 4 components per color)
-        var texCols = [ColorType](count: size * 4, repeatedValue: 255)
+        var texCols = [ColorType](repeating: 255, count: size * 4)
         var intWeights:[Int] = []
         var lastIntegerValue = 0
         for cur in weights {
@@ -95,7 +95,7 @@ public class ColorGradient1D: NSObject {
         
         //Last color (and weight) is guarunteed to exist,
         //but I optionally unwrap anyways.
-        if let lastCol = colors.last, nexWeightIndex = intWeights.last {
+        if let lastCol = colors.last, let nexWeightIndex = intWeights.last {
             for jjj in nexWeightIndex..<size {
                 texCols[jjj * 4    ] = ColorType(lastCol.r * 255)
                 texCols[jjj * 4 + 1] = ColorType(lastCol.g * 255)
@@ -120,7 +120,7 @@ public class ColorGradient1D: NSObject {
     public convenience init(colors:[SCVector4], weights:[CGFloat], smoothed:Bool = true) {
         
         var array:ColorArray = []
-        for (iii, color) in colors.enumerate() {
+        for (iii, color) in colors.enumerated() {
             let weight = object(weights, atIndex: iii) ?? 1.0
             let tuple = (color: color, weight: weight)
             array.append(tuple)
@@ -133,7 +133,7 @@ public class ColorGradient1D: NSObject {
         
         var colorsAndWeights:ColorArray = []
         
-        for (iii, col) in colors.enumerate() {
+        for (iii, col) in colors.enumerated() {
             let weight = CGFloat(iii) / CGFloat(colors.count - 1)
             colorsAndWeights.append((color: col, weight: weight))
         }
@@ -143,7 +143,7 @@ public class ColorGradient1D: NSObject {
     
     // MARK: - Logic
     
-    public subscript(percent:CGFloat) -> SCVector4 {
+    open subscript(percent:CGFloat) -> SCVector4 {
         let index = Int(percent * CGFloat(self.size - 1))
         
         let r = self.colorArray[index * 4]
@@ -153,7 +153,7 @@ public class ColorGradient1D: NSObject {
         return SCVector4(x: CGFloat(r) / 255.0, y: CGFloat(g) / 255.0, z: CGFloat(b) / 255.0, w: CGFloat(a) / 255.0)
     }
     
-    public func blendColor(color:SCVector4) -> ColorGradient1D {
+    open func blendColor(_ color:SCVector4) -> ColorGradient1D {
         var anchors:ColorArray = []
         for anchor in self.anchors {
             let blendedColor = linearlyInterpolate(color.a, left: anchor.color.xyz, right: color.xyz)
@@ -167,18 +167,18 @@ public class ColorGradient1D: NSObject {
     public func getImage(height:CGFloat = 32.0) -> UIImage {
         
         UIGraphicsBeginImageContext(CGSize(width: CGFloat(self.size), height: height))
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(context)
+        let context = UIGraphicsGetCurrentContext()!
+        context.saveGState()
         
         for iii in 0..<self.size {
             let percent = CGFloat(iii) / CGFloat(self.size - 1)
             let color = UIColor(vector4: self[percent])
-            CGContextSetFillColorWithColor(context, color.CGColor)
-            CGContextFillRect(context, CGRect(x: CGFloat(iii), y: 0.0, width: 1.0, height: height))
+            context.setFillColor(color.cgColor)
+            context.fill(CGRect(x: CGFloat(iii), y: 0.0, width: 1.0, height: height))
         }
         
-        let im = UIGraphicsGetImageFromCurrentImageContext()
-        CGContextRestoreGState(context)
+        let im = UIGraphicsGetImageFromCurrentImageContext()!
+        context.restoreGState()
         UIGraphicsEndImageContext()
         
         return im
@@ -191,13 +191,13 @@ public class ColorGradient1D: NSObject {
     
     // MARK: - Static Gradients
     
-    public static let grayscaleGradient:ColorGradient1D = ColorGradient1D(colors: [SCVector4.blackColor, SCVector4.whiteColor])
+    open static let grayscaleGradient:ColorGradient1D = ColorGradient1D(colors: [SCVector4.blackColor, SCVector4.whiteColor])
     
-    public static let rainbowGradient = ColorGradient1D(colors: SCVector4.rainbowColors)
+    open static let rainbowGradient = ColorGradient1D(colors: SCVector4.rainbowColors)
     
-    public static let fireGradient = ColorGradient1D(colorsAndWeights: [(SCVector4.blackColor, 0.25), (SCVector4.redColor, 0.5), (SCVector4.orangeColor, 0.7), (SCVector4.yellowColor, 0.75), (SCVector4.whiteColor, 1.0)])
+    open static let fireGradient = ColorGradient1D(colorsAndWeights: [(SCVector4.blackColor, 0.25), (SCVector4.redColor, 0.5), (SCVector4.orangeColor, 0.7), (SCVector4.yellowColor, 0.75), (SCVector4.whiteColor, 1.0)])
     
-    public static let hueGradient = ColorGradient1D(colors: [
+    open static let hueGradient = ColorGradient1D(colors: [
         SCVector4.redColor,
         SCVector4.yellowColor,
         SCVector4.greenColor,

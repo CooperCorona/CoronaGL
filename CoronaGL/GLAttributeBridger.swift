@@ -13,12 +13,12 @@ import Cocoa
 #endif
 
 
-public class GLAttributeBridger: NSObject {
+open class GLAttributeBridger: NSObject {
     
-    public private(set) var vertexBuffer:GLuint = 0
-    public let program:GLuint
+    open fileprivate(set) var vertexBuffer:GLuint = 0
+    open let program:GLuint
     
-    private(set) var attributes:[GLuint] = []
+    fileprivate(set) var attributes:[GLuint] = []
     
     public init(program:GLuint) {
         
@@ -28,7 +28,7 @@ public class GLAttributeBridger: NSObject {
         
     }//initialize with program
     
-    public func addAttribute(location:GLint) {
+    open func addAttribute(_ location:GLint) {
         if location < 0 {
             print("Error: Attribute location \(location) is invalid!")
             print("")
@@ -36,13 +36,13 @@ public class GLAttributeBridger: NSObject {
         self.attributes.append(GLuint(location))
     }
     
-    public func addAttributes(locations:[GLint]) {
+    open func addAttributes(_ locations:[GLint]) {
         for cur in locations {
             self.addAttribute(cur)
         }
     }
     
-    public func enableAttributes() {
+    open func enableAttributes() {
         for cur in self.attributes {
             glEnableVertexAttribArray(cur)
         }
@@ -55,7 +55,7 @@ public class GLAttributeBridger: NSObject {
     
     - parameter stride: The size of the Vertex Struct.
     */
-    public func bridgeAttributesWithSizes(sizes:[Int], stride:Int) {
+    open func bridgeAttributesWithSizes(_ sizes:[Int], stride:Int) {
         
         var position = 0
         for index in 0..<self.attributes.count {
@@ -64,14 +64,14 @@ public class GLAttributeBridger: NSObject {
             }
             
             let size = sizes[index]
-            let pointer = UnsafePointer<Void>(bitPattern: sizeof(GLfloat) * position)
+            let pointer = UnsafeRawPointer(bitPattern: MemoryLayout<GLfloat>.size * position)
             glVertexAttribPointer(self.attributes[index], GLint(size), GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(stride), pointer)
             
             position += size
         }
     }
     
-    public func disableAttributes() {
+    open func disableAttributes() {
         
         for cur in self.attributes {
             glDisableVertexAttribArray(cur)

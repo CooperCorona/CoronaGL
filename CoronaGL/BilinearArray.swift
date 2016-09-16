@@ -13,12 +13,12 @@ import Cocoa
 #endif
 import CoronaStructures
 
-public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
+open class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     
-    private var values:[T] = []
+    fileprivate var values:[T] = []
     
     ///Contains uniform (0-1) value of vertex at corresponding index.
-    public let vertexValues = [
+    open let vertexValues = [
         CGPoint(x: 0.0, y: 0.0),
         CGPoint(x: 1.0, y: 0.0),
         CGPoint(x: 0.0, y: 1.0),
@@ -26,12 +26,12 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     ]
     
     ///If true, then interpolation calculates proper midpoint by smoothstep(mid)
-    public var shouldSmooth = true
+    open var shouldSmooth = true
     
     // MARK: - Vertex Properties
     
     ///Index 0
-    public var bottomLeft:T {
+    open var bottomLeft:T {
         get {
             return self.values[0]
         }
@@ -41,7 +41,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 1
-    public var bottomRight:T {
+    open var bottomRight:T {
         get {
             return self.values[1]
         }
@@ -51,7 +51,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 2
-    public var topLeft:T {
+    open var topLeft:T {
         get {
             return self.values[2]
         }
@@ -61,7 +61,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     }
     
     ///Index 3
-    public var topRight:T {
+    open var topRight:T {
         get {
             return self.values[3]
         }
@@ -81,7 +81,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     
     public init(populate:(Int, CGPoint) -> T) {
         
-        for (iii, vec) in self.vertexValues.enumerate() {
+        for (iii, vec) in self.vertexValues.enumerated() {
             self.values.append(populate(iii, vec))
         }
         
@@ -95,7 +95,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     - parameter mid: 2-component vector with ranges in [0.0, 1.0] determining point to interpolate to.
     - returns: Bilinearly interpolated value.
     */
-    public func interpolate(mid:CGPoint) -> T {
+    open func interpolate(_ mid:CGPoint) -> T {
         
         let midVec:CGPoint
         if self.shouldSmooth {
@@ -123,12 +123,12 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     - parameter y: Y-component with range in [0.0, 1.0] to interpolate to.
     - returns: Bilinearly interpolated value.
     */
-    public func interpolateX(x:CGFloat, y:CGFloat) -> T {
+    open func interpolateX(_ x:CGFloat, y:CGFloat) -> T {
         return self.interpolate(CGPoint(x: x, y: y))
     }
     
     ///Subscripted access to values array.
-    public subscript(index:Int) -> T? {
+    open subscript(index:Int) -> T? {
         get {
             if index < 0 || index >= self.values.count {
                 return nil
@@ -136,7 +136,7 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
             return self.values[index]
         }
         set {
-            if let val = newValue where (index >= 0 && index < self.values.count) {
+            if let val = newValue , (index >= 0 && index < self.values.count) {
                 self.values[index] = val
             }
         }
@@ -144,6 +144,6 @@ public class BilinearArray<T: Interpolatable>: CustomStringConvertible {
     
     
     // MARK: - CustomStringConvertible
-    public var description:String { return "\(self.values)" }
+    open var description:String { return "\(self.values)" }
     
 }

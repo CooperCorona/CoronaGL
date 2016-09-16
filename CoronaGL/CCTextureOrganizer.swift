@@ -10,19 +10,19 @@ import GLKit
 import CoronaConvenience
 import CoronaStructures
 
-public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
+open class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     
-    public let identifier:String
+    open let identifier:String
     
-    public var textures:[String:CCTexture] = [:]
+    open var textures:[String:CCTexture] = [:]
     
-    public var files:[String] = []
-    public var directory:String? = nil
-    public var parser:XMLFileHandler? = nil
-    public var usingAtlases = true
-    public var individualTextures:[String:GLuint] = [:]
+    open var files:[String] = []
+    open var directory:String? = nil
+    open var parser:XMLFileHandler? = nil
+    open var usingAtlases = true
+    open var individualTextures:[String:GLuint] = [:]
     
-    public var defaultCCTexture:CCTexture! = nil
+    open var defaultCCTexture:CCTexture! = nil
     
     public init(identifier:String, files:[String], directory:String? = nil) {
         self.identifier = identifier
@@ -33,7 +33,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         super.init()
         
         let orgDict = CCTextureOrganizer.organizerDictionary
-        orgDict.setObject(self, forKey: identifier)
+        orgDict.setObject(self, forKey: identifier as NSCopying)
     }//initialize
     
     public convenience init(files:[String], directory:String? = nil) {
@@ -41,13 +41,13 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     }//initialize
     
     
-    public func loadTextures() {
+    open func loadTextures() {
         
         self.parser = XMLFileHandler(files: self.files, directory: self.directory, delegate: self)
         
         if let validParser = self.parser {
             #if os(iOS)
-            EAGLContext.setCurrentContext(CCTextureOrganizer.sharedContext)
+            EAGLContext.setCurrent(CCTextureOrganizer.sharedContext)
             #endif
             validParser.loadFile()
         }//valid to load
@@ -58,7 +58,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     }//load textures
     
     
-    public func startElement(elementName: String, attributes: XMLDictionary) {
+    open func startElement(_ elementName: String, attributes: XMLDictionary) {
 
         if (elementName == "Atlas") {
             
@@ -87,7 +87,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//start element
     
-    public func endElement(elementName: String) {
+    open func endElement(_ elementName: String) {
         
         if (elementName == "Atlas") {
             
@@ -97,7 +97,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//end element
 
-    public func finishedParsing() {
+    open func finishedParsing() {
         
         for (_, texture) in self.textures {
             self.defaultCCTexture = texture
@@ -112,10 +112,10 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//finished parsing
     
-    public func processAtlasBatch(attributes:[NSObject : AnyObject]) {
+    open func processAtlasBatch(_ attributes:[AnyHashable: Any]) {
         
         let dataStr = attributes["data"] as! NSString
-        let dataComps = dataStr.componentsSeparatedByString(", ")
+        let dataComps = dataStr.components(separatedBy: ", ")
         
         let size = CGSize(width: dataComps[2].getCGFloatValue(), height: dataComps[3].getCGFloatValue())
         
@@ -125,7 +125,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         let tSize = NSSizeFromString(attributes["size"] as! String)
         #endif
         let keyStr = attributes["keys"] as! NSString
-        let keyComps = keyStr.componentsSeparatedByString(", ") 
+        let keyComps = keyStr.components(separatedBy: ", ") 
         
         let texture = CCTextureOrganizer.createTextureWithAttributes(attributes)
         
@@ -162,7 +162,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         }//loop vertically
     }//process atlas batch
     
-    public func processIndividualAtlas(elementName:String, attributes:[NSObject : AnyObject]) {
+    open func processIndividualAtlas(_ elementName:String, attributes:[AnyHashable: Any]) {
         
         if let name = individualTextures[elementName] {
             
@@ -176,7 +176,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//process individual texture in atlas
     
-    public func processPreviousIndividualAtlas(name:GLuint, attributes:[NSObject : AnyObject]) {
+    open func processPreviousIndividualAtlas(_ name:GLuint, attributes:[AnyHashable: Any]) {
         
         let key = attributes["key"]! as! String
         #if os(iOS)
@@ -188,7 +188,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         textures[key] = CCTexture(name: name, frame: frame)
     }//process texture that's previously been created
     
-    public func processNewIndividualAtlas(elementName:String, attributes:[NSObject : AnyObject]) {
+    open func processNewIndividualAtlas(_ elementName:String, attributes:[AnyHashable: Any]) {
         
         let texture = CCTextureOrganizer.createTextureWithAttributes(attributes)
         individualTextures[elementName] = texture.name
@@ -202,17 +202,17 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     }//process texture that needs to be created
     
     
-    public class func createTextureWithAttributes(attributes:[NSObject : AnyObject]) -> GLKTextureInfo {
+    open class func createTextureWithAttributes(_ attributes:[AnyHashable: Any]) -> GLKTextureInfo {
         
         let dataStr = attributes["data"] as! NSString
-        let dataComps = dataStr.componentsSeparatedByString(", ")
+        let dataComps = dataStr.components(separatedBy: ", ")
         
         let size = CGSize(width: dataComps[2].getCGFloatValue(), height: dataComps[3].getCGFloatValue())
         
         return CCTextureOrganizer.createTexture(dataComps[0] as String, fileExtension: dataComps[1] as String, size: size)
     }//create texture with attribute dictionary
     
-    public class func createTexture(file:String, fileExtension:String, size:CGSize) -> GLKTextureInfo {
+    open class func createTexture(_ file:String, fileExtension:String, size:CGSize) -> GLKTextureInfo {
         
         if (fileExtension == "pdf") {
             
@@ -226,14 +226,14 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//create texture
     
-    public class func createPDFTexture(file:String, size:CGSize) -> GLKTextureInfo {
+    open class func createPDFTexture(_ file:String, size:CGSize) -> GLKTextureInfo {
         #if os(iOS)
         let image = UIImage.imageWithPDFFile(file, size: size)
         let data = UIImagePNGRepresentation(image!)!
         
         let tex: GLKTextureInfo!
         do {
-            tex = try GLKTextureLoader.textureWithContentsOfData(data, options: [GLKTextureLoaderOriginBottomLeft:true])
+            tex = try GLKTextureLoader.texture(withContentsOf: data, options: [GLKTextureLoaderOriginBottomLeft:true])
         } catch {
             tex = nil
         }
@@ -243,27 +243,27 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         return tex
         #else
         let image = NSImage.imageWithPDFFile(file, size: size)!
-        let data = image.TIFFRepresentation!
-        return try! GLKTextureLoader.textureWithContentsOfData(data, options: [GLKTextureLoaderOriginBottomLeft:true])
+        let data = image.tiffRepresentation!
+        return try! GLKTextureLoader.texture(withContentsOf: data, options: [GLKTextureLoaderOriginBottomLeft:true])
         #endif
     }//create pdf texture with size
     
-    public class func createPNGTexture(file:String, size:CGSize) -> GLKTextureInfo {
+    open class func createPNGTexture(_ file:String, size:CGSize) -> GLKTextureInfo {
         let path:String
-        if let bundlePath = NSBundle.mainBundle().pathForResource(file, ofType: "png") {
+        if let bundlePath = Bundle.main.path(forResource: file, ofType: "png") {
             path = bundlePath
         } else {
             path = "\(file).png"
         }
         
-        let tex = (try? GLKTextureLoader.textureWithContentsOfFile(path, options: [GLKTextureLoaderOriginBottomLeft:true]))!
+        let tex = (try? GLKTextureLoader.texture(withContentsOfFile: path, options: [GLKTextureLoaderOriginBottomLeft:true]))!
         
         CCTextureOrganizer.configureTexture(tex)
         
         return tex
     }//create png texture with size
     
-    public class func configureTexture(texture:GLKTextureInfo) {
+    open class func configureTexture(_ texture:GLKTextureInfo) {
         /*
         let enumTex = GLenum(GL_TEXTURE_2D)
         glBindTexture(enumTex, texture.name)
@@ -272,7 +272,7 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         */
     }//configure texture so it repeats
     
-    private class func pathForPNG(file:String) -> String? {
+    fileprivate class func pathForPNG(_ file:String) -> String? {
         let retinaFactor = GLSFrameBuffer.getRetinaScale()
         let retinaModifier:String
         if retinaFactor ~= 3.0 {
@@ -282,14 +282,14 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         } else {
             retinaModifier = ""
         }
-        return NSBundle.mainBundle().pathForResource("\(file)\(retinaModifier)", ofType: "png")
+        return Bundle.main.path(forResource: "\(file)\(retinaModifier)", ofType: "png")
     }
     
-    public func textureForString(key:String) -> CCTexture? {
+    open func textureForString(_ key:String) -> CCTexture? {
         return self.textures[key]
     }//get texture for string
     
-    private class var organizerDictionary:NSMutableDictionary {
+    fileprivate class var organizerDictionary:NSMutableDictionary {
         struct StaticInstance {
             static let instance:NSMutableDictionary = NSMutableDictionary()
         }
@@ -297,37 +297,19 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
     }//get dictionary that encapsulates all 'CCTextureOrganizer' instances
     
     #if os(iOS)
-    public class var sharedContext:EAGLContext {
-        
-        struct StaticInstance {
-            //            static let instance = EAGLContext(API:EAGLRenderingAPI.OpenGLES2)
-            static var instance:EAGLContext! = nil
-            static var onceToken:dispatch_once_t = 0
-        }
-        
-        dispatch_once(&StaticInstance.onceToken) {
-            StaticInstance.instance = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
-        }
-        
-        return StaticInstance.instance
-    }//get main context
+    open static let sharedContext:EAGLContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
     #endif
-    public class var sharedInstance:CCTextureOrganizer {
-        struct StaticInstance {
-            static let instance:CCTextureOrganizer = CCTextureOrganizer(identifier:"Shared Instance", files: [], directory: nil)
-        }
-        return StaticInstance.instance
-    }//get singleton
+    open static let sharedInstance = CCTextureOrganizer(identifier:"Shared Instance", files: [], directory: nil)
     
-    public class func textureForString(key:String) -> CCTexture? {
+    open class func textureForString(_ key:String) -> CCTexture? {
         
-        let keyComponents = key.componentsSeparatedByString("/")
+        let keyComponents = key.components(separatedBy: "/")
         
         if (keyComponents.count > 1) {
             
             let orgDict = CCTextureOrganizer.organizerDictionary
             
-            if let textureOrganizer = orgDict.objectForKey(keyComponents[0]) as? CCTextureOrganizer {
+            if let textureOrganizer = orgDict.object(forKey: keyComponents[0]) as? CCTextureOrganizer {
                 
                 return textureOrganizer.textureForString(keyComponents[1])
                 
@@ -343,9 +325,9 @@ public class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         
     }//get texture for string
     
-    public class var defaultTexture:CCTexture  { return CCTextureOrganizer.sharedInstance.defaultCCTexture }
-    public class var defaultName:GLuint        { return CCTextureOrganizer.defaultTexture.name }
-    public class func setDefaultTexture(key:String) -> Bool {
+    open class var defaultTexture:CCTexture  { return CCTextureOrganizer.sharedInstance.defaultCCTexture }
+    open class var defaultName:GLuint        { return CCTextureOrganizer.defaultTexture.name }
+    open class func setDefaultTexture(_ key:String) -> Bool {
         
         if let validTexture = CCTextureOrganizer.textureForString(key) {
             CCTextureOrganizer.sharedInstance.defaultCCTexture = validTexture

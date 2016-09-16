@@ -24,7 +24,7 @@ public class PlaygroundOpenGLDelegate: NSObject, GLKViewDelegate {
         if doLog {
             print("Setting up OpenGL...")
         }
-        EAGLContext.setCurrentContext(CCTextureOrganizer.sharedContext)
+        EAGLContext.setCurrent(CCTextureOrganizer.sharedContext)
         ShaderHelper.sharedInstance.loadPrograms([
             "Basic Shader":"BasicShader",
             "Universal 2D Shader":"Universal2DShader",
@@ -78,7 +78,7 @@ public class PlaygroundOpenGLDelegate: NSObject, GLKViewDelegate {
         v.delegate = self
     }
     
-    public func glkView(view: GLKView, drawInRect rect: CGRect) {
+    public func glkView(_ view: GLKView, drawIn rect: CGRect) {
         self.clearColor.bindGLClearColor()
         self.container.render()
     }

@@ -18,33 +18,33 @@ import CoronaStructures
  observers that recursively sets the
  properties same of children.
 */
-public class GLSRecursivePropertyNode: GLSNode {
+open class GLSRecursivePropertyNode: GLSNode {
     
-    override public var hidden:Bool {
+    override open var hidden:Bool {
         didSet {
             self.iterateChildrenRecursively() { [unowned self] in $0.hidden = self.hidden }
         }
     }
     
-    override public var tintColor:SCVector3 {
+    override open var tintColor:SCVector3 {
         didSet {
             self.iterateChildrenRecursively() { [unowned self] in $0.tintColor = self.tintColor }
         }
     }
     
-    override public var tintIntensity:SCVector3 {
+    override open var tintIntensity:SCVector3 {
         didSet {
             self.iterateChildrenRecursively() { [unowned self] in $0.tintIntensity = self.tintIntensity }
         }
     }
     
-    override public var shadeColor:SCVector3 {
+    override open var shadeColor:SCVector3 {
         didSet {
             self.iterateChildrenRecursively() { [unowned self] in $0.shadeColor = self.shadeColor }
         }
     }
     
-    override public var alpha:CGFloat {
+    override open var alpha:CGFloat {
         didSet {
             self.iterateChildrenRecursively() { [unowned self] in $0.alpha = self.alpha }
         }

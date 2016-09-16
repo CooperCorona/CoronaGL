@@ -16,12 +16,12 @@ import CoronaStructures
 /**
 Originally a class that allowed a visual representation of a BoolList2D, I realized that the only necessary information is the texture. Otherwise, a regular sprite works just fine. I still wanted to group these methods on a class, though, so I just made the only constructor private.
 */
-public class GLSBoolList2DSprite: GLSSprite {
+open class GLSBoolList2DSprite: GLSSprite {
 
     // MARK: - Types
     
     public struct ColorSet {
-        public private(set) var colorArray:[GLubyte] = [255, 255, 255, 255]
+        public fileprivate(set) var colorArray:[GLubyte] = [255, 255, 255, 255]
         public var color:SCVector3 {
             get {
                 return SCVector3(x: CGFloat(self.colorArray[0]) / 255.0, y: CGFloat(self.colorArray[1]) / 255.0, z: CGFloat(self.colorArray[2]) / 255.0)
@@ -52,8 +52,8 @@ public class GLSBoolList2DSprite: GLSSprite {
     
     ///Wrapper for the colors different positions should be.
     public struct ColorData {
-        public private(set) var validColorArray:[GLubyte]   = [170, 170, 170, 255]
-        public private(set) var invalidColorArray:[GLubyte] = [85, 85, 85, 255]
+        public fileprivate(set) var validColorArray:[GLubyte]   = [170, 170, 170, 255]
+        public fileprivate(set) var invalidColorArray:[GLubyte] = [85, 85, 85, 255]
         var validColor:SCVector3 {
             get {
                 return SCVector3(x: CGFloat(self.validColorArray[0]) / 255.0, y: CGFloat(self.validColorArray[1]) / 255.0, z: CGFloat(self.validColorArray[2]) / 255.0)
@@ -86,11 +86,11 @@ public class GLSBoolList2DSprite: GLSSprite {
             self.colors         = colors
         }
         
-        public mutating func addColor(color:SCVector3, forPoints points:Set<IntPoint>) {
+        public mutating func addColor(_ color:SCVector3, forPoints points:Set<IntPoint>) {
             self.colors.append(ColorSet(color: color, points: points))
         }
         
-        public func colorForPoint(point:IntPoint) -> [GLubyte]? {
+        public func colorForPoint(_ point:IntPoint) -> [GLubyte]? {
             for colorSet in self.colors {
                 if colorSet.points.contains(point) {
                     return colorSet.colorArray
@@ -104,7 +104,7 @@ public class GLSBoolList2DSprite: GLSSprite {
     // MARK: - Setup
     
     ///Made private so you can't actually instantiate one. MWA-HA-HA!
-    private override init(position: CGPoint, size: CGSize, texture: CCTexture?) {
+    fileprivate override init(position: CGPoint, size: CGSize, texture: CCTexture?) {
         super.init(position: position, size: size, texture: texture)
     }
     
@@ -114,7 +114,7 @@ public class GLSBoolList2DSprite: GLSSprite {
      - parameter values: The valid / invalid state values for each position.
      - parameter colors: The colors that specific positions should be.
      */
-    public class func getTextureArray(values:BoolList2D, colors:ColorData) -> [GLubyte] {
+    open class func getTextureArray(_ values:BoolList2D, colors:ColorData) -> [GLubyte] {
         var bytes:[GLubyte] = []
         for j in 0..<values.height {
             for i in 0..<values.width {
@@ -138,7 +138,7 @@ public class GLSBoolList2DSprite: GLSSprite {
      - parameter height: The height of the texture.
      - returns: A GLuint corresponding to an OpenGL texture.
     */
-    public class func convertArrayToTexture(array:[GLubyte], width:Int, height:Int) -> GLuint {
+    open class func convertArrayToTexture(_ array:[GLubyte], width:Int, height:Int) -> GLuint {
         var textureName:GLuint = 0
         glGenTextures(1, &textureName)
         glBindTexture(GLenum(GL_TEXTURE_2D), textureName)
@@ -160,10 +160,10 @@ public class GLSBoolList2DSprite: GLSSprite {
      - parameter size: The size of the sprite.
      - parameter handler: A handler invoked on the main thread once the sprite is created.
     */
-    public class func initializeAsync(queue:dispatch_queue_t, values:BoolList2D, colors:ColorData, size:CGSize, handler:(GLSSprite) -> Void) {
-        dispatch_async(queue) {
+    open class func initializeAsync(_ queue:DispatchQueue, values:BoolList2D, colors:ColorData, size:CGSize, handler:@escaping (GLSSprite) -> Void) {
+        queue.async {
             let bytes = GLSBoolList2DSprite.getTextureArray(values, colors: colors)
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 let texture = GLSBoolList2DSprite.convertArrayToTexture(bytes, width: values.width, height: values.height)
                 let sprite = GLSSprite(size: size, texture: CCTexture(name: texture))
                 handler(sprite)

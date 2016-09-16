@@ -14,7 +14,7 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
+open class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
 
     struct RadialVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -22,10 +22,10 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
         var texture:(GLfloat, GLfloat)  = (0.0, 0.0)
     }
     
-    public let gradient:GLGradientTexture2D
+    open let gradient:GLGradientTexture2D
     let radialProgram = ShaderHelper.programDictionaryForString("Radial Gradient Shader")!
-    public let buffer:GLSFrameBuffer
-    public var shadeTexture:CCTexture? = nil {
+    open let buffer:GLSFrameBuffer
+    open var shadeTexture:CCTexture? = nil {
         didSet {
             self.shadeTextureChanged()
             self.bufferIsDirty = true
@@ -33,8 +33,8 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
     }
     
     let radialVertices = TexturedQuadVertices(vertex: RadialVertex())
-    public var shouldRedraw = false
-    public private(set) var bufferIsDirty = false
+    open var shouldRedraw = false
+    open fileprivate(set) var bufferIsDirty = false
     
     public init(size:CGSize, gradient:GLGradientTexture2D) {
         
@@ -55,9 +55,9 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
         self.shadeTextureChanged()
     }
     
-    public func renderToTexture() {
+    open func renderToTexture() {
         
-        self.framebufferStack?.pushGLSFramebuffer(self.buffer)
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
         
         self.radialProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.radialVertices.size, self.radialVertices.vertices, GLenum(GL_STATIC_DRAW))
@@ -79,7 +79,7 @@ public class GLSRadialGradientSprite: GLSSprite, DoubleBuffered {
         self.bufferIsDirty = false
     }
     
-    private func shadeTextureChanged() {
+    fileprivate func shadeTextureChanged() {
         
         let frame = self.shadeTexture?.frame ?? CGRect(square: 1.0)
         

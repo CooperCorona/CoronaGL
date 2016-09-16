@@ -24,9 +24,9 @@ public struct UVertex: CustomStringConvertible {
     }
 }
 
-public class GLSNode: NSObject {
+open class GLSNode: NSObject {
     
-    public var position:CGPoint = CGPoint(x: 0.0, y: 0.0) {
+    open var position:CGPoint = CGPoint(x: 0.0, y: 0.0) {
         
         didSet {
             
@@ -46,7 +46,7 @@ public class GLSNode: NSObject {
         
     }//property observers
     
-    public var velocity:CGPoint = CGPoint(x: 0.0, y: 0.0) {
+    open var velocity:CGPoint = CGPoint(x: 0.0, y: 0.0) {
         
         didSet {
             if (inAnimationBlock) {
@@ -58,7 +58,7 @@ public class GLSNode: NSObject {
         
     }//velocity observers
     
-    public var rotation:CGFloat = 0.0 {
+    open var rotation:CGFloat = 0.0 {
         
         didSet {
             if (inAnimationBlock) {
@@ -76,7 +76,7 @@ public class GLSNode: NSObject {
         
     }//rotation observors
     
-    public var rotationVelocity:CGFloat = 0.0 {
+    open var rotationVelocity:CGFloat = 0.0 {
         
         didSet {
             if (inAnimationBlock) {
@@ -88,7 +88,7 @@ public class GLSNode: NSObject {
         
     }//rotation velocity observers
     
-    public var anchor:CGPoint = CGPoint(x: 0.5, y: 0.5) {
+    open var anchor:CGPoint = CGPoint(x: 0.5, y: 0.5) {
         didSet {
             if (!(oldValue ~= self.anchor)) {
                 self.modelMatrixIsDirty = true
@@ -96,7 +96,7 @@ public class GLSNode: NSObject {
         }
     }
     
-    public var scaleX:CGFloat = 1.0 {
+    open var scaleX:CGFloat = 1.0 {
         
         didSet {
             if (inAnimationBlock) {
@@ -113,7 +113,7 @@ public class GLSNode: NSObject {
         
     }//scale x observers
     
-    public var scaleY:CGFloat = 1.0 {
+    open var scaleY:CGFloat = 1.0 {
         
         didSet {
             if (inAnimationBlock) {
@@ -130,7 +130,7 @@ public class GLSNode: NSObject {
         
     }//scale y observers
     
-    public var scale:CGFloat {
+    open var scale:CGFloat {
         
         get {
             scaleY = scaleX
@@ -144,7 +144,7 @@ public class GLSNode: NSObject {
         
     }//scale observers
     
-    public var alpha:CGFloat = 1.0 {
+    open var alpha:CGFloat = 1.0 {
         
         didSet {
             if (inAnimationBlock) {
@@ -162,7 +162,7 @@ public class GLSNode: NSObject {
         
     }//alpha observors
     
-    public var textureTitle:String? = "" {
+    open var textureTitle:String? = "" {
         didSet {
             if let title = textureTitle {
                 texture = CCTextureOrganizer.textureForString(title)
@@ -170,7 +170,7 @@ public class GLSNode: NSObject {
         }
     }
     
-    public var tintColor:SCVector3 = SCVector3() {
+    open var tintColor:SCVector3 = SCVector3() {
         didSet {
             if (inAnimationBlock) {
                 add3Animation(oldValue, end: tintColor) { [unowned self] in self.tintColor = $0 }
@@ -182,7 +182,7 @@ public class GLSNode: NSObject {
             }
         }
     }
-    public var tintIntensity:SCVector3 = SCVector3() {
+    open var tintIntensity:SCVector3 = SCVector3() {
         didSet {
             if (inAnimationBlock) {
                 add3Animation(oldValue, end: tintIntensity) { [unowned self] in self.tintIntensity = $0 }
@@ -194,7 +194,7 @@ public class GLSNode: NSObject {
             }
         }
     }
-    public var shadeColor:SCVector3 = SCVector3(xValue: 1.0, yValue: 1.0, zValue: 1.0) {
+    open var shadeColor:SCVector3 = SCVector3(xValue: 1.0, yValue: 1.0, zValue: 1.0) {
         didSet {
             
             if (inAnimationBlock) {
@@ -208,25 +208,25 @@ public class GLSNode: NSObject {
         }
     }
     
-    public var contentSize = CGSize(width: 0.0, height: 0.0) {
+    open var contentSize = CGSize(width: 0.0, height: 0.0) {
         didSet {
             self.contentSizeChanged()
         }
     }
-    public var frame:CGRect {
+    open var frame:CGRect {
         let realSize = self.contentSize * CGSize(width: self.scaleX, height: self.scaleY)
         let xpos:CGFloat = self.position.x - realSize.width * self.anchor.x
         let ypos:CGFloat = self.position.y - realSize.height * self.anchor.y
         return CGRect(origin: CGPoint(x: xpos, y: ypos), size: realSize)
     }
     
-    public var texture:CCTexture? = nil
+    open var texture:CCTexture? = nil
     
-    public var vertices:[UVertex] = []
+    open var vertices:[UVertex] = []
     
-    public static var universalProjection = SCMatrix4()
-    private var internalProjection:SCMatrix4? = nil
-    public var projection:SCMatrix4 {
+    open static var universalProjection = SCMatrix4()
+    fileprivate var internalProjection:SCMatrix4? = nil
+    open var projection:SCMatrix4 {
         get {
             if let proj = self.internalProjection {
                 return proj
@@ -240,33 +240,33 @@ public class GLSNode: NSObject {
         }
     }
     
-    public var children:[GLSNode] = []
-    public weak var superNode:GLSNode? = nil
-    public weak var framebufferStack:GLSFramebufferStack? = nil {
+    open var children:[GLSNode] = []
+    open weak var superNode:GLSNode? = nil
+    open weak var framebufferStack:GLSFramebufferStack? = nil {
         didSet {
             self.iterateChildrenRecursively() { $0.framebufferStack = self.framebufferStack }
         }
     }
 //    public var framebufferReference = GLSFramebufferReference()
-    public var removeAtUpdate = false
-    public var hidden = false
-    public var modelMatrixAlwaysUsesRenderSelf = false
+    open var removeAtUpdate = false
+    open var hidden = false
+    open var modelMatrixAlwaysUsesRenderSelf = false
     
-    public var modelMatrixIsDirty:Bool =   false { didSet { if (self.modelMatrixIsDirty) {
+    open var modelMatrixIsDirty:Bool =   false { didSet { if (self.modelMatrixIsDirty) {
         //        if (!oldValue) { self.calculateRecursiveModelMatrix() }
         self.iterateChildrenRecursively() { $0.modelMatrixIsDirty = true }
         } } }
-    public var alphaIsDirty:Bool =         false
-    public var tintColorIsDirty:Bool =     false
-    public var tintIntensityIsDirty:Bool = false
-    public var shadeColorIsDirty:Bool =    false
-    public var verticesAreDirty:Bool =     false
+    open var alphaIsDirty:Bool =         false
+    open var tintColorIsDirty:Bool =     false
+    open var tintIntensityIsDirty:Bool = false
+    open var shadeColorIsDirty:Bool =    false
+    open var verticesAreDirty:Bool =     false
     
-    public var animations:[GLSAnimator] = []
+    open var animations:[GLSAnimator] = []
     
-    public var title = ""
+    open var title = ""
     
-    public class var wrangleEmitters:Bool { return true }
+    open class var wrangleEmitters:Bool { return true }
     
     //Initialization
     override convenience init() {
@@ -289,12 +289,12 @@ public class GLSNode: NSObject {
         
     }//initialize with rectangle
     
-    public func loadProgram() {
+    open func loadProgram() {
         //Subclasses should override
     }//load program
     
     //Ignores children
-    public func clone() -> GLSNode {
+    open func clone() -> GLSNode {
         
         let copiedNode = GLSNode(position: self.position, size: self.contentSize)
         
@@ -305,7 +305,7 @@ public class GLSNode: NSObject {
         return copiedNode
     }
     
-    public func copyFromNode(node:GLSNode) {
+    open func copyFromNode(_ node:GLSNode) {
         
         self.velocity = node.velocity
         self.rotation = node.rotation
@@ -320,7 +320,7 @@ public class GLSNode: NSObject {
     
     //Logic
     
-    public func modelMatrix(renderingSelf:Bool = true) -> SCMatrix4 {
+    open func modelMatrix(_ renderingSelf:Bool = true) -> SCMatrix4 {
         if (renderingSelf || self.modelMatrixAlwaysUsesRenderSelf) {
             return SCMatrix4(translation: self.position, rotation: self.rotation, scaleX: self.scaleX, scaleY: self.scaleY, anchor: self.anchor, size: self.contentSize)
         } else {
@@ -343,7 +343,7 @@ public class GLSNode: NSObject {
         */
     }//get model matrix
     
-    public func recursiveModelMatrix(renderingSelf:Bool = true) -> SCMatrix4 {
+    open func recursiveModelMatrix(_ renderingSelf:Bool = true) -> SCMatrix4 {
         
         if let superNode = self.superNode {
             return self.modelMatrix(renderingSelf) * superNode.recursiveModelMatrix(false)
@@ -371,9 +371,9 @@ public class GLSNode: NSObject {
         */
     }//get combined model matrix
     
-    public var storedRecursiveModelMatrix = SCMatrix4()
-    public var storedRecursiveModelMatrixFalse = SCMatrix4()
-    public func calculateRecursiveModelMatrix() {
+    open var storedRecursiveModelMatrix = SCMatrix4()
+    open var storedRecursiveModelMatrixFalse = SCMatrix4()
+    open func calculateRecursiveModelMatrix() {
         
         var mod = self.modelMatrix()
         //        var modFalse = self.modelMatrix(renderingSelf: false)
@@ -403,15 +403,15 @@ public class GLSNode: NSObject {
     //Invoke bind/unbind during rendering process
     //to allow subclasses to bind/unbind any
     //cpu-gpu bridges
-    public func bind(model:SCMatrix4) {
+    open func bind(_ model:SCMatrix4) {
         
     }//bind
     
-    public func unbind() {
+    open func unbind() {
         
     }//unbind
     
-    public func render(model:SCMatrix4) {
+    open func render(_ model:SCMatrix4) {
         
         if (self.hidden) {
             return
@@ -426,17 +426,17 @@ public class GLSNode: NSObject {
         
     }//render
     
-    public func render() {
+    open func render() {
         self.render(SCMatrix4())
     }
     
-    public func update(dt:CGFloat) {
+    open func update(_ dt:CGFloat) {
         
         self.position += velocity * dt
         self.rotation += rotationVelocity * dt
         
         var childrenToRemove:[GLSNode] = []
-        for (_, cur) in self.children.enumerate() {
+        for (_, cur) in self.children.enumerated() {
             
             cur.update(dt)
             
@@ -454,30 +454,30 @@ public class GLSNode: NSObject {
         self.updateAnimations(dt)
     }//update
     
-    public func contentSizeChanged() {
+    open func contentSizeChanged() {
         
     }
     
     //Children
-    public func addChild(child:GLSNode) {
+    open func addChild(_ child:GLSNode) {
         self.children.append(child)
         child.superNode = self
         
         child.framebufferStack = self.framebufferStack
     }//add child
     
-    public func removeChild(child:GLSNode) -> GLSNode? {
+    open func removeChild(_ child:GLSNode) -> GLSNode? {
         child.superNode = nil
         return removeObject(child, fromArray:&self.children)
     }//remove child
     
-    public func insertChild(child:GLSNode, atIndex index:Int) {
+    open func insertChild(_ child:GLSNode, atIndex index:Int) {
         
         if (index < 0 || index > self.children.count) {
             return
         }
         
-        self.children.insert(child, atIndex: index)
+        self.children.insert(child, at: index)
         
         child.superNode = self
         child.framebufferStack = self.framebufferStack
@@ -485,7 +485,7 @@ public class GLSNode: NSObject {
 //        self.nodeInsertedAsChild(child, atIndex: index)
     }//insert child
     
-    public func bringChildToFront(child:GLSNode) {
+    open func bringChildToFront(_ child:GLSNode) {
         
         //If child is found, remove child removes
         //it and returns that child
@@ -495,7 +495,7 @@ public class GLSNode: NSObject {
         
     }//bring child to front
     
-    public func sendChildToBack(child:GLSNode) {
+    open func sendChildToBack(_ child:GLSNode) {
         
         //If child is found, remove child removes
         //it and returns that child
@@ -507,41 +507,41 @@ public class GLSNode: NSObject {
     
     // MARK: - Recursives
     
-    public func iterateChildrenRecursively(closureFunction:(node:GLSNode) -> ()) {
+    open func iterateChildrenRecursively(_ closureFunction:(_ node:GLSNode) -> ()) {
         
         for cur in self.children {
-            closureFunction(node: cur)
+            closureFunction(cur)
             cur.iterateChildrenRecursively(closureFunction)
         }//iterate through children
         
     }//iterate through all children & children's children, etc.
     
-    public func iterateChildrenRecursivelyWithDepth(function:(node:GLSNode, depth:Int) -> ()) {
+    open func iterateChildrenRecursivelyWithDepth(_ function:(_ node:GLSNode, _ depth:Int) -> ()) {
         self.iterateChildrenRecursivelyAtDepth(0, function: function)
     }
     
-    private func iterateChildrenRecursivelyAtDepth(depth:Int, function:(node:GLSNode, depth:Int) -> ()) {
+    fileprivate func iterateChildrenRecursivelyAtDepth(_ depth:Int, function:(_ node:GLSNode, _ depth:Int) -> ()) {
         
         for child in self.children {
-            function(node: child, depth: depth)
+            function(child, depth)
             child.iterateChildrenRecursivelyAtDepth(depth + 1, function: function)
         }
     }
     
-    public func iterateSupernodesRecursively(closureFunction:(node:GLSNode) -> ()) {
+    open func iterateSupernodesRecursively(_ closureFunction:(_ node:GLSNode) -> ()) {
         
-        closureFunction(node: self)
+        closureFunction(self)
         
         var currentSupernode = self.superNode
         while (currentSupernode != nil) {
-            closureFunction(node: currentSupernode!)
+            closureFunction(currentSupernode!)
             currentSupernode = currentSupernode?.superNode
         }//loop through supernodes
         
     }//iterate through node and node's supernode and supernode's supernode, etc.
     
     ///Iterates recursively, finding last child of last child, etc., until finding the final child.
-    public func recursiveLastChild() -> GLSNode? {
+    open func recursiveLastChild() -> GLSNode? {
         
         if let lastChild = self.children.last {
             return lastChild.recursiveLastChild() ?? lastChild
@@ -552,7 +552,7 @@ public class GLSNode: NSObject {
     }
     
     ///Finds total number of children, children's children, etc.
-    public func recursiveChildrenCount() -> Int {
+    open func recursiveChildrenCount() -> Int {
         var count = self.children.count
         self.iterateChildrenRecursively() { count += $0.children.count }
         
@@ -569,26 +569,26 @@ public class GLSNode: NSObject {
         self.framebufferReference = GLSFramebufferReference(framebuffer: buffer)
     }
     */
-    public func setTintIntensityScalar(value:CGFloat) {
+    open func setTintIntensityScalar(_ value:CGFloat) {
         self.tintIntensity = SCVector3(x: value, y: value, z: value)
     }
     
-    public func setTintColor(color:SCVector3, intensity:CGFloat) {
+    open func setTintColor(_ color:SCVector3, intensity:CGFloat) {
         self.tintColor = color
         self.setTintIntensityScalar(intensity)
     }
     
     // MARK: - GPU Bridges
     
-    private var currentTextureIndex = 0
-    public func pushTexture(tex:GLuint, atLocation:GLint) {
+    fileprivate var currentTextureIndex = 0
+    open func pushTexture(_ tex:GLuint, atLocation:GLint) {
         glUniform1i(atLocation, GLint(self.currentTextureIndex))
         glActiveTexture(GLenum(GL_TEXTURE0 + self.currentTextureIndex))
         glBindTexture(GLenum(GL_TEXTURE_2D), tex)
         self.currentTextureIndex += 1
     }
     
-    public func popTextures() {
+    open func popTextures() {
         glActiveTexture(GLenum(GL_TEXTURE0))
         self.currentTextureIndex = 0
     }
@@ -602,23 +602,23 @@ public class GLSNode: NSObject {
 */
 public extension GLSNode {
     
-    public func bridgeUniform3f(location:GLint, vector:SCVector3) {
+    public func bridgeUniform3f(_ location:GLint, vector:SCVector3) {
         
         glUniform3f(location, GLfloat(vector.x), GLfloat(vector.y), GLfloat(vector.z))
         
     }//glUniform3f
     
-    public func bridgeUniform4f(location:GLint, vector:SCVector4) {
+    public func bridgeUniform4f(_ location:GLint, vector:SCVector4) {
         
         glUniform4f(location, GLfloat(vector.x), GLfloat(vector.y), GLfloat(vector.z), GLfloat(vector.w))
         
     }//glUniform4f
     
-    public func bridgeAttribute(location:GLint, size:Int, stride:Int, position:Int) {
+    public func bridgeAttribute(_ location:GLint, size:Int, stride:Int, position:Int) {
         
         glEnableVertexAttribArray(GLuint(location))
         
-        let pointer = UnsafePointer<Void>(bitPattern: sizeof(GLfloat) * position)
+        let pointer = UnsafeRawPointer(bitPattern: MemoryLayout<GLfloat>.size * position)
         glVertexAttribPointer(GLuint(location), GLint(size), GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(stride), pointer)
         
     }//bridge attribute
@@ -628,7 +628,7 @@ public extension GLSNode {
  extension GLSNode {
     // MARK: - CustomStringConvertible
     
-    public override var description:String {
+    open override var description:String {
         return "\(super.description) (\(self.title))"
     }
 }

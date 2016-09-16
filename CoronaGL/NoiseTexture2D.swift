@@ -10,11 +10,11 @@ import GLKit
 import CoronaConvenience
 import CoronaStructures
 
-public class Noise3DTexture2D: NSObject {
+open class Noise3DTexture2D: NSObject {
     
-    public let noise:NoiseArray3D
-    public private(set) var noiseTexture:GLuint = 0
-    public private(set) var permutationTexture:GLuint = 0
+    open let noise:NoiseArray3D
+    open fileprivate(set) var noiseTexture:GLuint = 0
+    open fileprivate(set) var permutationTexture:GLuint = 0
     
     public init(noise:NoiseArray3D) {
         
@@ -86,17 +86,17 @@ public class Noise3DTexture2D: NSObject {
     }
     
     
-    public func debugQuickLookObject() -> AnyObject {
-        return "Seed = \(self.noise.seed)"
+    open func debugQuickLookObject() -> AnyObject {
+        return "Seed = \(self.noise.seed)" as AnyObject
     }
 }
 
 
-public class Noise2DTexture2D: NSObject {
+open class Noise2DTexture2D: NSObject {
     
-    public let noise:NoiseArray2D
-    public private(set) var noiseTexture:GLuint = 0
-    public private(set) var permutationTexture:GLuint = 0
+    open let noise:NoiseArray2D
+    open fileprivate(set) var noiseTexture:GLuint = 0
+    open fileprivate(set) var permutationTexture:GLuint = 0
     
     public init(noise:NoiseArray2D) {
         

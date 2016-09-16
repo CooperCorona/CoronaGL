@@ -16,54 +16,54 @@ import CoronaStructures
 
 public enum AnimationModes: CustomStringConvertible {
     
-    case Linear
-    case EaseIn
-    case EaseOut
-    case EaseInOut
-    case Smoothstep
-    case Sputter
-    case Cycle(CGFloat)
-    case Autoreverse
-    case Fluctuate(FluctuatingNoise1D)
+    case linear
+    case easeIn
+    case easeOut
+    case easeInOut
+    case smoothstep
+    case sputter
+    case cycle(CGFloat)
+    case autoreverse
+    case fluctuate(FluctuatingNoise1D)
     
     public var description:String {
         switch self {
-        case .Linear:
+        case .linear:
             return "Linear"
-        case .EaseIn:
+        case .easeIn:
             return "EaseIn"
-        case .EaseOut:
+        case .easeOut:
             return "EaseOut"
-        case .EaseInOut:
+        case .easeInOut:
             return "EaseInOut"
-        case .Smoothstep:
+        case .smoothstep:
             return "Smoothstep"
-        case .Sputter:
+        case .sputter:
             return "Sputter"
-        case let .Cycle(speed):
+        case let .cycle(speed):
             return "Cycle(\(speed))"
-        case .Autoreverse:
+        case .autoreverse:
             return "Autoreverse"
-        case let .Fluctuate(fNoise):
+        case let .fluctuate(fNoise):
             return "Fluctuate(\(fNoise))"
         }
     }
     
 }//animation modes
 
-public class GLSAnimationHelper: NSObject {
+open class GLSAnimationHelper: NSObject {
     
     // MARK: - Properties
     
     ///The mode controlling the timing of animation.
-    public let mode:AnimationModes
+    open let mode:AnimationModes
     ///How long the animation is in seconds.
-    public let duration:CGFloat?
+    open let duration:CGFloat?
     ///How many seconds have elapsed.
-    public private(set) var time:CGFloat = 0.0
+    open fileprivate(set) var time:CGFloat = 0.0
     
     ///Whether the animation is finished animating or not.
-    public var isFinished:Bool {
+    open var isFinished:Bool {
         if let duration = self.duration {
             return self.time >= duration
         } else {
@@ -72,7 +72,7 @@ public class GLSAnimationHelper: NSObject {
     }
     
     ///The time when adjusted for the mode.
-    public var realTime:CGFloat {
+    open var realTime:CGFloat {
         return self.valueForTime(self.time)
     }
     
@@ -88,7 +88,7 @@ public class GLSAnimationHelper: NSObject {
     
     // MARK: - Logic
     
-    func valueForTime(time:CGFloat) -> CGFloat {
+    func valueForTime(_ time:CGFloat) -> CGFloat {
             
         //NOTE: Some enumeration values depend on having a valid duration,
         //so I force unwrap it.
@@ -102,45 +102,45 @@ public class GLSAnimationHelper: NSObject {
         
         switch(self.mode) {
             
-        case .Linear:
+        case .linear:
             return t
             
-        case .EaseIn:
+        case .easeIn:
             return 1.0 - cos(CGFloat(M_PI_2) * t)
             
-        case .EaseOut:
+        case .easeOut:
             return sin(CGFloat(M_PI_2) * t)
             
-        case .EaseInOut:
+        case .easeInOut:
             return (1.0 - cos(CGFloat(M_PI) * t)) / 2.0
             
-        case .Smoothstep:
+        case .smoothstep:
             return t * t * (3.0 - 2.0 * t)
             
-        case .Sputter:
+        case .sputter:
             let h1 = -054.0 * t * t * t * t * t
             let h2 = +135.0 * t * t * t * t
             let h3 = -110.0 * t * t * t
             let h4 = +030.0 * t * t
             return h1 + h2 + h3 + h4
             
-        case let .Cycle(speed):
+        case let .cycle(speed):
             return (1.0 - cos(CGFloat(M_PI_2) * self.time * speed)) / 2.0
             
-        case .Autoreverse:
+        case .autoreverse:
             return (1.0 - cos(CGFloat(2.0 * M_PI) * t)) / 2.0
             
-        case let .Fluctuate(fNoise):
+        case let .fluctuate(fNoise):
             return fNoise.value
             
         }//get time for mode
     }
     
-    public func update(dt:CGFloat) {
+    open func update(_ dt:CGFloat) {
         
         self.time += dt
         
-        if case let .Fluctuate(fNoise) = self.mode {
+        if case let .fluctuate(fNoise) = self.mode {
             fNoise.update(dt)
         }
         
@@ -148,16 +148,16 @@ public class GLSAnimationHelper: NSObject {
     
 }
 
-public class GLSAnimator: NSObject {
+open class GLSAnimator: NSObject {
     
     // MARK: - Properties
     
-    public let helper:GLSAnimationHelper
+    open let helper:GLSAnimationHelper
     
-    public var isFinished:Bool { return self.helper.isFinished }
+    open var isFinished:Bool { return self.helper.isFinished }
     // MARK: - Setup
     
-    private init(mode:AnimationModes, duration:CGFloat?) {
+    fileprivate init(mode:AnimationModes, duration:CGFloat?) {
         
         self.helper = GLSAnimationHelper(mode: mode, duration: duration)
         
@@ -166,15 +166,15 @@ public class GLSAnimator: NSObject {
     
     // MARK: - Logic
     
-    public func applyChangeWithTime(time:CGFloat) {
+    open func applyChangeWithTime(_ time:CGFloat) {
         print("Error!\nGLSAnimator::applyChangeWithTime invoked!")
     }//apply change in value
     
-    public func applyChange() {
+    open func applyChange() {
         self.applyChangeWithTime(self.helper.realTime)
     }
     
-    public func endAnimation() {
+    open func endAnimation() {
         
         if let dur = self.helper.duration {
             let endTime = self.helper.valueForTime(dur)
@@ -183,7 +183,7 @@ public class GLSAnimator: NSObject {
         
     }//end animation
     
-    public func update(dt:CGFloat) {
+    open func update(_ dt:CGFloat) {
         
         self.helper.update(dt)
         
@@ -193,12 +193,12 @@ public class GLSAnimator: NSObject {
     
 }
 
-public class GLSFloatAnimator: GLSAnimator {
+open class GLSFloatAnimator: GLSAnimator {
     
-    private let handler:(CGFloat) -> ()
-    private let delta:AnimationDelta<CGFloat>
+    fileprivate let handler:(CGFloat) -> ()
+    fileprivate let delta:AnimationDelta<CGFloat>
     
-    public init(mode:AnimationModes, duration:CGFloat?, start:CGFloat, end:CGFloat, handler:(CGFloat) -> ()) {
+    public init(mode:AnimationModes, duration:CGFloat?, start:CGFloat, end:CGFloat, handler:@escaping (CGFloat) -> ()) {
         
         self.handler = handler
         self.delta = AnimationDelta(start: start, end: end)
@@ -206,18 +206,18 @@ public class GLSFloatAnimator: GLSAnimator {
         super.init(mode: mode, duration: duration)
     }
     
-    public override func applyChangeWithTime(time: CGFloat) {
+    open override func applyChangeWithTime(_ time: CGFloat) {
         self.handler(self.delta[time])
     }
     
 }
 
-public class GLSPointAnimator: GLSAnimator {
+open class GLSPointAnimator: GLSAnimator {
     
-    private let handler:(CGPoint) -> ()
-    private let delta:AnimationDelta<CGPoint>
+    fileprivate let handler:(CGPoint) -> ()
+    fileprivate let delta:AnimationDelta<CGPoint>
     
-    public init(mode:AnimationModes, duration:CGFloat?, start:CGPoint, end:CGPoint, handler:(CGPoint) -> ()) {
+    public init(mode:AnimationModes, duration:CGFloat?, start:CGPoint, end:CGPoint, handler:@escaping (CGPoint) -> ()) {
         
         self.handler = handler
         self.delta = AnimationDelta(start: start, end: end)
@@ -225,18 +225,18 @@ public class GLSPointAnimator: GLSAnimator {
         super.init(mode: mode, duration: duration)
     }
     
-    public override func applyChangeWithTime(time: CGFloat) {
+    open override func applyChangeWithTime(_ time: CGFloat) {
         self.handler(self.delta[time])
     }
     
 }
 
-public class GLSVector3Animator: GLSAnimator {
+open class GLSVector3Animator: GLSAnimator {
     
-    private let handler:(SCVector3) -> ()
-    private let delta:AnimationDelta<SCVector3>
+    fileprivate let handler:(SCVector3) -> ()
+    fileprivate let delta:AnimationDelta<SCVector3>
     
-    public init(mode:AnimationModes, duration:CGFloat?, start:SCVector3, end:SCVector3, handler:(SCVector3) -> ()) {
+    public init(mode:AnimationModes, duration:CGFloat?, start:SCVector3, end:SCVector3, handler:@escaping (SCVector3) -> ()) {
         
         self.handler = handler
         self.delta = AnimationDelta(start: start, end: end)
@@ -244,18 +244,18 @@ public class GLSVector3Animator: GLSAnimator {
         super.init(mode: mode, duration: duration)
     }
     
-    public override func applyChangeWithTime(time: CGFloat) {
+    open override func applyChangeWithTime(_ time: CGFloat) {
         self.handler(self.delta[time])
     }
     
 }
 
-public class GLSVector4Animator: GLSAnimator {
+open class GLSVector4Animator: GLSAnimator {
     
-    private let handler:(SCVector4) -> ()
-    private let delta:AnimationDelta<SCVector4>
+    fileprivate let handler:(SCVector4) -> ()
+    fileprivate let delta:AnimationDelta<SCVector4>
     
-    public init(mode:AnimationModes, duration:CGFloat?, start:SCVector4, end:SCVector4, handler:(SCVector4) -> ()) {
+    public init(mode:AnimationModes, duration:CGFloat?, start:SCVector4, end:SCVector4, handler:@escaping (SCVector4) -> ()) {
         
         self.handler = handler
         self.delta = AnimationDelta(start: start, end: end)
@@ -263,7 +263,7 @@ public class GLSVector4Animator: GLSAnimator {
         super.init(mode: mode, duration: duration)
     }
     
-    public override func applyChangeWithTime(time: CGFloat) {
+    open override func applyChangeWithTime(_ time: CGFloat) {
         self.handler(self.delta[time])
     }
     

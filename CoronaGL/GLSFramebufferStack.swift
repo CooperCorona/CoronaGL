@@ -31,7 +31,7 @@ public class GLSFramebufferStack: NSObject {
     
     public func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         
-        return self.pushFramebuffer(buffer.framebuffer)
+        return self.pushFramebuffer(buffer: buffer.framebuffer)
         
     }//push a framebuffer
     
@@ -58,12 +58,12 @@ public class GLSFramebufferStack: NSObject {
     
 #else
     
-public class GLSFramebufferStack: NSObject {
+open class GLSFramebufferStack: NSObject {
     
-    private let initialBuffer:NSOpenGLView?
-    private var buffers:[GLuint] = []
-    private var renderBuffers:[GLuint] = []
-    public let internalContext:NSOpenGLContext?
+    fileprivate let initialBuffer:NSOpenGLView?
+    fileprivate var buffers:[GLuint] = []
+    fileprivate var renderBuffers:[GLuint] = []
+    open let internalContext:NSOpenGLContext?
     
     public init(initialBuffer:NSOpenGLView?) {
         
@@ -78,7 +78,7 @@ public class GLSFramebufferStack: NSObject {
     }//initialize
     
     
-    public func pushFramebuffer(buffer:GLuint) -> Bool {
+    open func pushFramebuffer(buffer:GLuint) -> Bool {
         
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer)
         self.buffers.append(buffer)
@@ -86,7 +86,7 @@ public class GLSFramebufferStack: NSObject {
         return true
     }//push a framebuffer
     
-    public func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
+    open func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         self.internalContext?.makeCurrentContext()
         /*if let buffer = self.initialBuffer {
          glViewport(0, 0, GLsizei(buffer.frame.width), GLsizei(buffer.frame.height))
@@ -101,7 +101,7 @@ public class GLSFramebufferStack: NSObject {
         return true
     }//push a framebuffer
     
-    public func popFramebuffer() -> Bool {
+    open func popFramebuffer() -> Bool {
         
         if (self.buffers.count <= 0) {
             return false
@@ -111,7 +111,7 @@ public class GLSFramebufferStack: NSObject {
         self.buffers.removeLast()
         self.renderBuffers.removeLast()
         
-        if let topBuffer = self.buffers.last, renderBuffer = self.renderBuffers.last {
+        if let topBuffer = self.buffers.last, let renderBuffer = self.renderBuffers.last {
             glBindFramebuffer(GLenum(topBuffer), topBuffer)
             glBindRenderbuffer(GLenum(GL_RENDERBUFFER), renderBuffer)
         } else {

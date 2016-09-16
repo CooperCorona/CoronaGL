@@ -14,16 +14,16 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class StaticRenderer: NSObject {
+open class StaticRenderer: NSObject {
 
     // MARK: - Types
     
-    public class Program: GLProgramDictionary {
+    open class Program: GLProgramDictionary {
         
         public init() {
             
-            guard let program = ShaderHelper.programForString("Universal 2D Shader") else {
-                fatalError("Basic Shader does not exist!")
+            guard let program = ShaderHelper.programForString("Universal2 D Shader") else {
+                fatalError("Universal 2D Shader does not exist!")
             }
             
             super.init(program: program, locations: [
@@ -37,7 +37,7 @@ public class StaticRenderer: NSObject {
                 "a_Position",
                 "a_Texture",
                 "a_Index"
-                ])
+            ])
             
             glUseProgram(program)
         }
@@ -46,31 +46,31 @@ public class StaticRenderer: NSObject {
     
     // MARK: - Properties
     
-    public static let backgroundQueue       = dispatch_queue_create("Static Renderer Queue", DISPATCH_QUEUE_SERIAL)
-    private let operationQueue              = NSOperationQueue()
-    private let program                     = Program()
-    private var vertices:[UVertex]          = []
-    private var modelMatrices:[GLfloat]     = []
-    private var shadeColors:[GLfloat]       = []
-    private var tintColors:[GLfloat]        = []
-    private var tintIntensities:[GLfloat]   = []
-    private var alphas:[GLfloat]            = []
-    private var count                       = 0
-    private var currentTexture:GLuint       = 0
+    open static let backgroundQueue       = DispatchQueue(label: "Static Renderer Queue", attributes: [])
+    fileprivate let operationQueue              = OperationQueue()
+    fileprivate let program                     = Program()
+    fileprivate var vertices:[UVertex]          = []
+    fileprivate var modelMatrices:[GLfloat]     = []
+    fileprivate var shadeColors:[GLfloat]       = []
+    fileprivate var tintColors:[GLfloat]        = []
+    fileprivate var tintIntensities:[GLfloat]   = []
+    fileprivate var alphas:[GLfloat]            = []
+    fileprivate var count                       = 0
+    fileprivate var currentTexture:GLuint       = 0
     
-    private var allVertices:[[UVertex]]      = []
-    private var allModelMatrices:[[GLfloat]] = []
-    private var allShadeColors:[[GLfloat]]   = []
-    private var allTintColors:[[GLfloat]]    = []
-    private var allTintIntensities:[[GLfloat]] = []
-    private var allAlphas:[[GLfloat]]        = []
-    private var allTextures:[GLuint]         = []
+    fileprivate var allVertices:[[UVertex]]      = []
+    fileprivate var allModelMatrices:[[GLfloat]] = []
+    fileprivate var allShadeColors:[[GLfloat]]   = []
+    fileprivate var allTintColors:[[GLfloat]]    = []
+    fileprivate var allTintIntensities:[[GLfloat]] = []
+    fileprivate var allAlphas:[[GLfloat]]        = []
+    fileprivate var allTextures:[GLuint]         = []
     
-    private var doubleBufferedSprites:[DoubleBuffered] = []
+    fileprivate var doubleBufferedSprites:[DoubleBuffered] = []
     
-    public var asynchronous                 = false
-    public var clearColor                   = SCVector4.blackColor
-    private var onFirstRender               = true
+    open var asynchronous                 = false
+    open var clearColor                   = SCVector4.blackColor
+    fileprivate var onFirstRender               = true
     
     // MARK: - Setup
     
@@ -80,7 +80,8 @@ public class StaticRenderer: NSObject {
     }
     
     // MARK: - Logic
-    public func renderNode(node:GLSNode) {
+    
+    open func renderNode(_ node:GLSNode) {
         let block = {
             self.allVertices            = []
             self.allModelMatrices       = []
@@ -96,7 +97,7 @@ public class StaticRenderer: NSObject {
             self.iterateNode(node, matrix: SCMatrix4())
             self.addBatch()
             if self.asynchronous {
-                dispatch_sync(dispatch_get_main_queue()) {
+                DispatchQueue.main.sync {
                     self.renderAll()
                 }
             } else {
@@ -104,15 +105,15 @@ public class StaticRenderer: NSObject {
             }
         }
         if self.asynchronous {
-            dispatch_async(StaticRenderer.backgroundQueue, block)
+            StaticRenderer.backgroundQueue.async(execute: block)
         } else {
             block()
         }
     }
     
-    private func iterateNode(node:GLSNode, matrix:SCMatrix4) {
+    fileprivate func iterateNode(_ node:GLSNode, matrix:SCMatrix4) {
         
-        if let texture = node.texture where !node.hidden && node.vertices.count > 0 {
+        if let texture = node.texture , !node.hidden && node.vertices.count > 0 {
             let childModel = node.modelMatrix() * matrix
             
             if self.count <= 0 {
@@ -128,7 +129,7 @@ public class StaticRenderer: NSObject {
             }
         }
         
-        if let dbSprite = node as? DoubleBuffered where dbSprite.bufferIsDirty {
+        if let dbSprite = node as? DoubleBuffered , dbSprite.bufferIsDirty {
             self.doubleBufferedSprites.append(dbSprite)
         }
         
@@ -137,7 +138,7 @@ public class StaticRenderer: NSObject {
         }
     }
     
-    private func addNode(node:GLSNode, matrix:SCMatrix4) {
+    fileprivate func addNode(_ node:GLSNode, matrix:SCMatrix4) {
         let copiedVertices = node.vertices
         self.vertices           += copiedVertices.map() {
             var vertex = $0
@@ -152,7 +153,7 @@ public class StaticRenderer: NSObject {
         self.count += 1
     }
     
-    private func addBatch() -> Bool {
+    fileprivate func addBatch() -> Bool {
         guard self.count > 0 else {
             return false
         }
@@ -168,7 +169,7 @@ public class StaticRenderer: NSObject {
         return true
     }
     
-    private func renderAll() {
+    fileprivate func renderAll() {
         
         guard self.allAlphas.count > 0 else {
             return
@@ -182,7 +183,7 @@ public class StaticRenderer: NSObject {
         self.program.use()
 
         for i in self.allVertices.range {
-            glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(UVertex) * self.allVertices[i].count, self.allVertices[i], GLenum(GL_STREAM_DRAW))
+            glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<UVertex>.size * self.allVertices[i].count, self.allVertices[i], GLenum(GL_STREAM_DRAW))
             glUniformMatrix4fv(self.program["u_Projection"], 1, 0, GLSNode.universalProjection.values)
             glUniformMatrix4fv(self.program["u_ModelMatrix"], GLsizei(self.allModelMatrices[i].count / 16), 0, self.allModelMatrices[i])
             glUniform3fv(self.program["u_ShadeColor"], GLsizei(self.allShadeColors[i].count / 3), self.allShadeColors[i])
@@ -194,18 +195,18 @@ public class StaticRenderer: NSObject {
             glUniform1i(self.program["u_TextureInfo"], 0)
             
             self.program.enableAttributes()
-            self.program.bridgeAttributesWithSizes([2, 2, 1], stride: sizeof(UVertex))
+            self.program.bridgeAttributesWithSizes([2, 2, 1], stride: MemoryLayout<UVertex>.size)
             glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.allVertices[i].count))
             self.program.disableAttributes()
         }
     }
     
-    private func renderCurrent() {
+    fileprivate func renderCurrent() {
         self.addBatch()
         return
         
         if self.asynchronous {
-            dispatch_sync(dispatch_get_main_queue()) {
+            DispatchQueue.main.sync {
                 if self.onFirstRender {
                     self.onFirstRender = false
                     self.clearColor.bindGLClearColor()
@@ -213,7 +214,7 @@ public class StaticRenderer: NSObject {
                 let count = GLsizei(self.count)
                 
                 self.program.use()
-                glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(UVertex) * self.vertices.count, self.vertices, GLenum(GL_STREAM_DRAW))
+                glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<UVertex>.size * self.vertices.count, self.vertices, GLenum(GL_STREAM_DRAW))
                 glUniformMatrix4fv(self.program["u_Projection"], 1, 0, GLSNode.universalProjection.values)
                 glUniformMatrix4fv(self.program["u_ModelMatrix"], count, 0, self.modelMatrices)
                 glUniform3fv(self.program["u_ShadeColor"], count, self.shadeColors)
@@ -225,7 +226,7 @@ public class StaticRenderer: NSObject {
                 glUniform1i(self.program["u_TextureInfo"], 0)
                 
                 self.program.enableAttributes()
-                self.program.bridgeAttributesWithSizes([2, 2, 1], stride: sizeof(UVertex))
+                self.program.bridgeAttributesWithSizes([2, 2, 1], stride: MemoryLayout<UVertex>.size)
                 glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.vertices.count))
                 self.program.disableAttributes()
 //                self.done = true
@@ -234,7 +235,7 @@ public class StaticRenderer: NSObject {
             let count = GLsizei(self.count)
             
             self.program.use()
-            glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(UVertex) * self.vertices.count, self.vertices, GLenum(GL_STREAM_DRAW))
+            glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<UVertex>.size * self.vertices.count, self.vertices, GLenum(GL_STREAM_DRAW))
             glUniformMatrix4fv(self.program["u_Projection"], 1, 0, GLSNode.universalProjection.values)
             glUniformMatrix4fv(self.program["u_ModelMatrix"], count, 0, self.modelMatrices)
             glUniform3fv(self.program["u_ShadeColor"], count, self.shadeColors)
@@ -246,13 +247,13 @@ public class StaticRenderer: NSObject {
             glUniform1i(self.program["u_TextureInfo"], 0)
             
             self.program.enableAttributes()
-            self.program.bridgeAttributesWithSizes([2, 2, 1], stride: sizeof(UVertex))
+            self.program.bridgeAttributesWithSizes([2, 2, 1], stride: MemoryLayout<UVertex>.size)
             glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.vertices.count))
             self.program.disableAttributes()
         }
     }
     
-    private func resetArrays() {
+    fileprivate func resetArrays() {
         self.count              = 0
         self.vertices           = []
         self.modelMatrices      = []
@@ -262,9 +263,9 @@ public class StaticRenderer: NSObject {
         self.alphas             = []
     }
     
-    public func performBlock(block:() -> Void) {
+    open func performBlock(_ block:@escaping () -> Void) {
         if self.asynchronous {
-            dispatch_async(StaticRenderer.backgroundQueue, block)
+            StaticRenderer.backgroundQueue.async(execute: block)
         } else {
             block()
         }

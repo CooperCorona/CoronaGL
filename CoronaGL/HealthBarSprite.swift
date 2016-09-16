@@ -14,20 +14,20 @@
 import CoronaConvenience
 import CoronaStructures
 
-public class HealthBarSprite: NSObject {
+open class HealthBarSprite: NSObject {
 
-    public let barSize:CGSize
-    public let backSize:CGSize
-    public let buffer:CGFloat
+    open let barSize:CGSize
+    open let backSize:CGSize
+    open let buffer:CGFloat
     
-    public let backgroundSprite:GLSSprite
-    public let foregroundSprite:GLSSprite
-    public let outlineSprite:GLSSprite
+    open let backgroundSprite:GLSSprite
+    open let foregroundSprite:GLSSprite
+    open let outlineSprite:GLSSprite
     
-    public var fullColor = SCVector3.greenColor
-    public var emptyColor = SCVector3.redColor
+    open var fullColor = SCVector3.greenColor
+    open var emptyColor = SCVector3.redColor
     
-    public var backgroundColor:SCVector3 {
+    open var backgroundColor:SCVector3 {
         get {
             return self.backgroundSprite.shadeColor
         }
@@ -36,7 +36,7 @@ public class HealthBarSprite: NSObject {
         }
     }
 
-    public var outlineColor:SCVector3 {
+    open var outlineColor:SCVector3 {
         get {
             return self.outlineSprite.shadeColor
         }
@@ -45,7 +45,7 @@ public class HealthBarSprite: NSObject {
         }
     }
     
-    public var position:CGPoint {
+    open var position:CGPoint {
         get {
             return self.outlineSprite.position
         }
@@ -80,19 +80,19 @@ public class HealthBarSprite: NSObject {
         super.init()
     }//initialize
     
-    public func colorForPercent(percent:CGFloat) -> SCVector3 {
+    open func colorForPercent(_ percent:CGFloat) -> SCVector3 {
         return self.emptyColor + (self.fullColor - self.emptyColor) * percent
     }//color for percent
     
-    public func applyPercent(percent:CGFloat) {
+    open func applyPercent(_ percent:CGFloat) {
         let realPercent = min(max(percent, 0.0), 1.0)
         self.foregroundSprite.scaleX = realPercent
         self.foregroundSprite.shadeColor = self.colorForPercent(realPercent)
     }//apply percent
     
-    public func animatePercent(percent:CGFloat, withDuration:CGFloat) {
+    open func animatePercent(_ percent:CGFloat, withDuration:CGFloat) {
         
-        GLSNode.animateWithDuration(withDuration, mode: AnimationModes.EaseInOut) { [unowned self] in
+        GLSNode.animateWithDuration(withDuration, mode: AnimationModes.easeInOut) { [unowned self] in
             self.applyPercent(percent)
         }
         

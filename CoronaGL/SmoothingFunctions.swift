@@ -14,32 +14,32 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public func smoothstep(x:Float) -> Float {
+public func smoothstep(_ x:Float) -> Float {
     return x * x * (3.0 - 2.0 * x)
 }
 
-public func smoothstep(x:Double) -> Double {
+public func smoothstep(_ x:Double) -> Double {
     return x * x * (3.0 - 2.0 * x)
 }
 
-public func smoothstep(x:CGFloat) -> CGFloat {
+public func smoothstep(_ x:CGFloat) -> CGFloat {
     return x * x * (3.0 - 2.0 * x)
 }
 
-public func smoothstep(p:CGPoint) -> CGPoint {
+public func smoothstep(_ p:CGPoint) -> CGPoint {
     let x = smoothstep(p.x)
     let y = smoothstep(p.y)
     return CGPoint(x: x, y: y)
 }
 
-public func smoothstep(v:SCVector3) -> SCVector3 {
+public func smoothstep(_ v:SCVector3) -> SCVector3 {
     let x = smoothstep(v.x)
     let y = smoothstep(v.y)
     let z = smoothstep(v.z)
     return SCVector3(x: x, y: y, z: z)
 }
 
-public func smoothstep(v:SCVector4) -> SCVector4 {
+public func smoothstep(_ v:SCVector4) -> SCVector4 {
     let x = smoothstep(v.x)
     let y = smoothstep(v.y)
     let z = smoothstep(v.z)
@@ -51,35 +51,35 @@ public func smoothstep(v:SCVector4) -> SCVector4 {
 //According to http://flafla2.github.io/2014/08/09/perlinnoise.html
 //the equation is 6t^5 - 15t^4 + 10t^3
 
-public func perlinStep(t:Float) -> Float {
+public func perlinStep(_ t:Float) -> Float {
     let t_3 = t * t * t
     return 6.0 * t_3 * t * t - 15.0 * t_3 * t + 10.0 * t_3
 }
 
-public func perlinStep(t:Double) -> Double {
+public func perlinStep(_ t:Double) -> Double {
     let t_3 = t * t * t
     return 6.0 * t_3 * t * t - 15.0 * t_3 * t + 10.0 * t_3
 }
 
-public func perlinStep(t:CGFloat) -> CGFloat {
+public func perlinStep(_ t:CGFloat) -> CGFloat {
     let t_3 = t * t * t
     return 6.0 * t_3 * t * t - 15.0 * t_3 * t + 10.0 * t_3
 }
 
-public func perlinStep(p:CGPoint) -> CGPoint {
+public func perlinStep(_ p:CGPoint) -> CGPoint {
     let x = perlinStep(p.x)
     let y = perlinStep(p.y)
     return CGPoint(x: x, y: y)
 }
 
-public func perlinStep(v:SCVector3) -> SCVector3 {
+public func perlinStep(_ v:SCVector3) -> SCVector3 {
     let x = perlinStep(v.x)
     let y = perlinStep(v.y)
     let z = perlinStep(v.z)
     return SCVector3(x: x, y: y, z: z)
 }
 
-public func perlinStep(v:SCVector4) -> SCVector4 {
+public func perlinStep(_ v:SCVector4) -> SCVector4 {
     let x = perlinStep(v.x)
     let y = perlinStep(v.y)
     let z = perlinStep(v.z)

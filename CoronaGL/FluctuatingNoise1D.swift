@@ -13,22 +13,22 @@ import UIKit
 import Cocoa
 #endif
 
-public class FluctuatingNoise1D: CustomStringConvertible {
+open class FluctuatingNoise1D: CustomStringConvertible {
     
     // MARK: - Properties
     
-    public let noise:NoiseArray1D
+    open let noise:NoiseArray1D
     
     ///The internal time used to calculate the noise.
-    public private(set) var time:CGFloat = 0.0
+    open fileprivate(set) var time:CGFloat = 0.0
     ///The speed at which the time increases (negative values cause the time to decrease).
-    public var speed:CGFloat = 1.0
+    open var speed:CGFloat = 1.0
     ///The middle value of the noise.
-    public var middleValue:CGFloat = 0.0
+    open var middleValue:CGFloat = 0.0
     ///The range of the values.
-    public var range:CGFloat = 2.0
+    open var range:CGFloat = 2.0
     ///The lower value of the noise.
-    public var lowerValue:CGFloat {
+    open var lowerValue:CGFloat {
         get {
             return self.middleValue - self.range / 2.0
         }
@@ -37,7 +37,7 @@ public class FluctuatingNoise1D: CustomStringConvertible {
         }
     }
     ///The lower and upper value of the noise.
-    public var extremeValues:(low:CGFloat, hi:CGFloat) {
+    open var extremeValues:(low:CGFloat, hi:CGFloat) {
         get {
             return (self.lowerValue, self.lowerValue + self.range)
         }
@@ -48,13 +48,13 @@ public class FluctuatingNoise1D: CustomStringConvertible {
     }
     
     ///The value the noise is divided by to fix its range to [-1.0, 1.0].
-    public let noiseDivisor:CGFloat = 0.7
+    open let noiseDivisor:CGFloat = 0.7
     
     ///The type of noise used.
-    public var noiseType = GLSPerlinNoiseSprite.NoiseType.Default
+    open var noiseType = GLSPerlinNoiseSprite.NoiseType.Default
     
-    private var storedValue:CGFloat = 0.0
-    public var value:CGFloat {
+    fileprivate var storedValue:CGFloat = 0.0
+    open var value:CGFloat {
         switch self.noiseType {
         case .Default:
             return self.noise.noiseAt(self.time) / self.noiseDivisor * self.range + self.middleValue
@@ -68,7 +68,7 @@ public class FluctuatingNoise1D: CustomStringConvertible {
         }
     }
     
-    public var description:String { return "Noise(\(self.noise.seed)) \(self.extremeValues)" }
+    open var description:String { return "Noise(\(self.noise.seed)) \(self.extremeValues)" }
     
     // MARK: - Setup
     
@@ -90,11 +90,11 @@ public class FluctuatingNoise1D: CustomStringConvertible {
     // MARK: - Logic
     
     ///Update the time given a delta.
-    public func update(dt:CGFloat) {
+    open func update(_ dt:CGFloat) {
         self.time += self.speed * dt
     }
     
-    private func baseNoise(iterations:Int) -> CGFloat {
+    fileprivate func baseNoise(_ iterations:Int) -> CGFloat {
         var noiseValue:CGFloat = 0.0
         for i in 1...iterations {
             let factor = CGFloat(1 << i)

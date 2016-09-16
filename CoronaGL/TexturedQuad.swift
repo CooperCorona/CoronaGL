@@ -13,16 +13,16 @@ import Cocoa
 #endif
 import CoronaConvenience
 
-public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
+open class TexturedQuadVertices<T>: ExpressibleByArrayLiteral {
     
     public typealias Element = T
     
     // MARK: - Properties
     
-    public var vertices:[T] = []
-    public var stride:Int  { return sizeof(T) }
-    public var count:Int   { return self.vertices.count }
-    public var size:Int    { return self.stride * self.count }
+    open var vertices:[T] = []
+    open var stride:Int  { return MemoryLayout<T>.size }
+    open var count:Int   { return self.vertices.count }
+    open var size:Int    { return self.stride * self.count }
     
     public init(vertices:[T] = []) {
         self.vertices = vertices
@@ -43,7 +43,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     }
     // MARK: - Setup
     
-    public func generateVerticesWithHandler(handler:(Int) -> T) {
+    open func generateVerticesWithHandler(_ handler:(Int) -> T) {
         
         for iii in 0..<TexturedQuad.verticesPerQuad {
             self.vertices.append(handler(iii))
@@ -51,14 +51,14 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
         
     }//generate vertices with handler
     
-    public func generateVerticesWithSize(size:CGSize, handler:(index:Int, position:(GLfloat, GLfloat), texture:(GLfloat, GLfloat)) -> T) {
+    open func generateVerticesWithSize(_ size:CGSize, handler:(_ index:Int, _ position:(GLfloat, GLfloat), _ texture:(GLfloat, GLfloat)) -> T) {
         
         //Size as a CGPoint
         let sap = size.getCGPoint()
         for iii in 0..<TexturedQuad.verticesPerQuad {
             let curTex = TexturedQuad.pointForIndex(iii)
             let curPos = (curTex * sap)
-            let vertex = handler(index: iii, position: curPos.getGLTuple(), texture: curTex.getGLTuple())
+            let vertex = handler(iii, curPos.getGLTuple(), curTex.getGLTuple())
             self.vertices.append(vertex)
         }
         
@@ -66,7 +66,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     
     // MARK: - Logic
     
-    public func iterateWithHandler(handler:(Int, inout T) -> ()) {
+    open func iterateWithHandler(_ handler:(Int, inout T) -> ()) {
         
         for iii in 0..<TexturedQuad.verticesPerQuad {
             handler(iii, &self.vertices[iii])
@@ -74,7 +74,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
         
     }//iterate vertices with handler
     
-    public func alterVertex(vertex:TexturedQuad.VertexName, withHandler handler:(inout T) -> ()) {
+    open func alterVertex(_ vertex:TexturedQuad.VertexName, withHandler handler:(inout T) -> ()) {
         
         let indices = vertex.getVertexIndices()
         for curIndex in indices {
@@ -91,7 +91,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     - parameter frame: The frame to use. Uses the top left, bottom right, etc.
     - parameter handler: A closure that takes the current point (top left, etc.) and an inout *T*. You should set the appropriate property of the *T* to supplied point value.
     */
-    public func alterWithFrame(frame:CGRect, handler:(CGPoint, inout T) -> Void) {
+    open func alterWithFrame(_ frame:CGRect, handler:(CGPoint, inout T) -> Void) {
         
         let tl = frame.topLeftGL
         let bl = frame.bottomLeftGL
@@ -137,11 +137,11 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
         
     }
     
-    public func append(vertex:T) {
+    open func append(_ vertex:T) {
         self.vertices.append(vertex)
     }
     
-    public subscript(index:Int) -> T {
+    open subscript(index:Int) -> T {
         get {
             return self.vertices[index]
         }
@@ -151,7 +151,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     }
     
     
-    public func bufferDataWithVertexBuffer(vertexBuffer:GLuint, usage:GLenum = GLenum(GL_STATIC_DRAW)) {
+    open func bufferDataWithVertexBuffer(_ vertexBuffer:GLuint, usage:GLenum = GLenum(GL_STATIC_DRAW)) {
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.size, self.vertices, usage)
     }
@@ -161,7 +161,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     
       glBufferData(GLenum(GL_ARRAY_BUFFER), self.size, self.vertices, GLenum(usage))
     */
-    public func bufferData(usage:Int32) {
+    open func bufferData(_ usage:Int32) {
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.size, self.vertices, GLenum(usage))
     }
     
@@ -170,7 +170,7 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     
       glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.count))
     */
-    public func drawArrays() {
+    open func drawArrays() {
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.count))
     }
     
@@ -179,13 +179,13 @@ public class TexturedQuadVertices<T>: ArrayLiteralConvertible {
     
       glDrawArrays(TexturedQuad.drawingMode, GLsizei(start), GLsizei(count))
     */
-    public func drawArraysWithStart(start:Int, count:Int) {
+    open func drawArraysWithStart(_ start:Int, count:Int) {
         glDrawArrays(TexturedQuad.drawingMode, GLsizei(start), GLsizei(count))
     }
     
 }
 
-public class TexturedQuad {
+open class TexturedQuad {
     
     // MARK: - Defined Types
     
@@ -265,7 +265,7 @@ public class TexturedQuad {
     
     // MARK: - Static Methods
     
-    public class func setPosition(position:CGRect, inout ofVertices vertices: [UVertex]) {
+    open class func setPosition(_ position:CGRect, ofVertices vertices: inout [UVertex]) {
         
         if (TexturedQuad.verticesPerQuad == 6) {
             
@@ -287,7 +287,7 @@ public class TexturedQuad {
         
     }//set texture of vertices
     
-    public class func setTexture(texture:CGRect, inout ofVertices vertices: [UVertex]) {
+    open class func setTexture(_ texture:CGRect, ofVertices vertices: inout [UVertex]) {
         
         if (TexturedQuad.verticesPerQuad == 6) {
             
@@ -309,7 +309,7 @@ public class TexturedQuad {
         
     }//set texture of vertices
     
-    public class func pointForIndex(index:Int) -> CGPoint {
+    open class func pointForIndex(_ index:Int) -> CGPoint {
         
         //If the number of vertices per quad is 4,
         //then I am using GL_TRIANGLE_STRIPS
@@ -332,7 +332,7 @@ public class TexturedQuad {
                 return CGPoint(x: 1.0, y: 0.0)
                 
             default:
-                return CGPointZero
+                return CGPoint.zero
             }
             
         } else {
@@ -351,14 +351,14 @@ public class TexturedQuad {
                 return CGPoint(x: 1.0, y: 0.0)
                 
             default:
-                return CGPointZero
+                return CGPoint.zero
             }
         }
         
         
     }//point for index
     
-    public class func generateVertices() -> [UVertex] {
+    open class func generateVertices() -> [UVertex] {
         
         var verts:[UVertex] = []
         for _ in 0..<TexturedQuad.verticesPerQuad {
@@ -368,7 +368,7 @@ public class TexturedQuad {
         return verts
     }//generate vertices
     
-    public class func generateVerticesWithHandler(handler:(Int, inout UVertex) -> ()) -> [UVertex] {
+    open class func generateVerticesWithHandler(_ handler:(Int, inout UVertex) -> ()) -> [UVertex] {
         
         var verts:[UVertex] = []
         for iii in 0..<TexturedQuad.verticesPerQuad {
@@ -385,7 +385,7 @@ public class TexturedQuad {
     public class var verticesPerQuad:Int { return 4 }
     public class var drawingMode:GLenum { return GLenum(GL_TRIANGLE_STRIP) }
     */
-    public class var verticesPerQuad:Int { return 6 }
-    public class var drawingMode:GLenum { return GLenum(GL_TRIANGLES) }
+    open class var verticesPerQuad:Int { return 6 }
+    open class var drawingMode:GLenum { return GLenum(GL_TRIANGLES) }
     
 }

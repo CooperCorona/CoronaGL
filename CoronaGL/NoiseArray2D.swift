@@ -11,38 +11,39 @@ import UIKit
 #else
 import Cocoa
 #endif
+import GameplayKit
 
-public class NoiseArray2D {
+open class NoiseArray2D {
     
     public typealias NoiseType = CGFloat
     
     ///Total number of gradients / permutations.
-    public static let totalCount = 256
+    open static let totalCount = 256
     
     ///Total elements of gradient / permutation arrays.
-    public static let arrayCount = NoiseArray2D.totalCount * 2 + 2
+    open static let arrayCount = NoiseArray2D.totalCount * 2 + 2
     
     ///Used to clamp indices to correct range.
-    public static let permutationClamp = 255
+    open static let permutationClamp = 255
     
     ///2-Component Normalized Vectors of index's corresponding gradient.
-    public private(set) var gradients = [CGPoint](count: NoiseArray2D.arrayCount, repeatedValue: CGPoint.zero)
+    open fileprivate(set) var gradients = [CGPoint](repeating: CGPoint.zero, count: NoiseArray2D.arrayCount)
     
     ///Scrambled indices of gradients array.
-    public private(set) var permutations = [Int](count: NoiseArray2D.arrayCount, repeatedValue: 0)
+    open fileprivate(set) var permutations = [Int](repeating: 0, count: NoiseArray2D.arrayCount)
     
     ///Number used to seed pseudo random number generator.
-    public let seed:UInt32
+    open let seed:UInt32
+    fileprivate let random:GKMersenneTwisterRandomSource
     
     ///Whether the noise should be calculated by smoothing the interpolation.
-    public var shouldSmooth = true
+    open var shouldSmooth = true
     
     ///Initialize NoiseArray2D with noise corresponding to seed.
     public init(seed:UInt32 = 1) {
-        
         self.seed = seed
         //Seed pseudo random number generator
-        srandom(seed)
+        self.random = GKMersenneTwisterRandomSource(seed: UInt64(seed))
         
         //Generate pseudo random gradients (which
         //are always the same for the same seeds)
@@ -57,7 +58,7 @@ public class NoiseArray2D {
         
         //Scramble list of permutations
         for iii in 0..<NoiseArray2D.totalCount {
-            let scrambleIndex = random() % NoiseArray2D.totalCount
+            let scrambleIndex = abs(self.random.nextInt()) % NoiseArray2D.totalCount
             let storedValue = self.permutations[iii]
             self.permutations[iii] = self.permutations[scrambleIndex]
             self.permutations[scrambleIndex] = storedValue
@@ -72,8 +73,8 @@ public class NoiseArray2D {
         
     }//initialize
     
-    private func randomValue() -> CGFloat {
-        return CGFloat(random() % (NoiseArray2D.totalCount * 2 + 1) - NoiseArray2D.totalCount) / CGFloat(NoiseArray2D.totalCount)
+    fileprivate func randomValue() -> CGFloat {
+        return CGFloat(abs(self.random.nextInt()) % (NoiseArray2D.totalCount * 2 + 1) - NoiseArray2D.totalCount) / CGFloat(NoiseArray2D.totalCount)
     }
     
     /**
@@ -82,7 +83,7 @@ public class NoiseArray2D {
     - parameter vec: XY position to calculate noise at.
     - returns: Value of noise at *vec* in range [-1.0, 1.0]
     */
-    public func noiseAt(vec:CGPoint) -> NoiseType {
+    open func noiseAt(_ vec:CGPoint) -> NoiseType {
         
         let xComponents = self.getComponentsAt(vec.x)
         let yComponents = self.getComponentsAt(vec.y)
@@ -168,7 +169,7 @@ public class NoiseArray2D {
     - parameter vec: XY position to calculate noise at.
     - returns: Value of noise at *vec* in range [0.0, 1.0]
     */
-    public func positiveNoiseAt(vec:CGPoint) -> NoiseType {
+    open func positiveNoiseAt(_ vec:CGPoint) -> NoiseType {
         return self.noiseAt(vec) * 0.5 + 0.5
     }
     
@@ -182,7 +183,7 @@ public class NoiseArray2D {
     - returns: **Pre Distance** Distance in range [0.0, 1.0) of value from lower index.
     - returns: **Post Distance** Distance in range [-1.0, 0.0) of value from upper index.
     */
-    private func getComponentsAt(value:CGFloat) -> (lowerIndex:Int, upperIndex:Int, preDistance:CGFloat, postDistance:CGFloat) {
+    fileprivate func getComponentsAt(_ value:CGFloat) -> (lowerIndex:Int, upperIndex:Int, preDistance:CGFloat, postDistance:CGFloat) {
         let lowerIndex = Int(value) & NoiseArray2D.permutationClamp
         let upperIndex = (lowerIndex + 1) & NoiseArray2D.permutationClamp
         let preDistance = value - floor(value)
@@ -191,7 +192,7 @@ public class NoiseArray2D {
     }
     
     ///Convenience accessor to *permutations* (read-only).
-    private subscript(index:Int) -> Int {
+    fileprivate subscript(index:Int) -> Int {
         return self.permutations[index]
     }
 }

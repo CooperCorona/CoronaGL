@@ -18,7 +18,7 @@ public protocol DoubleBuffered {
     
 }
 
-public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
+open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Types
     
@@ -38,24 +38,24 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Properties
     
-    private var noiseProgram = ShaderHelper.programDictionaryForString("Perlin Noise Shader")!
+    fileprivate var noiseProgram = ShaderHelper.programDictionaryForString("Perlin Noise Shader")!
     
     ///Texture used to find, generate, and interpolate between noise values.
-    public var noiseTexture:Noise3DTexture2D
+    open var noiseTexture:Noise3DTexture2D
     ///Gradient of colors that noise is mapped to.
-    public var gradient:GLGradientTexture2D
+    open var gradient:GLGradientTexture2D
     ///Texture multiplied into the final output color.
-    public var shadeTexture:CCTexture? {
+    open var shadeTexture:CCTexture? {
         didSet {
             self.shadeTextureChanged()
         }
     }
     
-    public let noiseVertices:TexturedQuadVertices<PerlinNoiseVertex> = []
-    public private(set) var buffer:GLSFrameBuffer
+    open let noiseVertices:TexturedQuadVertices<PerlinNoiseVertex> = []
+    open fileprivate(set) var buffer:GLSFrameBuffer
     
     ///What type of noise is drawn (Default, Fractal, etc.)
-    public var noiseType:NoiseType = NoiseType.Default {
+    open var noiseType:NoiseType = NoiseType.Default {
         didSet {
             let key:String
             switch self.noiseType {
@@ -74,7 +74,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     }
     
     ///Conceptually, the size of the noise. How much noise you can see.
-    public var noiseSize:CGSize = CGSize(square: 1.0) {
+    open var noiseSize:CGSize = CGSize(square: 1.0) {
         didSet {
             self.noiseSizeChanged()
             if self.shouldRedraw && !(noiseSize.width ~= oldValue.width || noiseSize.height ~= oldValue.height) {
@@ -85,7 +85,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         }
     }
     ///Accessor for *noiseSize.width*
-    public var noiseWidth:CGFloat {
+    open var noiseWidth:CGFloat {
         get {
             return self.noiseSize.width
         }
@@ -94,7 +94,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         }
     }
     ///Accessor for *noiseSize.height*
-    public var noiseHeight:CGFloat {
+    open var noiseHeight:CGFloat {
         get {
             return self.noiseSize.height
         }
@@ -104,9 +104,9 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     }
     
     ///Offset of noise texture. Note that the texture is not redrawn when *offset* is changed.
-    public var offset:SCVector3 = SCVector3() {
+    open var offset:SCVector3 = SCVector3() {
         didSet {
-            self.offset = SCVector3(x: self.offset.x % 255.0, y: self.offset.y % 255.0, z: self.offset.z % 255.0)
+            self.offset = SCVector3(x: self.offset.x.truncatingRemainder(dividingBy: 255.0), y: self.offset.y.truncatingRemainder(dividingBy: 255.0), z: self.offset.z.truncatingRemainder(dividingBy: 255.0))
             if self.shouldRedraw && !(self.offset ~= oldValue) {
                 self.renderToTexture()
             } else {
@@ -115,17 +115,17 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         }
     }
     ///Speed at with offset changes. Note that the texture is not redrawn when *offset* is changed.
-    public var offsetVelocity = SCVector3()
+    open var offsetVelocity = SCVector3()
     ///How much the noise is blended with the rest of the texture. 0.0 for no noise and 1.0 for full noise.
-    public var noiseAlpha:CGFloat = 1.0
+    open var noiseAlpha:CGFloat = 1.0
     
     ///The period is how long it takes for the noise to begin repeating. Defaults to 256 (which doesn't actually have an effect).
-    public var period:(x:Int, y:Int, z:Int) = (256, 256, 256) {
+    open var period:(x:Int, y:Int, z:Int) = (256, 256, 256) {
         didSet {
             self.bufferIsDirty = true
         }
     }
-    public var xyPeriod:(x:Int, y:Int) {
+    open var xyPeriod:(x:Int, y:Int) {
         get {
             return (self.period.x, self.period.y)
         }
@@ -133,7 +133,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
             self.period = (newValue.x, newValue.y, self.period.z)
         }
     }
-    public var yzPeriod:(y:Int, z:Int) {
+    open var yzPeriod:(y:Int, z:Int) {
         get {
             return (self.period.y, self.period.z)
         }
@@ -141,7 +141,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
             self.period = (self.period.x, newValue.y, newValue.z)
         }
     }
-    public var xzPeriod:(x:Int, z:Int) {
+    open var xzPeriod:(x:Int, z:Int) {
         get {
             return (self.period.x, self.period.z)
         }
@@ -160,7 +160,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     the full range. Default value is 0.7, because
     that should cause noise to range from [-1.0, 1.0].
     */
-    public var noiseDivisor:CGFloat = 0.7 {
+    open var noiseDivisor:CGFloat = 0.7 {
         didSet {
             if self.noiseDivisor <= 0.0 {
                 self.noiseDivisor = 1.0
@@ -169,17 +169,17 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         }
     }
     
-    public var noiseAngle:CGFloat = 0.0 {
+    open var noiseAngle:CGFloat = 0.0 {
         didSet {
-            self.noiseAngle = self.noiseAngle % CGFloat(2.0 * M_PI)
+            self.noiseAngle = self.noiseAngle.truncatingRemainder(dividingBy: CGFloat(2.0 * M_PI))
             self.bufferIsDirty = true;
         }
     }
     
-    public var shouldRedraw = false
-    public private(set) var bufferIsDirty = false
+    open var shouldRedraw = false
+    open fileprivate(set) var bufferIsDirty = false
     
-    public private(set) var fadeAnimation:NoiseFadeAnimation? = nil
+    open fileprivate(set) var fadeAnimation:NoiseFadeAnimation? = nil
     
     // MARK: - Setup
     
@@ -226,7 +226,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Logic
     
-    public override func update(dt: CGFloat) {
+    open override func update(_ dt: CGFloat) {
         super.update(dt)
         
         self.offset += self.offsetVelocity * dt
@@ -241,8 +241,8 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     }//update
     
     ///Render noise to background texture (*buffer*).
-    public func renderToTexture() {
-        guard let success = self.framebufferStack?.pushGLSFramebuffer(self.buffer) where success else {
+    open func renderToTexture() {
+        guard let success = self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer) , success else {
             print("Error: Couldn't push framebuffer!")
             print("Stack: \(self.framebufferStack)")
             return
@@ -294,7 +294,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         self.bufferIsDirty = false
     }
     
-    public func shadeTextureChanged() {
+    open func shadeTextureChanged() {
         if let nt = self.shadeTexture {
             let bl = nt.frame.bottomLeftGL
             let br = nt.frame.bottomRightGL
@@ -320,7 +320,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         }
     }
     
-    public func noiseSizeChanged() {
+    open func noiseSizeChanged() {
         
         self.noiseVertices.iterateWithHandler() { index, vertex in
             let curPoint = TexturedQuad.pointForIndex(index)
@@ -331,7 +331,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         
     }//noise size changed
     
-    public override func contentSizeChanged() {
+    open override func contentSizeChanged() {
         self.buffer = GLSFrameBuffer(size: self.contentSize)
         self.texture = self.buffer.ccTexture
         
@@ -344,7 +344,7 @@ public class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         super.contentSizeChanged()
     }
     
-    public func performFadeWithDuration(duration:CGFloat, appearing:Bool, completion:dispatch_block_t?) {
+    open func performFadeWithDuration(_ duration:CGFloat, appearing:Bool, completion:(()->())?) {
         let fadeAnimation = NoiseFadeAnimation(sprite: self, duration: duration, appearing: appearing)
         if let completion = completion {
             fadeAnimation.completionHandler = completion

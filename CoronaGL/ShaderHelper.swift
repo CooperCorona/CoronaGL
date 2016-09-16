@@ -8,10 +8,10 @@
 
 import GLKit
 
-public class ShaderHelper : NSObject {
+open class ShaderHelper : NSObject {
 
     // MARK: - Shared Instance
-    public class var sharedInstance : ShaderHelper {
+    open class var sharedInstance : ShaderHelper {
         struct Static {
             static let instance:ShaderHelper = ShaderHelper()
         }//static instance
@@ -20,9 +20,9 @@ public class ShaderHelper : NSObject {
     
     // MARK: - Properties
     
-    public var programs:[String:GLuint] = [:]
-    private(set) public var programDictionaries:[String:GLProgramDictionary] = [:]
-    private(set) public var isLoaded = false
+    open var programs:[String:GLuint] = [:]
+    fileprivate(set) open var programDictionaries:[String:GLProgramDictionary] = [:]
+    fileprivate(set) open var isLoaded = false
     
     // MARK: - Setup
     
@@ -32,11 +32,11 @@ public class ShaderHelper : NSObject {
     
     // MARK: - Logic
     
-    public func loadPrograms(dict:[String:String]) {
+    open func loadPrograms(_ dict:[String:String]) {
         
         for (key, file) in dict {
-            if let vshURL = NSBundle.mainBundle().URLForResource(file, withExtension: "vsh"),
-            fshURL = NSBundle.mainBundle().URLForResource(file, withExtension: "fsh") {
+            if let vshURL = Bundle.main.url(forResource: file, withExtension: "vsh"),
+            let fshURL = Bundle.main.url(forResource: file, withExtension: "fsh") {
                 let program = buildProgramVertexURL(vshURL, fragmentURL: fshURL)
                 programs[key] = program
                 programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
@@ -47,28 +47,28 @@ public class ShaderHelper : NSObject {
     }//load programs
     
     ///Gets all *.vsh* and *.fsh* files from the OmniSwift bundle and loads them.
-    public func loadProgramsFromBundle() {
+    open func loadProgramsFromBundle() {
         /*
         var vshDict:[String:NSURL] = [:]
         var fshDict:[String:NSURL] = [:]
         */
         #if os(iOS)
-        EAGLContext.setCurrentContext(CCTextureOrganizer.sharedContext)
+        EAGLContext.setCurrent(CCTextureOrganizer.sharedContext)
         #else
 //        GLSFrameBuffer.globalContext.makeCurrentContext()
         #endif
         var basePaths:[String:String] = [:]
-        var vshURLs:[String:NSURL] = [:]
-        var fshURLs:[String:NSURL] = [:]
-        if let resourcePath = NSBundle.mainBundle().resourcePath,
-        let enumerator = NSFileManager.defaultManager().enumeratorAtPath(resourcePath) {
+        var vshURLs:[String:URL] = [:]
+        var fshURLs:[String:URL] = [:]
+        if let resourcePath = Bundle.main.resourcePath,
+        let enumerator = FileManager.default.enumerator(atPath: resourcePath) {
             while let currentPath = enumerator.nextObject() as? String {
                 if let (key, path) = self.keyAndPathForPath(currentPath) {
                     basePaths[key] = path
                     if currentPath.hasSuffix(".vsh") {
-                        vshURLs[key] = NSURL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                        vshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
                     } else if currentPath.hasSuffix(".fsh") {
-                        fshURLs[key] = NSURL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                        fshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class ShaderHelper : NSObject {
         for (key, path) in basePaths {
 //            let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")
 //            let fshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).fsh")
-            guard let vshURL = vshURLs[key], fshURL = fshURLs[key] else {
+            guard let vshURL = vshURLs[key], let fshURL = fshURLs[key] else {
                 print("Error: Failed to load shader (\(key)).")
                 continue
             }
@@ -140,8 +140,8 @@ public class ShaderHelper : NSObject {
         */
     }
     
-    private func keyAndPathForPath(path:String) -> (key:String, path:String)? {
-        let baseFilePaths = path.componentsSeparatedByString("/").last!.componentsSeparatedByString(".")
+    fileprivate func keyAndPathForPath(_ path:String) -> (key:String, path:String)? {
+        let baseFilePaths = path.components(separatedBy: "/").last!.components(separatedBy: ".")
         guard baseFilePaths.count >= 2 && (baseFilePaths[1] == "vsh" || baseFilePaths[1] == "fsh") else {
             return nil
         }
@@ -150,7 +150,7 @@ public class ShaderHelper : NSObject {
         return (key, filePath)
     }
     
-    public func buildProgramVertexURL(vshURL:NSURL, fragmentURL fshURL:NSURL) -> GLuint {
+    open func buildProgramVertexURL(_ vshURL:URL, fragmentURL fshURL:URL) -> GLuint {
         let program = glCreateProgram()
 
         let vertexShader = self.buildShader(vshURL, shaderType: GLenum(GL_VERTEX_SHADER))
@@ -164,22 +164,22 @@ public class ShaderHelper : NSObject {
         return program
     }//create program
     
-    public func buildShader(url:NSURL, shaderType:GLenum) -> GLuint {
+    open func buildShader(_ url:URL, shaderType:GLenum) -> GLuint {
         
         #if os(iOS)
-        let data = try? String(contentsOfURL: url, encoding: NSUTF8StringEncoding)
-        var text:UnsafePointer<GLchar> = (data! as NSString).UTF8String
+        let data = try? String(contentsOf: url, encoding: String.Encoding.utf8)
+        var text:UnsafePointer<GLchar>? = (data! as NSString).utf8String!
 
-        let source = withUnsafePointer(&text) { (pointer:UnsafePointer<UnsafePointer<GLchar>>) -> GLuint in
+        let source = withUnsafePointer(to: &text) { (pointer:UnsafePointer<UnsafePointer<GLchar>?>) -> GLuint in
             let sourceValue = glCreateShader(shaderType)
             glShaderSource(sourceValue, 1, pointer, nil)
             glCompileShader(sourceValue)
             return sourceValue
         }
         #else
-        let data = try? String(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-        let cSource = data!.cStringUsingEncoding(NSASCIIStringEncoding)
-        var text = UnsafePointer<GLchar> (cSource!)
+        let data = try? String(contentsOf: url, encoding: String.Encoding.ascii)
+        let cSource = data!.cString(using: String.Encoding.ascii)
+        var text:UnsafePointer<GLchar>? = UnsafePointer<GLchar> (cSource!)
         let source = glCreateShader(shaderType)
         var length = GLint(data!.characters.count)
         glShaderSource(source, 1, &text, &length)
@@ -190,9 +190,9 @@ public class ShaderHelper : NSObject {
         glGetShaderiv(source, GLenum(GL_INFO_LOG_LENGTH), &logLength)
         if (logLength > 0)
         {//valid log
-            var ump = Array<GLchar>(count: Int(logLength), repeatedValue: 0)
+            var ump = Array<GLchar>(repeating: 0, count: Int(logLength))
             glGetShaderInfoLog(source, logLength, &logLength, &ump)
-            let str = String(UTF8String: ump)
+            let str = String(validatingUTF8: ump)
             print("Shader Log:\(str!)")
         }//valid log
         
@@ -207,19 +207,19 @@ public class ShaderHelper : NSObject {
         return source
     }//create shader
     
-    private func createProgramDictionary(program:GLuint, vertexURL vshURL:NSURL, fragmentURL fshURL:NSURL) -> GLProgramDictionary? {
-        guard let vshData = try? String(contentsOfURL: vshURL, encoding: NSASCIIStringEncoding),
-            let fshData = try? String(contentsOfURL: fshURL, encoding: NSASCIIStringEncoding) else {
+    fileprivate func createProgramDictionary(_ program:GLuint, vertexURL vshURL:URL, fragmentURL fshURL:URL) -> GLProgramDictionary? {
+        guard let vshData = try? String(contentsOf: vshURL, encoding: String.Encoding.ascii),
+            let fshData = try? String(contentsOf: fshURL, encoding: String.Encoding.ascii) else {
                 return nil
         }
         return GLProgramDictionary(program: program, vertexShader: vshData, fragmentShader: fshData)
     }
     
-    public class func programDictionaryForString(key:String) -> GLProgramDictionary? {
+    open class func programDictionaryForString(_ key:String) -> GLProgramDictionary? {
         return ShaderHelper.sharedInstance.programDictionaries[key]
     }
     
-    public subscript(index:String) -> GLuint? {
+    open subscript(index:String) -> GLuint? {
         if let program = self.programs[index] {
             return program
         } else {
@@ -228,7 +228,7 @@ public class ShaderHelper : NSObject {
         }
     }//get program for string
     
-    public class func programForString(key:String) -> GLuint? {
+    open class func programForString(_ key:String) -> GLuint? {
         return ShaderHelper.sharedInstance[key]
     }//get program for string
     

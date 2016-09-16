@@ -83,24 +83,22 @@ public extension GLSCamera {
         var origin = rect.origin
         var maxPoint = origin + rect.size.getCGPoint()
         
-        origin = self.convertPointToOpenGL(origin)
-        maxPoint = self.convertPointToOpenGL(maxPoint)
+        origin = self.convertPointToOpenGL(point: origin)
+        maxPoint = self.convertPointToOpenGL(point: maxPoint)
         
         var glRect = CGRect(x: origin.x, y: origin.y, width: maxPoint.x - origin.x, height: maxPoint.y - origin.y)
-        glRect.standardizeInPlace()
-        return glRect
+        return glRect.standardized
     }//convert rect to OpenGL
     
     public func convertRectFromOpenGL(rect:CGRect) -> CGRect {
         var origin = rect.origin
         var maxPoint = origin + rect.size.getCGPoint()
         
-        origin = self.convertPointFromOpenGL(origin)
-        maxPoint = self.convertPointFromOpenGL(maxPoint)
+        origin = self.convertPointFromOpenGL(point: origin)
+        maxPoint = self.convertPointFromOpenGL(point: maxPoint)
         
         var uiRect = CGRect(x: origin.x, y: origin.y, width: maxPoint.x - origin.x, height: maxPoint.y - origin.y)
-        uiRect.standardizeInPlace()
-        return uiRect
+        return uiRect.standardized
     }//convert rect to OpenGL
     
 }//Conversions

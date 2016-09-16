@@ -33,11 +33,15 @@ public struct PEVertex: CustomStringConvertible {
     }
 }
 
-public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
-    
+open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
+    /*
+    private static var __once: () = {
+            StaticInstance.instance = DispatchQueue(label: "GLSParticleEmitter Update", attributes: [])
+        }()
+    */
     // MARK: - Types
     
-    public class PEVertexData {
+    open class PEVertexData {
         let velocity:CGPoint
         var life:CGFloat
         var isFinished:Bool { return self.life <= 0.0 }
@@ -47,7 +51,7 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
             self.life = life
         }//initialize
         
-        func update(dt:CGFloat, inout vertex:PEVertex) {
+        func update(_ dt:CGFloat, vertex:inout PEVertex) {
             
             self.life -= dt
             
@@ -59,48 +63,49 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     // MARK: - Properties
     
-    public var particles:[PEVertex] = []
-    public var particleData:[PEVertexData] = []
+    open var particles:[PEVertex] = []
+    open var particleData:[PEVertexData] = []
     
-    public let particleSize:CGFloat
-    public let particleSizeRange:CGFloat
-    public let particleColor:SCVector3
-    public let particleColorRange:SCVector3
-    public let particleVelocity:CGFloat
-    public let particleVelocityRange:CGFloat
-    public let particleLife:CGFloat
-    public let particleLifeRange:CGFloat
-    public let particleBirthFrequency:CGFloat
-    public let particleBirthRate:Int
-    public var particleAngleMinimum:CGFloat = 0.0
-    public var particleAngleMaximum:CGFloat = 2.0 * CGFloat(M_PI)
-    public let particleTexture:CCTexture?
-    public let particleTextureAnchor:(GLfloat, GLfloat, GLfloat, GLfloat)
-    public var particleSpawnShape:RandomPointProtocol? = nil
+    open let particleSize:CGFloat
+    open let particleSizeRange:CGFloat
+    open let particleColor:SCVector3
+    open let particleColorRange:SCVector3
+    open let particleVelocity:CGFloat
+    open let particleVelocityRange:CGFloat
+    open let particleLife:CGFloat
+    open let particleLifeRange:CGFloat
+    open let particleBirthFrequency:CGFloat
+    open let particleBirthRate:Int
+    open var particleAngleMinimum:CGFloat = 0.0
+    open var particleAngleMaximum:CGFloat = 2.0 * CGFloat(M_PI)
+    open let particleTexture:CCTexture?
+    open let particleTextureAnchor:(GLfloat, GLfloat, GLfloat, GLfloat)
+    open var particleSpawnShape:RandomPointProtocol? = nil
     
-    public let screenScale:CGFloat = GLSFrameBuffer.getRetinaScale()
+    open let screenScale:CGFloat = GLSFrameBuffer.getRetinaScale()
     
-    public let duration:CGFloat?
-    private var durCount:CGFloat = 0.0
-    private var spawnCount:CGFloat = 0.0
+    open let duration:CGFloat?
+    fileprivate var durCount:CGFloat = 0.0
+    fileprivate var spawnCount:CGFloat = 0.0
     
-    public var isEmitting = true
-    public var smoothEnding = true
-    public var removeAutomatically = true
-    public var paused = false
-    public var updateInBackground = true
+    open var isEmitting = true
+    open var smoothEnding = true
+    open var removeAutomatically = true
+    open var paused = false
+    open var updateInBackground = true
     
-    public let bufferSize:CGFloat
-    public let buffer:GLSFrameBuffer
+    open let bufferSize:CGFloat
+    open let buffer:GLSFrameBuffer
     
-    public let particleProgram = ShaderHelper.programDictionaryForString("Universal Particle Shader")!
+    open let particleProgram = ShaderHelper.programDictionaryForString("Universal Particle Shader")!
+//    open let particleProgram = ShaderHelper.programDictionaryForString("Test Particles")!
     
-    public private(set) var bufferIsDirty = false
+    open fileprivate(set) var bufferIsDirty = false
     ///CURRENTLY DOES NOTHING. Other GLSNode subclasses invoke renderToTexture in update method if this is true.
-    public var shouldRedraw = false
+    open var shouldRedraw = false
     
     // MARK: - Setup
-    
+
     public init(size:CGFloat, color:SCVector3, velocity:CGFloat, life:CGFloat, birth:Int, duration:CGFloat?, texture:CCTexture?, sizeRange:CGFloat = 0.0, colorRange: SCVector3 = SCVector3(), velocityRange:CGFloat = 0.0, lifeRange:CGFloat = 0.0) {
         
         self.particleSize = size
@@ -141,7 +146,7 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     // MARK: - Logic
     
-    public func generateParticle() -> (PEVertex, PEVertexData) {
+    open func generateParticle() -> (PEVertex, PEVertexData) {
         
         let color = GLSParticleEmitter.randomVector3(self.particleColor, withRange: self.particleColorRange)
         
@@ -161,7 +166,7 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         return (part, data)
     }//generate vertex
     
-    public func randomPointForParticle() -> CGPoint {
+    open func randomPointForParticle() -> CGPoint {
         
         let pCenter = CGPoint(x: bufferSize / 2.0, y: bufferSize / 2.0)
         
@@ -172,14 +177,14 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         return pCenter
     }//random point for particle
     
-    public override func update(dt: CGFloat) {
+    open override func update(_ dt: CGFloat) {
         super.update(dt)
         
         self.updateParticles(dt)
         self.updateDuration(dt)
     }
     
-    public func updateParticles(dt:CGFloat) {
+    open func updateParticles(_ dt:CGFloat) {
         
         var storedData      = self.particleData
         var storedParticles = self.particles
@@ -207,7 +212,7 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         self.bufferIsDirty = true
     }
 
-    public func addParticles(dt:CGFloat) -> (vertices:[PEVertex], data:[PEVertexData]) {
+    open func addParticles(_ dt:CGFloat) -> (vertices:[PEVertex], data:[PEVertexData]) {
         
         self.spawnCount += dt
         var parts:[PEVertex] = []
@@ -228,7 +233,7 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         return (parts, datas)
     }//add particles
 
-    public func updateDuration(dt:CGFloat) {
+    open func updateDuration(_ dt:CGFloat) {
         
         if let _ = self.duration {
             self.durCount -= dt
@@ -245,16 +250,16 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         
     }//update duration
     
-    
-    public func renderToTexture() {
-        self.framebufferStack?.pushGLSFramebuffer(self.buffer)
+    open func renderToTexture() {
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
+        
         self.buffer.bindClearColor()
         
         glBlendColor(0, 0, 0, 1.0);
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_CONSTANT_ALPHA));
         
         self.particleProgram.use()
-        glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(PEVertex) * self.particles.count, self.particles, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<PEVertex>.size * self.particles.count, self.particles, GLenum(GL_STATIC_DRAW))
         
         self.particleProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
@@ -262,16 +267,15 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
             glBindTexture(GLenum(GL_TEXTURE_2D), tex.name)
             glUniform1i(self.particleProgram["u_TextureInfo"], 0)
         }
-        
+ 
         self.particleProgram.enableAttributes()
-        self.particleProgram.bridgeAttributesWithSizes([2, 3, 1, 4], stride: sizeof(PEVertex))
-        
+        self.particleProgram.bridgeAttributesWithSizes([2, 3, 1, 4], stride: MemoryLayout<PEVertex>.size)
         glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(self.particles.count))
         
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+        
         self.particleProgram.disable()
         self.framebufferStack?.popFramebuffer()
-        
         self.bufferIsDirty = false
     }
     
@@ -281,19 +285,17 @@ public class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     }//deinitialize
     
     
-    
-    public class var backgroundQueue:dispatch_queue_t {
+    /*
+    open class var backgroundQueue:DispatchQueue {
         struct StaticInstance {
-            static var instance:dispatch_queue_t! = nil
-            static var onceToken:dispatch_once_t = 0
+            static var instance:DispatchQueue! = nil
+            static var onceToken:Int = 0
         }
-        dispatch_once(&StaticInstance.onceToken) {
-            StaticInstance.instance = dispatch_queue_create("GLSParticleEmitter Update", DISPATCH_QUEUE_SERIAL)
-        }
+        _ = GLSParticleEmitter.__once
         
         return StaticInstance.instance
     }
-    
+    */
 }
 
 //Get Random Floats/Vectors
@@ -306,14 +308,14 @@ public extension GLSParticleEmitter {
         return CGFloat(randomInt) / 100000.0
     }
     
-    public class func randomFloat(lower:CGFloat, between upper:CGFloat) -> CGFloat {
+    public class func randomFloat(_ lower:CGFloat, between upper:CGFloat) -> CGFloat {
         
         let factor = GLSParticleEmitter.randomFloat()
         
         return lower + (upper - lower) * factor
     }//get a random float between two values
     
-    public class func randomFloat(middle:CGFloat, withRange range:CGFloat) -> CGFloat {
+    public class func randomFloat(_ middle:CGFloat, withRange range:CGFloat) -> CGFloat {
         
         return GLSParticleEmitter.randomFloat(middle - range / 2.0, between: middle + range / 2.0)
         
@@ -330,14 +332,14 @@ public extension GLSParticleEmitter {
         
     }//get a random vector 3 with range
     
-    public class func randomVector3(lower:SCVector3, between upper:SCVector3) -> SCVector3 {
+    public class func randomVector3(_ lower:SCVector3, between upper:SCVector3) -> SCVector3 {
         
         let factor = GLSParticleEmitter.randomVector3()
         
         return lower + (upper - lower) * factor
     }//get a random vector 3 between two values
     
-    public class func randomVector3(middle:SCVector3, withRange range:SCVector3) -> SCVector3 {
+    public class func randomVector3(_ middle:SCVector3, withRange range:SCVector3) -> SCVector3 {
         
         return GLSParticleEmitter.randomVector3(middle - range / 2.0, between: middle + range / 2.0)
         

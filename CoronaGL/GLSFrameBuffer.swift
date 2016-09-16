@@ -20,43 +20,43 @@ public typealias ImageType = UIImage
 #else
 public typealias ImageType = NSImage
 #endif
-public class GLSFrameBuffer: GLSNode {
+open class GLSFrameBuffer: GLSNode {
     
-    private var framebufferName:GLuint = 0
-    public var framebuffer:GLuint { return self.framebufferName }
-    private var internalTextureName:GLuint = 0
+    fileprivate var framebufferName:GLuint = 0
+    open var framebuffer:GLuint { return self.framebufferName }
+    fileprivate var internalTextureName:GLuint = 0
     //    var texture:GLuint { return self.texture }
-    public var textureName:GLuint { return self.internalTextureName }
+    open var textureName:GLuint { return self.internalTextureName }
     #if os(OSX)
-    private(set) public var renderBuffer:GLuint = 0
-    public static let globalContext = NSOpenGLContext(format: NSOpenGLPixelFormat(attributes: [
+    fileprivate(set) open var renderBuffer:GLuint = 0
+    open static let globalContext = NSOpenGLContext(format: NSOpenGLPixelFormat(attributes: [
         UInt32(NSOpenGLPFAAccelerated),
         UInt32(NSOpenGLPFAColorSize), UInt32(32),
         UInt32(NSOpenGLPFAOpenGLProfile),
         UInt32(NSOpenGLProfileVersion3_2Core),
         UInt32(0)
-        ])!, shareContext: nil)!
+        ])!, share: nil)!
     #endif
     
-    public let internalSize:CGSize
-    public let internalScale:CGFloat
-    public let size:CGSize
+    open let internalSize:CGSize
+    open let internalScale:CGFloat
+    open let size:CGSize
     
-    public var clearColor = SCVector4()
+    open var clearColor = SCVector4()
     
-    public let ccTexture:CCTexture
-    public let sprite:GLSSprite
+    open let ccTexture:CCTexture
+    open let sprite:GLSSprite
     /**
     If true, then framebuffer renders normally.
     If false, then you are responsible for rendering.
     The 'sprite' property is provided for you.
     */
-    public var renderAutomatically = true
+    open var renderAutomatically = true
     /**
     If *true*, then framebuffer renders children to self in render method.
     If *false*, then contents of framebuffer do not change automatically.
     */
-    public var renderChildren = true
+    open var renderChildren = true
     
     /**
     Texture Parameters must be *GL_LINEAR* and *GL_CLAMP_TO_EDGE*
@@ -121,12 +121,12 @@ public class GLSFrameBuffer: GLSNode {
         self.texture = self.ccTexture
     }
     
-    override public func render(model: SCMatrix4) {
+    override open func render(_ model: SCMatrix4) {
         
         let childModel = self.modelMatrix() * model
         
         if self.renderChildren {
-            self.framebufferStack?.pushGLSFramebuffer(self)
+            self.framebufferStack?.pushGLSFramebuffer(buffer: self)
             
             self.bindClearColor()
             //        super.render(SCMatrix4())
@@ -155,14 +155,14 @@ public class GLSFrameBuffer: GLSNode {
         self.sprite.render(childModel)
     }//render
     
-    public func bindClearColor() {
+    open func bindClearColor() {
         
         glClearColor(GLfloat(self.clearColor.r), GLfloat(self.clearColor.g), GLfloat(self.clearColor.b), GLfloat(self.clearColor.a))
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
         
     }//bind clear color
     
-    public func getImage() -> ImageType {
+    open func getImage() -> ImageType {
     
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), self.framebufferName)
         glReadBuffer(GLenum(GL_COLOR_ATTACHMENT0))
@@ -173,7 +173,7 @@ public class GLSFrameBuffer: GLSNode {
         //(width * height) pixels times 4 bytes per pixel
         let dataLength = width * height * 4
         
-        var buffer:[GLubyte] = Array<GLubyte>(count: dataLength, repeatedValue: 2)
+        var buffer:[GLubyte] = Array<GLubyte>(repeating: 2, count: dataLength)
         
         while (glGetError() != GLenum(GL_NO_ERROR)) {
             
@@ -201,33 +201,33 @@ public class GLSFrameBuffer: GLSNode {
         }
         */
         
-        let dProvider = CGDataProviderCreateWithData(nil, buffer, Int(dataLength), nil)
+        let dProvider = CGDataProvider(dataInfo: nil, data: buffer, size: Int(dataLength), releaseData: { _ in })!
         let bitsPerComponent = 8
         let bitsPerPixel = bitsPerComponent * 4
         let bytesPerRow = width * 4
         let cSpace = CGColorSpaceCreateDeviceRGB()
 //        let bInfo = CGBitmapInfo(CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.Last.rawValue)
-        let bInfo = CGBitmapInfo(rawValue: CGBitmapInfo.ByteOrder32Big.rawValue | CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let rIntent = CGColorRenderingIntent.RenderingIntentDefault
+        let bInfo = CGBitmapInfo(rawValue: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue)
+        let rIntent = CGColorRenderingIntent.defaultIntent
         
-        let cgIm = CGImageCreate(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, cSpace, bInfo, dProvider, nil, false, rIntent)
+        let cgIm = CGImage(width: width, height: height, bitsPerComponent: bitsPerComponent, bitsPerPixel: bitsPerPixel, bytesPerRow: bytesPerRow, space: cSpace, bitmapInfo: bInfo, provider: dProvider, decode: nil, shouldInterpolate: false, intent: rIntent)
         
 //        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, self.internalScale)
 //        let context = UIGraphicsGetCurrentContext()
-        let context = CGBitmapContextCreate(nil, width, height, bitsPerComponent, bytesPerRow, cSpace, bInfo.rawValue)
-        CGContextSaveGState(context)
+        let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: cSpace, bitmapInfo: bInfo.rawValue)
+        context?.saveGState()
         
-        CGContextSetBlendMode(context, CGBlendMode.Copy)
-        CGContextDrawImage(context, CGRect(width: CGFloat(width), height: CGFloat(height), centered: false), cgIm)
+        context?.setBlendMode(CGBlendMode.copy)
+        context?.draw(cgIm!, in: CGRect(width: CGFloat(width), height: CGFloat(height), centered: false))
         
 //        let im = UIGraphicsGetImageFromCurrentImageContext()
-        let cgIm2 = CGBitmapContextCreateImage(context)
-        CGContextRestoreGState(context)
+        let cgIm2 = context?.makeImage()
+        context?.restoreGState()
 //        UIGraphicsEndImageContext()
         #if os(iOS)
-        let im = UIImage(CGImage: cgIm2!, scale: self.internalScale, orientation: .Up)
+        let im = UIImage(cgImage: cgIm2!, scale: self.internalScale, orientation: .up)
         #else
-        let im = NSImage(CGImage: cgIm2!, size: self.contentSize)
+        let im = NSImage(cgImage: cgIm2!, size: self.contentSize)
         #endif
         return im
     }//get framebuffer as image
@@ -240,27 +240,27 @@ public class GLSFrameBuffer: GLSNode {
 
     - returns: Total path of png file in Documents directory.
     */
-    public func saveWithName(name:String) -> NSURL {
+    public func saveWithName(name:String) -> URL {
         
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) 
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         let documentDirectory = paths[0]
         
 //        var filePath = documentDirectory.stringByAppendingPathComponent(name)
 //        filePath = filePath.stringByAppendingPathExtension("png")!
-        var filePath = NSURL(string: documentDirectory)!
-        filePath = filePath.URLByAppendingPathComponent(name)
-        filePath = filePath.URLByAppendingPathExtension("png")
+        var filePath:URL = URL(string: documentDirectory)!
+        filePath = filePath.appendingPathComponent(name)
+        filePath = filePath.appendingPathExtension("png")
         
         let im = self.getImage()
         let data = UIImagePNGRepresentation(im)
         
-        data?.writeToURL(filePath, atomically: true)
+        try? data?.write(to: filePath, options: Data.WritingOptions.atomic)
         
         return filePath
     }//save with name
     #endif
     
-    override public func clone() -> GLSFrameBuffer {
+    override open func clone() -> GLSFrameBuffer {
         
         let copiedBuffer = GLSFrameBuffer(size: self.size)
         
@@ -270,7 +270,7 @@ public class GLSFrameBuffer: GLSNode {
         
     }//clone
     
-    public func copyFromFrameBuffer(buffer:GLSFrameBuffer) {
+    open func copyFromFrameBuffer(_ buffer:GLSFrameBuffer) {
         
         self.copyFromNode(buffer)
         
@@ -287,47 +287,47 @@ public class GLSFrameBuffer: GLSNode {
     
     //Override Properties
     
-    override public var position:CGPoint {
+    override open var position:CGPoint {
         didSet {
             self.sprite.position = self.position
         }
     }
-    override public var rotation:CGFloat {
+    override open var rotation:CGFloat {
         didSet {
             self.sprite.rotation = self.rotation
         }
     }
-    override public var scaleX:CGFloat {
+    override open var scaleX:CGFloat {
         didSet {
             self.sprite.scaleX = self.scaleX
         }
     }
-    override public var scaleY:CGFloat {
+    override open var scaleY:CGFloat {
         didSet {
             self.sprite.scaleX = self.scaleY
         }
     }
-    override public var alpha:CGFloat {
+    override open var alpha:CGFloat {
         didSet {
             self.sprite.alpha = self.alpha
         }
     }
-    override public var anchor:CGPoint {
+    override open var anchor:CGPoint {
         didSet {
             self.sprite.anchor = self.anchor
         }
     }
-    override public var tintColor:SCVector3 {
+    override open var tintColor:SCVector3 {
         didSet {
             self.sprite.tintColor = self.tintColor
         }
     }
-    override public var tintIntensity:SCVector3 {
+    override open var tintIntensity:SCVector3 {
         didSet {
             self.sprite.tintIntensity = self.tintIntensity
         }
     }
-    override public var shadeColor:SCVector3 {
+    override open var shadeColor:SCVector3 {
         didSet {
             self.sprite.shadeColor = self.shadeColor
         }
@@ -357,17 +357,17 @@ public extension GLSFrameBuffer {
 //Getters / public class Functions
 public extension GLSFrameBuffer {
     
-    public class func isPowerOf2(value:Int) -> Bool {
+    public class func isPowerOf2(_ value:Int) -> Bool {
         return (value & (value - 1)) == 0
     }
     
-    public class func getValidPowerOf2(value:Int) -> Int {
+    public class func getValidPowerOf2(_ value:Int) -> Int {
         
         if (GLSFrameBuffer.isPowerOf2(value)) {
             return value
         }
         
-        let bitCount = 8 * sizeof(Int)
+        let bitCount = 8 * MemoryLayout<Int>.size
         var bitShift = 0
         for iii in 1..<bitCount {
             if (value & (1 << iii) != 0) {
@@ -382,7 +382,7 @@ public extension GLSFrameBuffer {
         return 1 << (bitShift + 1)
     }
     
-    public class func getValidSize(size:CGSize) -> CGSize {
+    public class func getValidSize(_ size:CGSize) -> CGSize {
         return size
         /*
          *  DEPRECATED
@@ -398,14 +398,14 @@ public extension GLSFrameBuffer {
     
     public class func getRetinaScale() -> CGFloat {
         #if os(iOS)
-        if (UIScreen.mainScreen().respondsToSelector(Selector("nativeScale"))) {
-            let nativeScale = UIScreen.mainScreen().nativeScale
+            if (UIScreen.main.responds(to: #selector(getter: UIScreen.nativeScale))) {
+            let nativeScale = UIScreen.main.nativeScale
             return (nativeScale > 0.0) ? nativeScale : 1.0
-        } else if (UIScreen.mainScreen().respondsToSelector(#selector(UIScreen.displayLinkWithTarget(_:selector:)))) {
+        } else if (UIScreen.main.responds(to: #selector(UIScreen.displayLink))) {
             //'scale' property only works correctly
             //after 'displayLinkWithTarget:selector:
             //was introduced
-            return UIScreen.mainScreen().scale
+            return UIScreen.main.scale
         }
         return 1.0
         #else

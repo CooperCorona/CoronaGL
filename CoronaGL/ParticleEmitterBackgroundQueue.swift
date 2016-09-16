@@ -13,9 +13,9 @@ import Cocoa
 #endif
 
 
-public class ParticleEmitterBackgroundQueue: NSObject {
+open class ParticleEmitterBackgroundQueue: NSObject {
    
-    public class EReference {
+    open class EReference {
         weak var emitter:GLSParticleEmitter? = nil
         let index:Int
         
@@ -26,7 +26,7 @@ public class ParticleEmitterBackgroundQueue: NSObject {
             
         }//initialize
         
-        func update(dt:CGFloat) {
+        func update(_ dt:CGFloat) {
             
             self.emitter?.updateParticles(dt)
             
@@ -40,14 +40,16 @@ public class ParticleEmitterBackgroundQueue: NSObject {
                     dispatch_queue_create("Particle Emitter Queue 4", DISPATCH_QUEUE_CONCURRENT)]
     public var queueCounts = [0, 0, 0, 0]
     */
-    public var references:[EReference] = []
-    public let queues = [ dispatch_queue_create("Particle Emitter Queue 1", DISPATCH_QUEUE_CONCURRENT) ]
+    open var references:[EReference] = []
+    open let queues = [ DispatchQueue(label: "Particle Emitter Queue 1", attributes: DispatchQueue.Attributes.concurrent) ]
 //    let queues = [ dispatch_get_main_queue() ]
     
     /** Used to calculate delta time for updating. Set 'currentDate' to nil to reset timing (could be useful if you pause the update for a while. DT would include all the time while it was paused!) */
-    public var currentDate:NSDate? = nil
+    open var currentDate:Date? = nil
     
-    public func findMinimumQueue() -> Int {
+    static let sharedInstance = ParticleEmitterBackgroundQueue()
+    
+    open func findMinimumQueue() -> Int {
         
         return 0
         /*
@@ -64,7 +66,7 @@ public class ParticleEmitterBackgroundQueue: NSObject {
         */
     }//find queue with minimum number of emitters
     
-    public func addEmitter(emitter:GLSParticleEmitter) {
+    open func addEmitter(_ emitter:GLSParticleEmitter) {
     
         let index = self.findMinimumQueue()
         
@@ -72,7 +74,7 @@ public class ParticleEmitterBackgroundQueue: NSObject {
         
     }//add emitter
     
-    public func removeEmitter(emitter:GLSParticleEmitter) {
+    open func removeEmitter(_ emitter:GLSParticleEmitter) {
         
         self.references = self.references.filter() { (reference:EReference) in
             reference.emitter !== emitter
@@ -80,9 +82,9 @@ public class ParticleEmitterBackgroundQueue: NSObject {
         
     }//remove emitter
     
-    public func update(dt:CGFloat) {
+    open func update(_ dt:CGFloat) {
         
-        let curDate = NSDate()
+        let curDate = Date()
 //        let deltaTime = CGFloat(curDate.timeIntervalSinceDate(self.currentDate ?? NSDate()))
         self.currentDate = curDate
         /*
@@ -105,35 +107,22 @@ public class ParticleEmitterBackgroundQueue: NSObject {
         */
     }//update
     
-    public func removeAll() {
-        self.references.removeAll(keepCapacity: true)
+    open func removeAll() {
+        self.references.removeAll(keepingCapacity: true)
     }//remove all
 }
 
 public extension ParticleEmitterBackgroundQueue {
     
-    public class var sharedInstance:ParticleEmitterBackgroundQueue {
-        struct StaticInstance {
-            static var instance:ParticleEmitterBackgroundQueue! = nil
-            static var onceToken:dispatch_once_t = 0
-        }
-        
-        dispatch_once(&StaticInstance.onceToken) {
-            StaticInstance.instance = ParticleEmitterBackgroundQueue()
-        }
-        
-        return StaticInstance.instance
-    }
-    
-    public class func addEmitter(emitter:GLSParticleEmitter) {
+    public class func addEmitter(_ emitter:GLSParticleEmitter) {
         ParticleEmitterBackgroundQueue.sharedInstance.addEmitter(emitter)
     }
     
-    public class func removeEmitter(emitter:GLSParticleEmitter) {
+    public class func removeEmitter(_ emitter:GLSParticleEmitter) {
         ParticleEmitterBackgroundQueue.sharedInstance.removeEmitter(emitter)
     }
     
-    public class func update(dt:CGFloat) {
+    public class func update(_ dt:CGFloat) {
         ParticleEmitterBackgroundQueue.sharedInstance.update(dt)
     }
     

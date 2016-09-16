@@ -14,7 +14,7 @@ import Cocoa
 import CoronaConvenience
 
 ///Uses 2D Noise to create and animate a colorable fire.
-public class GLSFireSprite: GLSSprite, DoubleBuffered {
+open class GLSFireSprite: GLSSprite, DoubleBuffered {
     
     public struct FireVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -24,43 +24,43 @@ public class GLSFireSprite: GLSSprite, DoubleBuffered {
     // MARK: - Properties
     
     ///The desired noise gradients.
-    public let noiseTexture:Noise2DTexture2D
+    open let noiseTexture:Noise2DTexture2D
     
     ///The colors to use for the fire (0.0 is the bottom, 1.0 is the top).
-    public let gradient:GLGradientTexture2D
+    open let gradient:GLGradientTexture2D
     
-    public let buffer:GLSFrameBuffer
+    open let buffer:GLSFrameBuffer
     
-    public let fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
-    public let fireVertices = TexturedQuadVertices(vertex: FireVertex())
+    open let fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
+    open let fireVertices = TexturedQuadVertices(vertex: FireVertex())
     
     ///How much noise (how many peaks/troughs).
-    public var noiseSize:CGFloat = 1.0 {
+    open var noiseSize:CGFloat = 1.0 {
         didSet {
             self.noiseSizeChanged()
             self.bufferIsDirty = true
         }
     }
     ///What to divide the noise by (to help get noise in desired range).
-    public var noiseDivisor:CGFloat = 0.7 {
+    open var noiseDivisor:CGFloat = 0.7 {
         didSet {
             self.bufferIsDirty = true
         }
     }
     ///The baseline of the fire.
-    public var noiseCenter:CGFloat = 0.5 {
+    open var noiseCenter:CGFloat = 0.5 {
         didSet {
             self.bufferIsDirty = true
         }
     }
     ///How much the noise should offset from the baseline.
-    public var noiseRange:CGFloat = 1.0 {
+    open var noiseRange:CGFloat = 1.0 {
         didSet {
             self.bufferIsDirty = true
         }
     }
     ///Offset into the fire (Y-Values are animated).
-    public var offset = CGPoint.zero {
+    open var offset = CGPoint.zero {
         didSet {
             if self.shouldRedraw && !(self.offset ~= oldValue) {
                 self.renderToTexture()
@@ -70,16 +70,16 @@ public class GLSFireSprite: GLSSprite, DoubleBuffered {
         }
     }
     ///How fast the offset is changing.
-    public var offsetVelocity = CGPoint.zero
+    open var offsetVelocity = CGPoint.zero
     
     ///Whether the fire should attenuate the alpha near the top.
     ///Note that this causes the fire to appear smaller than it actually is,
     ///because the top is invisible (alpha == 0.0).
-    public var attenuateAlpha = true
+    open var attenuateAlpha = true
     
     ///Whether the sprite should invoke renderToTexture() when the offset is changed.
-    public var shouldRedraw = false
-    public private(set) var bufferIsDirty = false
+    open var shouldRedraw = false
+    open fileprivate(set) var bufferIsDirty = false
     
     /**
 Initialize a Fire sprite.
@@ -106,8 +106,8 @@ Initialize a Fire sprite.
     }
   
     ///Renders the fire to the background buffer
-    public func renderToTexture() {
-        self.framebufferStack?.pushGLSFramebuffer(self.buffer)
+    open func renderToTexture() {
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
         self.buffer.bindClearColor()
         
         self.fireProgram.use()
@@ -138,7 +138,7 @@ Initialize a Fire sprite.
         self.bufferIsDirty = false
     }//render to texture
     
-    private func noiseSizeChanged() {
+    fileprivate func noiseSizeChanged() {
         self.fireVertices.iterateWithHandler() { index, vertex in
             let curPos = TexturedQuad.pointForIndex(index)
             vertex.noiseTexture = (GLfloat(curPos.x * self.noiseSize), GLfloat(curPos.y))
@@ -146,7 +146,7 @@ Initialize a Fire sprite.
         }
     }
     
-    public override func update(dt: CGFloat) {
+    open override func update(_ dt: CGFloat) {
         super.update(dt)
         
         self.offset += self.offsetVelocity * dt

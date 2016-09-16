@@ -14,7 +14,7 @@ import Cocoa
 import CoronaConvenience
 
 ///Code for shader and coefficents for .FastBlur comes from http://xissburg.com/faster-gaussian-blur-in-glsl/
-public class GLSBlurSprite: GLSSprite, DoubleBuffered {
+open class GLSBlurSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Types
     
@@ -43,24 +43,24 @@ public class GLSBlurSprite: GLSSprite, DoubleBuffered {
     // MARK: - Properties
     
     ///The texture to blur
-    public var blurTexture:CCTexture? = nil {
+    open var blurTexture:CCTexture? = nil {
         didSet {
             self.blurTextureChanged()
         }
     }
     ///The framebuffer that contains the horizontally blurred texture.
-    public let horizontalBuffer:GLSFrameBuffer
+    open let horizontalBuffer:GLSFrameBuffer
     ///The framebuffer that contains the totally blurred texture.
-    public let verticalBuffer:GLSFrameBuffer
+    open let verticalBuffer:GLSFrameBuffer
     ///DoubleBuffered Conformance. Returns verticalBuffer,
     ///because that is the buffer that contains the final texture.
-    public var buffer:GLSFrameBuffer { return self.verticalBuffer }
+    open var buffer:GLSFrameBuffer { return self.verticalBuffer }
     
-    public var shouldRedraw = true
-    public var bufferIsDirty = false
+    open var shouldRedraw = true
+    open var bufferIsDirty = false
     
     ///What type of blur to use (changes shader program).
-    public var blurType:BlurType = .FastBlur {
+    open var blurType:BlurType = .FastBlur {
         didSet {
             if self.blurType != oldValue {
                 switch self.blurType {
@@ -77,9 +77,9 @@ public class GLSBlurSprite: GLSSprite, DoubleBuffered {
             }
         }
     }
-    private var blurProgram = ShaderHelper.programDictionaryForString("Fast Blur Shader")!
-    private let horizontalBlurVertices  = TexturedQuadVertices(vertex: UVertex())
-    private let verticalBlurVertices    = TexturedQuadVertices(vertex: UVertex())
+    fileprivate var blurProgram = ShaderHelper.programDictionaryForString("Fast Blur Shader")!
+    fileprivate let horizontalBlurVertices  = TexturedQuadVertices(vertex: UVertex())
+    fileprivate let verticalBlurVertices    = TexturedQuadVertices(vertex: UVertex())
     
     /**
     How blurry the texture should be. Animatable.
@@ -91,7 +91,7 @@ public class GLSBlurSprite: GLSSprite, DoubleBuffered {
     how much blur there is. At 0.0, the texture is
     not blurred at all. At 1.0, the texture is maximally blurred.
     */
-    public var blurFactor:CGFloat = 2.0 {
+    open var blurFactor:CGFloat = 2.0 {
         didSet {
             if self.inAnimationBlock {
                 self.add1Animation(oldValue, end: self.blurFactor) { [unowned self] in self.blurFactor = $0 }
@@ -132,9 +132,9 @@ public class GLSBlurSprite: GLSSprite, DoubleBuffered {
     
     // MARK: - Logic
     
-    private func renderToBuffer(buffer:GLSFrameBuffer, horizontal:Bool) {
+    fileprivate func renderToBuffer(_ buffer:GLSFrameBuffer, horizontal:Bool) {
         
-        self.framebufferStack?.pushGLSFramebuffer(buffer)
+        self.framebufferStack?.pushGLSFramebuffer(buffer: buffer)
         
         buffer.bindClearColor()
         
@@ -173,13 +173,13 @@ public class GLSBlurSprite: GLSSprite, DoubleBuffered {
     }//render to framebuffer
     
     ///Renders the blurred textures to the background buffers.
-    public func renderToTexture() {
+    open func renderToTexture() {
         self.renderToBuffer(self.horizontalBuffer, horizontal: true)
         self.renderToBuffer(self.verticalBuffer, horizontal: false)
         self.bufferIsDirty = false
     }//render to textures
     
-    private func blurTextureChanged() {
+    fileprivate func blurTextureChanged() {
         
         let frame = self.blurTexture?.frame ?? CGRect(square: 1.0)
         

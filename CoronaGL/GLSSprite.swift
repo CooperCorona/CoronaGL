@@ -14,19 +14,19 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class GLSSprite: GLSNode {
+open class GLSSprite: GLSNode {
    
 //    var projection:SCMatrix4 = SCMatrix4()
     
-    override public var texture:CCTexture? {
+    override open var texture:CCTexture? {
         didSet {
             self.setQuadForTexture()
         }
     }
     
-    public let program = ShaderHelper.programDictionaryForString("Basic Shader")!
+    open let program = ShaderHelper.programDictionaryForString("Basic Shader")!
     
-    public var storedMatrix = SCMatrix4()
+    open var storedMatrix = SCMatrix4()
     
     public init(position:CGPoint, size:CGSize, texture:CCTexture?) {
         
@@ -53,7 +53,7 @@ public class GLSSprite: GLSNode {
         self.init(size: CGSize.zero, texture: texture)
     }//initialize (only using texture)
     
-    override public func contentSizeChanged() {
+    override open func contentSizeChanged() {
         let sizeAsPoint = self.contentSize.getCGPoint()
         for iii in 0..<TexturedQuad.verticesPerQuad {
             vertices[iii].position = (TexturedQuad.pointForIndex(iii) * sizeAsPoint).getGLTuple()
@@ -61,13 +61,13 @@ public class GLSSprite: GLSNode {
         self.verticesAreDirty = true
     }
     
-    public func setQuadForTexture() {
+    open func setQuadForTexture() {
         let tFrame = self.texture?.frame ?? CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         TexturedQuad.setTexture(tFrame, ofVertices: &self.vertices)
         self.verticesAreDirty = true
     }//set quad for texture
     
-    override public func render(model: SCMatrix4) {
+    override open func render(_ model: SCMatrix4) {
         
         if (self.hidden) {
             return
@@ -77,7 +77,7 @@ public class GLSSprite: GLSNode {
         self.storedMatrix = childModel
 
         self.program.use()
-        glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(UVertex) * self.vertices.count, self.vertices, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<UVertex>.size * self.vertices.count, self.vertices, GLenum(GL_STATIC_DRAW))
         
         glBindTexture(GLenum(GL_TEXTURE_2D), self.texture?.name ?? 0)
         glUniform1i(self.program["u_TextureInfo"], 0)
@@ -91,7 +91,7 @@ public class GLSSprite: GLSNode {
         self.bridgeUniform3f(self.program["u_ShadeColor"], vector: self.shadeColor)
 
         self.program.enableAttributes()
-        self.program.bridgeAttributesWithSizes([2, 2, 1], stride: sizeof(UVertex))
+        self.program.bridgeAttributesWithSizes([2, 2, 1], stride: MemoryLayout<UVertex>.size)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.vertices.count))
         
@@ -100,7 +100,7 @@ public class GLSSprite: GLSNode {
         super.render(model)
     }//render
     
-    override public func clone() -> GLSSprite {
+    override open func clone() -> GLSSprite {
         
         let copiedSprite = GLSSprite(position: self.position, size: self.contentSize, texture: self.texture)
         
@@ -110,7 +110,7 @@ public class GLSSprite: GLSNode {
         
     }//clone
     
-    public func copyFromSprite(node:GLSSprite) {
+    open func copyFromSprite(_ node:GLSSprite) {
         
         super.copyFromNode(node)
         

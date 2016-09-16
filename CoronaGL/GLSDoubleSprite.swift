@@ -14,7 +14,7 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-public class GLSDoubleSprite: GLSSprite, DoubleBuffered {
+open class GLSDoubleSprite: GLSSprite, DoubleBuffered {
    
     public struct DoubleVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -22,23 +22,23 @@ public class GLSDoubleSprite: GLSSprite, DoubleBuffered {
         var texture2:(GLfloat, GLfloat) = (0.0, 0.0)
     }
     
-    public var firstTexture:CCTexture?  = nil {
+    open var firstTexture:CCTexture?  = nil {
         didSet {
             self.bufferIsDirty = true
         }
     }
-    public var secondTexture:CCTexture? = nil {
+    open var secondTexture:CCTexture? = nil {
         didSet {
             self.bufferIsDirty = true
         }
     }
     
-    public var doubleVertices = [DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex()]
+    open var doubleVertices = [DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex(), DoubleVertex()]
     
-    public let doubleProgram = ShaderHelper.programDictionaryForString("Double Shader")!
-    public var buffer:GLSFrameBuffer
-    public var shouldRedraw = false
-    public private(set) var bufferIsDirty = false
+    open let doubleProgram = ShaderHelper.programDictionaryForString("Double Shader")!
+    open var buffer:GLSFrameBuffer
+    open var shouldRedraw = false
+    open fileprivate(set) var bufferIsDirty = false
     
     
     public init(size:CGSize, firstTexture:CCTexture?, secondTexture:CCTexture?) {
@@ -54,7 +54,7 @@ public class GLSDoubleSprite: GLSSprite, DoubleBuffered {
     }//initialize
     
     
-    override public func setQuadForTexture() {
+    override open func setQuadForTexture() {
     
         super.setQuadForTexture()
         
@@ -72,13 +72,13 @@ public class GLSDoubleSprite: GLSSprite, DoubleBuffered {
     
     }//apply texture to vertices
     
-    public func renderToTexture() {
+    open func renderToTexture() {
         
-        self.framebufferStack?.pushGLSFramebuffer(self.buffer)
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
         self.buffer.bindClearColor()
         
         self.doubleProgram.use()
-        glBufferData(GLenum(GL_ARRAY_BUFFER), sizeof(DoubleVertex) * self.doubleVertices.count, self.doubleVertices, GLenum(GL_DYNAMIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<DoubleVertex>.size * self.doubleVertices.count, self.doubleVertices, GLenum(GL_DYNAMIC_DRAW))
         
         self.doubleProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
@@ -93,7 +93,7 @@ public class GLSDoubleSprite: GLSSprite, DoubleBuffered {
         glActiveTexture(GLenum(GL_TEXTURE0))
         
         self.doubleProgram.enableAttributes()
-        self.doubleProgram.bridgeAttributesWithSizes([2, 2, 2], stride: sizeof(DoubleVertex))
+        self.doubleProgram.bridgeAttributesWithSizes([2, 2, 2], stride: MemoryLayout<DoubleVertex>.size)
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.doubleVertices.count))
         

@@ -8,16 +8,16 @@
 
 import GLKit
 
-public class GLGradientTexture2D: NSObject {
+open class GLGradientTexture2D: NSObject {
     
     // MARK: - Properties
-    public private(set) var gradient:ColorGradient1D
-    public private(set) var textureName:GLuint = 0
+    open fileprivate(set) var gradient:ColorGradient1D
+    open fileprivate(set) var textureName:GLuint = 0
     
     ///Controls whether texture repeats or clamps.
     ///*true* for Repeat (jump from 0.0 to 1.0 and vice-versa).
     ///*false* for Clamp (numbers below 0.0 become 0.0, and numbers above 1.0 become 1.0)
-    public var repeats:Bool = false {
+    open var repeats:Bool = false {
         didSet {
             glBindTexture(GLenum(GL_TEXTURE_2D), self.textureName)
             if self.repeats {

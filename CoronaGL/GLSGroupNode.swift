@@ -19,7 +19,7 @@ is optimized to not calculate its
 model matrix, etc. so you don't lose
 performance.
 */
-public class GLSGroupNode: GLSNode {
+open class GLSGroupNode: GLSNode {
     /* Also overrides tintColor,
     tintIntensity, and shadeColor setters
     to recursively set children when
@@ -48,11 +48,11 @@ public class GLSGroupNode: GLSNode {
         
     }//initialize
     
-    override public func modelMatrix(renderingSelf: Bool = true) -> SCMatrix4 {
+    override open func modelMatrix(_ renderingSelf: Bool = true) -> SCMatrix4 {
         return SCMatrix4()
     }
     
-    override public func recursiveModelMatrix(renderingSelf: Bool = true) -> SCMatrix4 {
+    override open func recursiveModelMatrix(_ renderingSelf: Bool = true) -> SCMatrix4 {
         return super.recursiveModelMatrix(renderingSelf)
     }//recursive model matrix
     

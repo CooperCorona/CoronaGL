@@ -11,21 +11,21 @@ import GLKit
 import CoronaConvenience
 import CoronaStructures
 
-public class GLKOmniController: GLKViewController {
+open class GLKOmniController: GLKViewController {
     
-    public var framebufferStack:GLSFramebufferStack! = nil
-    public var container:GLSNode! = nil
-    public var projection:SCMatrix4 = SCMatrix4()
+    open var framebufferStack:GLSFramebufferStack! = nil
+    open var container:GLSNode! = nil
+    open var projection:SCMatrix4 = SCMatrix4()
 
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
         
         let glkView = self.view as! GLKView
         glkView.context = CCTextureOrganizer.sharedContext
-        EAGLContext.setCurrentContext(CCTextureOrganizer.sharedContext)
+        EAGLContext.setCurrent(CCTextureOrganizer.sharedContext)
         
-        self.container = GLSNode(frame: CGRectZero, projection: projection)
+        self.container = GLSNode(frame: CGRect.zero, projection: projection)
         
         self.framebufferStack = GLSFramebufferStack(initialBuffer: glkView)
         self.container.framebufferStack = self.framebufferStack
@@ -42,12 +42,12 @@ public class GLKOmniController: GLKViewController {
         GLKOmniController.setupOpenGL()
     }
     
-    override public func viewDidAppear(animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
     }
     
-    override public func glkView(view: GLKView, drawInRect rect: CGRect) {
+    override open func glkView(_ view: GLKView, drawIn rect: CGRect) {
         
         glClearColor(0.2, 0.2, 0.2, 1.0)
         glClear(GLenum(GL_COLOR_BUFFER_BIT))
@@ -58,35 +58,35 @@ public class GLKOmniController: GLKViewController {
 
     }//draw
     
-    public func update() {
+    open func update() {
         
         let dt = CGFloat(self.timeSinceLastUpdate)
         
-        self.updateContainer(dt)
+        self.updateContainer(dt: dt)
         
 
     }//update
     
-    public func updateContainer(dt:CGFloat) {
+    open func updateContainer(dt:CGFloat) {
         
         self.container.update(dt)
     }//update container
 
     
-    public func calculateProjection() {
+    open func calculateProjection() {
         let vSize = self.view.frame.size
         self.projection = SCMatrix4(right: vSize.width, top: vSize.height, back: -1024, front: 1024)
     }
     
     // MARK: - Positioning
     
-    public func centerContainer(position:CGPoint, scale containerScale:CGFloat? = nil) -> CGPoint {
+    open func centerContainer(position:CGPoint, scale containerScale:CGFloat? = nil) -> CGPoint {
         let vSize = self.view.frame.size
         let scale = containerScale ?? self.container.scale
         return CGPoint(x: vSize.width / 2.0 - position.x, y: vSize.height / 2.0 - position.y) * scale
     }
     
-    public func clampCenter(center:CGPoint, levelSize oSize:CGSize, minBoundary:CGFloat, maxBoundary:CGFloat, hudHeight:CGFloat, scale containerScale:CGFloat? = nil) -> CGPoint {
+    open func clampCenter(center:CGPoint, levelSize oSize:CGSize, minBoundary:CGFloat, maxBoundary:CGFloat, hudHeight:CGFloat, scale containerScale:CGFloat? = nil) -> CGPoint {
         
         let scale = containerScale ?? self.container.scale
         let vSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - hudHeight)
@@ -95,8 +95,9 @@ public class GLKOmniController: GLKViewController {
         let oBounds = (max: maxBoundary, min: minBoundary)
         let oFrame = CGRect(x: oBounds.min, y: 0.0, width: oBounds.max - oBounds.min, height: oSize.height)
 
+        let maxYSubtractionTerm = oFrame.minY * scale + hudHeight * (scale - 1.0) / 2.0
         let maxX = vSize.width  * (scale - 1.0) / 2.0 - oFrame.minX * scale
-        let maxY = vSize.height * (scale - 1.0) / 2.0 - oFrame.minY * scale + hudHeight * (scale - 1.0) / 2.0
+        let maxY = vSize.height * (scale - 1.0) / 2.0 - maxYSubtractionTerm
         let minX = vSize.width  * (scale + 1.0) / 2.0 - oFrame.maxX * scale
         let minY = vSize.height * (scale + 1.0) / 2.0 - oFrame.maxY * scale
         
@@ -115,8 +116,8 @@ public class GLKOmniController: GLKViewController {
         return CGPoint(x: xpos, y: ypos)
     }
     
-    public func convertPointToOpenGL(point: CGPoint) -> CGPoint {
-        return self.convertPointToOpenGL(point, container: self.container)
+    open func convertPointToOpenGL(point: CGPoint) -> CGPoint {
+        return self.convertPointToOpenGL(point: point, container: self.container)
         /*
         var glPoint = point
         let vSize = self.view.frame.size
@@ -133,8 +134,8 @@ public class GLKOmniController: GLKViewController {
         */
     }//convert point to OpenGL
     
-    public func convertPointFromOpenGL(point:CGPoint) -> CGPoint {
-        return self.convertPointFromOpenGL(point, container: self.container)
+    open func convertPointFromOpenGL(point:CGPoint) -> CGPoint {
+        return self.convertPointFromOpenGL(point: point, container: self.container)
         /*
         let scale = self.container.scale
         let c = self.container.position - self.container.anchor * self.container.contentSize * scale
@@ -143,7 +144,7 @@ public class GLKOmniController: GLKViewController {
         */
     }//conver point from OpenGL coords to UIKit coords
     
-    public func convertPointToOpenGL(point: CGPoint, container:GLSNode) -> CGPoint {
+    open func convertPointToOpenGL(point: CGPoint, container:GLSNode) -> CGPoint {
         
         var glPoint = point
         let vSize = self.view.frame.size
@@ -159,36 +160,38 @@ public class GLKOmniController: GLKViewController {
         return CGPoint(x: (glPoint.x - cx) / scale, y: (glPoint.y - cy) / scale)
     }//convert point to OpenGL
     
-    public func convertPointFromOpenGL(point:CGPoint, container:GLSNode) -> CGPoint {
+    open func convertPointFromOpenGL(point:CGPoint, container:GLSNode) -> CGPoint {
         let scale = CGPoint(x: container.scaleX, y: container.scaleY)
         let c = container.position - container.anchor * container.contentSize * scale
         let location = point * scale + c
         return CGPoint(x: location.x, y: self.view.frame.size.height - location.y)
     }//conver point from OpenGL coords to UIKit coords
     
-    public func openGLPointFromTouches(touches:Set<UITouch>) -> CGPoint {
-        return self.convertPointToOpenGL(self.locationFromTouches(touches))
+    open func openGLPointFromTouches(touches:Set<UITouch>) -> CGPoint {
+        return self.convertPointToOpenGL(point: self.locationFromTouches(touches: touches as NSSet))
     }
     
-    public func openGLPointFromTouches(touches:Set<UITouch>, container:GLSNode) -> CGPoint {
-        return self.convertPointToOpenGL(self.locationFromTouches(touches), container: container)
+    open func openGLPointFromTouches(touches:Set<UITouch>, container:GLSNode) -> CGPoint {
+        return self.convertPointToOpenGL(point: self.locationFromTouches(touches: touches as NSSet), container: container)
     }
     
-    
-    public class func setupOpenGL() {
-        struct StaticOnceToken {
-            static var onceToken:dispatch_once_t = 0;
-        }
+    ///We can't use dispatch_once in Swift 3, which is fine
+    ///for most of the singletons (which were holdovers from
+    ///Swift 1 anyways), but we actually need it here. Instead,
+    ///we have a (lazy) static variable that is initialized via
+    ///closure. That closure performs our setup. The setupOpenGL
+    ///method just loads this value, running the closure.
+    fileprivate static let setupOpenGLClosure:Bool = {
+        let cctOrg = CCTextureOrganizer.sharedInstance
+        cctOrg.files = [ "Atlases" ]
+        cctOrg.loadTextures()
         
-        dispatch_once(&StaticOnceToken.onceToken) {
-            let cctOrg = CCTextureOrganizer.sharedInstance
-            cctOrg.files = [ "Atlases" ]
-            cctOrg.loadTextures()
-            
-//            ShaderHelper.sharedInstance.loadPrograms(["Basic Shader":"BasicShader", "Universal 2D Shader":"Universal2DShader", "Universal Particle Shader":"UniversalParticleShader", "Noise Shader":"NoiseShader"])
-            ShaderHelper.sharedInstance.loadProgramsFromBundle()
-        }//dispatch only one time
-        
+        //            ShaderHelper.sharedInstance.loadPrograms(["Basic Shader":"BasicShader", "Universal 2D Shader":"Universal2DShader", "Universal Particle Shader":"UniversalParticleShader", "Noise Shader":"NoiseShader"])
+        ShaderHelper.sharedInstance.loadProgramsFromBundle()
+        return true
+    }()
+    open class func setupOpenGL() {
+        let _ = GLKOmniController.setupOpenGLClosure
     }//setup OpenGL
     
 }

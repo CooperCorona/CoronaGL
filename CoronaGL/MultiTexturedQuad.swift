@@ -16,17 +16,17 @@ import Cocoa
 A class in the same vein as *TexturedQuad* that allows multiple,
 distinct sets of vertices to be used and accessed.
 */
-public class MultiTexturedQuad<T>: ArrayLiteralConvertible {
+open class MultiTexturedQuad<T>: ExpressibleByArrayLiteral {
     
     public typealias Element = T
     
     // MARK: - Properties
     
-    public var vertices:[T] = []
-    public var stride:Int  { return sizeof(T) }
-    public var count:Int   { return self.vertices.count }
-    public var size:Int    { return self.stride * self.count }
-    public var quadCount:Int { return self.count / TexturedQuad.verticesPerQuad }
+    open var vertices:[T] = []
+    open var stride:Int  { return MemoryLayout<T>.size }
+    open var count:Int   { return self.vertices.count }
+    open var size:Int    { return self.stride * self.count }
+    open var quadCount:Int { return self.count / TexturedQuad.verticesPerQuad }
     
     // MARK: - Setup
     
@@ -76,7 +76,7 @@ public class MultiTexturedQuad<T>: ArrayLiteralConvertible {
     
     - parameter handler: A closure with 3 parameters. The first is which quad you are currently in. The second is the index of the current vertex, relative to the quad. The third is the vertex.
     */
-    public func iterateWithHandler(handler:(Int, Int, inout T) -> Void) {
+    open func iterateWithHandler(_ handler:(Int, Int, inout T) -> Void) {
         
         for iii in 0..<self.count {
             let quadIndex = iii / TexturedQuad.verticesPerQuad
@@ -92,7 +92,7 @@ public class MultiTexturedQuad<T>: ArrayLiteralConvertible {
     - parameter quad: Which quad to iterate the vertices of.
     - parameter handler: A closure with 2 parameters. The first is the index of the current vertex, relative to the quad. The second is the vertex.
     */
-    public func iterateQuad(quad:Int, withHandler handler:(Int, inout T) -> Void) {
+    open func iterateQuad(_ quad:Int, withHandler handler:(Int, inout T) -> Void) {
         
         if quad < 0 || quad >= self.quadCount {
             return
@@ -112,7 +112,7 @@ public class MultiTexturedQuad<T>: ArrayLiteralConvertible {
     - parameter rect: The rect to get the vertices from.
     - parameter handler: A closure with 2 parameters. The first is the given vertex of *rect*. The second is the vertex.
     */
-    public func iterateQuad(quad:Int, forRect rect:CGRect, withHandler handler:(CGPoint, inout T) -> Void) {
+    open func iterateQuad(_ quad:Int, forRect rect:CGRect, withHandler handler:(CGPoint, inout T) -> Void) {
         
         if quad < 0 || quad >= self.quadCount {
             return
@@ -147,7 +147,7 @@ public class MultiTexturedQuad<T>: ArrayLiteralConvertible {
     - parameter rect: The rect to get the vertices from.
     - parameter A: closure with 2 parameters. The first is the given vertex of *rect*. The second is the vertex.
     */
-    public func iterateForRect(rect:CGRect, withHandler handler:(CGPoint, inout T) -> Void) {
+    open func iterateForRect(_ rect:CGRect, withHandler handler:(CGPoint, inout T) -> Void) {
         
         for quad in 0..<self.quadCount {
             self.iterateQuad(quad, forRect: rect, withHandler: handler)
