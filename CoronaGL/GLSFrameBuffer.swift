@@ -182,7 +182,7 @@ open class GLSFrameBuffer: GLSNode {
 //        glPixelStorei(GLenum(GL_PACK_ALIGNMENT), 1)
 //        glPixelStorei(GLenum(GL_UNPACK_ALIGNMENT), 1)
         glReadPixels(0, 0, GLsizei(width), GLsizei(height), GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), &buffer)
-        /*
+        
         //OpenGL has origin at bottom left
         //UIImage wants origin at top left
         //So I swap the pixels vertically
@@ -199,7 +199,7 @@ open class GLSFrameBuffer: GLSNode {
             }
             
         }
-        */
+        
         
         let dProvider = CGDataProvider(dataInfo: nil, data: buffer, size: Int(dataLength), releaseData: { _ in })!
         let bitsPerComponent = 8

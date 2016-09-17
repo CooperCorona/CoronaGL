@@ -93,6 +93,7 @@
 		DCB587541D8A467B00194959 /* Universal2DShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872E1D8A467B00194959 /* Universal2DShader.fsh */; };
 		DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872F1D8A467B00194959 /* Universal2DShader.vsh */; };
 		DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */; };
+		DCEA99B91D8CCA740019964F /* OmniGLView2d.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEA99B81D8CCA740019964F /* OmniGLView2d.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -201,6 +202,7 @@
 		DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UniversalParticleShader.fsh; sourceTree = "<group>"; };
 		DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UniversalParticleShader.vsh; sourceTree = "<group>"; };
 		DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient1D.swift; sourceTree = "<group>"; };
+		DCEA99B81D8CCA740019964F /* OmniGLView2d.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmniGLView2d.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +329,7 @@
 				DC5CDCC21D80B360008C2A8D /* MultiTexturedQuad.swift */,
 				DC5CDCC31D80B360008C2A8D /* NoiseFadeAnimation.swift */,
 				DC5CDCC41D80B360008C2A8D /* NoiseTexture2D.swift */,
+				DCEA99B81D8CCA740019964F /* OmniGLView2d.swift */,
 				DC5CDCC51D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift */,
 				DC5CDCC61D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift */,
 				DC5CDCC71D80B360008C2A8D /* ShaderHelper.swift */,
@@ -558,6 +561,7 @@
 				DC5CDCB31D80B351008C2A8D /* GLSRecursivePropertyNode.swift in Sources */,
 				DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */,
 				DC5CDCB11D80B351008C2A8D /* GLSPerlinNoiseSprite.swift in Sources */,
+				DCEA99B91D8CCA740019964F /* OmniGLView2d.swift in Sources */,
 				DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */,
 				DC087D471D85F76800104A84 /* HealthBarSprite.swift in Sources */,
 				DC5CDCFD1D80B6D1008C2A8D /* NoiseArray3D.swift in Sources */,
@@ -678,6 +682,7 @@
 				INFOPLIST_FILE = CoronaGL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "Corona-Corporation.CoronaGL";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -701,6 +706,7 @@
 				INFOPLIST_FILE = CoronaGL/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "Corona-Corporation.CoronaGL";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
