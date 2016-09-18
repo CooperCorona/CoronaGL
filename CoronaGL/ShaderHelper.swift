@@ -60,19 +60,23 @@ open class ShaderHelper : NSObject {
         var basePaths:[String:String] = [:]
         var vshURLs:[String:URL] = [:]
         var fshURLs:[String:URL] = [:]
-        if let resourcePath = Bundle.main.resourcePath,
-        let enumerator = FileManager.default.enumerator(atPath: resourcePath) {
-            while let currentPath = enumerator.nextObject() as? String {
-                if let (key, path) = self.keyAndPathForPath(currentPath) {
-                    basePaths[key] = path
-                    if currentPath.hasSuffix(".vsh") {
-                        vshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
-                    } else if currentPath.hasSuffix(".fsh") {
-                        fshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+        var bundles:[Bundle] = Bundle.allFrameworks.filter() { $0.bundlePath.contains("CoronaGL") }
+        bundles.append(Bundle.main)
+        for bundle in bundles {
+            if let resourcePath = bundle.resourcePath,
+            let enumerator = FileManager.default.enumerator(atPath: resourcePath) {
+                while let currentPath = enumerator.nextObject() as? String {
+                    if let (key, path) = self.keyAndPathForPath(currentPath) {
+                        basePaths[key] = path
+                        if currentPath.hasSuffix(".vsh") {
+                            vshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                        } else if currentPath.hasSuffix(".fsh") {
+                            fshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                        }
                     }
                 }
+                    
             }
-                
         }
         for (key, path) in basePaths {
 //            let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")

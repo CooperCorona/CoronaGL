@@ -256,8 +256,11 @@ open class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
             path = "\(file).png"
         }
         
+        //Fixes crash on OS X where GLKTextureLoader
+        //fails if the OpenGL error flags are still set.
+        while glGetError() != GLenum(GL_NO_ERROR) {
+        }
         let tex = (try? GLKTextureLoader.texture(withContentsOfFile: path, options: [GLKTextureLoaderOriginBottomLeft:true]))!
-        
         CCTextureOrganizer.configureTexture(tex)
         
         return tex
