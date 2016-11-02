@@ -21,6 +21,24 @@ open class OmniGLView2d: NSOpenGLView {
     
     // MARK: - Setup
     
+    public override init?(frame frameRect: NSRect, pixelFormat format: NSOpenGLPixelFormat?) {
+        super.init(frame: frameRect, pixelFormat: format)
+        
+        guard let format = format else {
+            return nil
+        }
+        //  Create a context with our pixel format (we have no other context, so nil)
+        guard let context = NSOpenGLContext(format: format, share: GLSFrameBuffer.globalContext) else {
+            Swift.print("context could not be constructed")
+            return nil
+        }
+        self.openGLContext = context
+        self.openGLContext?.makeCurrentContext()
+        context.view = self
+        
+        self.container.framebufferStack = self.framebufferStack
+    }
+    
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         
@@ -32,7 +50,7 @@ open class OmniGLView2d: NSOpenGLView {
             UInt32(0)                                  //  C API's expect to end with 0
         ]
         
-        //  Create a pixel format using our attributes
+        // Create a pixel format using our attributes
         guard let pixelFormat = NSOpenGLPixelFormat(attributes: attrs) else {
             Swift.print("pixelFormat could not be constructed")
             return
@@ -76,6 +94,7 @@ open class OmniGLView2d: NSOpenGLView {
     // MARK: - Logic
     
     open override func draw(_ dirtyRect: NSRect) {
+        GLSFrameBuffer.globalContext.view = self
         self.openGLContext?.makeCurrentContext()
         self.clearColor.bindGLClearColor()
         self.container.render()

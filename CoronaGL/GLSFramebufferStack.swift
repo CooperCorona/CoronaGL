@@ -46,9 +46,7 @@ public class GLSFramebufferStack: NSObject {
         if let topBuffer = self.buffers.last {
             glBindFramebuffer(GLenum(topBuffer), topBuffer)
         } else {
-            #if os(iOS)
             self.initialBuffer.bindDrawable()
-            #endif
         }
         
         return true
@@ -88,10 +86,7 @@ open class GLSFramebufferStack: NSObject {
     
     open func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         self.internalContext?.makeCurrentContext()
-        /*if let buffer = self.initialBuffer {
-         glViewport(0, 0, GLsizei(buffer.frame.width), GLsizei(buffer.frame.height))
-         }*/
-        
+
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
         glBindRenderbuffer(GLenum(GL_RENDERBUFFER), buffer.renderBuffer)
         

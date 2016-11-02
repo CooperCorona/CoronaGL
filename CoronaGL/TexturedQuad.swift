@@ -381,6 +381,7 @@ open class TexturedQuad {
         
         return verts
     }//generate vertices (and configure them with handler)
+
     /*
     public class var verticesPerQuad:Int { return 4 }
     public class var drawingMode:GLenum { return GLenum(GL_TRIANGLE_STRIP) }
