@@ -96,6 +96,7 @@ open class OmniGLView2d: NSOpenGLView {
     open override func draw(_ dirtyRect: NSRect) {
         GLSFrameBuffer.globalContext.view = self
         self.openGLContext?.makeCurrentContext()
+        GLSNode.universalProjection = SCMatrix4(right: self.frame.width, top: self.frame.height)
         self.clearColor.bindGLClearColor()
         self.container.render()
         glFlush()

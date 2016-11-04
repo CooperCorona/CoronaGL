@@ -61,6 +61,9 @@
 		DC5CDCFE1D80B6D1008C2A8D /* SmoothingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */; };
 		DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */; };
 		DC5E203E1D8B3AE7006B7498 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5E203D1D8B3AE7006B7498 /* GameplayKit.framework */; };
+		DC6E8B0F1DCBC88E00620B7C /* CheckerShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */; };
+		DC6E8B101DCBC88E00620B7C /* CheckerShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */; };
+		DC6E8B141DCBC89D00620B7C /* GLSCheckerSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC6E8B131DCBC89D00620B7C /* GLSCheckerSprite.swift */; };
 		DC806F371D8202A9006F95F7 /* GLSBoolList2DSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */; };
 		DC8EC0581D8C435800CA55AD /* UniversalParticleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */; };
 		DC8EC0591D8C435800CA55AD /* UniversalParticleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */; };
@@ -170,6 +173,9 @@
 		DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothingFunctions.swift; sourceTree = "<group>"; };
 		DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrilinearArray.swift; sourceTree = "<group>"; };
 		DC5E203D1D8B3AE7006B7498 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
+		DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.fsh; sourceTree = "<group>"; };
+		DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.vsh; sourceTree = "<group>"; };
+		DC6E8B131DCBC89D00620B7C /* GLSCheckerSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSCheckerSprite.swift; sourceTree = "<group>"; };
 		DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSBoolList2DSprite.swift; sourceTree = "<group>"; };
 		DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.fsh; sourceTree = "<group>"; };
 		DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.vsh; sourceTree = "<group>"; };
@@ -228,6 +234,8 @@
 				DCB5870F1D8A467B00194959 /* BasicGradientShader.vsh */,
 				DCB587101D8A467B00194959 /* BasicShader.fsh */,
 				DCB587111D8A467B00194959 /* BasicShader.vsh */,
+				DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */,
+				DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */,
 				DCB587121D8A467B00194959 /* ColorShader.fsh */,
 				DCB587131D8A467B00194959 /* ColorShader.vsh */,
 				DCB587141D8A467B00194959 /* DoubleShader.fsh */,
@@ -290,6 +298,7 @@
 				DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */,
 				DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */,
 				DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */,
+				DC6E8B131DCBC89D00620B7C /* GLSCheckerSprite.swift */,
 				DC5CDC971D80B351008C2A8D /* GLSDoubleSprite.swift */,
 				DC5CDC981D80B351008C2A8D /* GLSFireSprite.swift */,
 				DC5CDC991D80B351008C2A8D /* GLSFrameBuffer.swift */,
@@ -489,6 +498,7 @@
 				DCB587351D8A467B00194959 /* BasicGradientShader.vsh in Resources */,
 				DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */,
 				DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */,
+				DC6E8B0F1DCBC88E00620B7C /* CheckerShader.fsh in Resources */,
 				DC4054291D8C6B0D00608A8F /* PerlinNoiseShader.fsh in Resources */,
 				DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */,
 				DCB587391D8A467B00194959 /* ColorShader.vsh in Resources */,
@@ -500,6 +510,7 @@
 				DC4054251D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh in Resources */,
 				DCB587421D8A467B00194959 /* FireShader.fsh in Resources */,
 				DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */,
+				DC6E8B101DCBC88E00620B7C /* CheckerShader.vsh in Resources */,
 				DC40542B1D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh in Resources */,
 				DC40542C1D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh in Resources */,
 				DCB5873C1D8A467B00194959 /* DummyShader.fsh in Resources */,
@@ -535,6 +546,7 @@
 				DC5CDCFC1D80B6D1008C2A8D /* NoiseArray2D.swift in Sources */,
 				DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */,
 				DC5CDCA91D80B351008C2A8D /* GLSFireSprite.swift in Sources */,
+				DC6E8B141DCBC89D00620B7C /* GLSCheckerSprite.swift in Sources */,
 				DC5CDCB51D80B351008C2A8D /* GLSSprite.swift in Sources */,
 				DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */,
 				DC5CDCAD1D80B351008C2A8D /* GLSGroupNode.swift in Sources */,
