@@ -16,8 +16,10 @@ import OpenGL
 open class OmniGLView2d: NSOpenGLView {
     
     open var clearColor = SCVector4.blackColor
-    open private(set) var container = GLSNode(position: NSPoint.zero, size: NSSize.zero)
-    private(set) lazy var framebufferStack:GLSFramebufferStack = GLSFramebufferStack(initialBuffer: self)
+    private(set) open var container = GLSNode(position: NSPoint.zero, size: NSSize.zero)
+    private(set) open lazy var framebufferStack:GLSFramebufferStack = GLSFramebufferStack(initialBuffer: self)
+    
+    private(set) open var buffers:[DoubleBuffered] = []
     
     // MARK: - Setup
     
@@ -96,6 +98,9 @@ open class OmniGLView2d: NSOpenGLView {
     open override func draw(_ dirtyRect: NSRect) {
         GLSFrameBuffer.globalContext.view = self
         self.openGLContext?.makeCurrentContext()
+        for buffer in self.buffers {
+            buffer.renderToTexture()
+        }
         GLSNode.universalProjection = SCMatrix4(right: self.frame.width, top: self.frame.height)
         self.clearColor.bindGLClearColor()
         self.container.render()
@@ -114,6 +119,20 @@ open class OmniGLView2d: NSOpenGLView {
         let node = self.container.removeChild(child)
         self.setNeedsDisplay(self.frame)
         return node
+    }
+    
+    open func add(buffer:DoubleBuffered) {
+        self.buffers.append(buffer)
+        if let node = buffer as? GLSNode {
+            node.framebufferStack = self.framebufferStack
+        }
+    }
+    
+    open func removeBuffer(at index:Int) -> DoubleBuffered? {
+        guard 0 <= index && index < self.buffers.count else {
+            return nil
+        }
+        return self.buffers.remove(at: index)
     }
     
 }

@@ -26,10 +26,10 @@ open class GLSCheckerSprite: GLSNode {
     
     open let program = ShaderHelper.programDictionaryForString("Checker Shader")!
     
-    public init(off:SCVector4, on:SCVector4, size:NSSize) {
+    public init(off:SCVector4, on:SCVector4, size:CGSize) {
         self.offColor   = off
         self.onColor    = on
-        super.init(position: NSPoint.zero, size: size)
+        super.init(position: CGPoint.zero, size: size)
         self.vertices = [UVertex](repeating: UVertex(), count: TexturedQuad.verticesPerQuad)
         self.contentSizeChanged()
     }

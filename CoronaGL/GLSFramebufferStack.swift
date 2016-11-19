@@ -7,6 +7,7 @@
 //
 
 import GLKit
+import CoronaStructures
 
 #if os(iOS)
 public class GLSFramebufferStack: NSObject {
@@ -64,13 +65,7 @@ open class GLSFramebufferStack: NSObject {
     open let internalContext:NSOpenGLContext?
     
     public init(initialBuffer:NSOpenGLView?) {
-        
         self.initialBuffer = initialBuffer
-        /*if let pixelFormat = self.initialBuffer?.pixelFormat {
-         self.internalContext = NSOpenGLContext(format: pixelFormat, shareContext: self.initialBuffer?.openGLContext)
-         } else {
-         self.internalContext = nil
-         }*/
         self.internalContext = GLSFrameBuffer.globalContext
         super.init()
     }//initialize

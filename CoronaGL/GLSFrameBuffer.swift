@@ -20,7 +20,7 @@ public typealias ImageType = UIImage
 #else
 public typealias ImageType = NSImage
 #endif
-open class GLSFrameBuffer: GLSNode {
+open class GLSFrameBuffer: GLSNode, DoubleBuffered {
     
     fileprivate var framebufferName:GLuint = 0
     open var framebuffer:GLuint { return self.framebufferName }
@@ -45,7 +45,6 @@ open class GLSFrameBuffer: GLSNode {
     open var clearColor = SCVector4()
     
     open let ccTexture:CCTexture
-    open let sprite:GLSSprite
     /**
     If true, then framebuffer renders normally.
     If false, then you are responsible for rendering.
@@ -57,6 +56,18 @@ open class GLSFrameBuffer: GLSNode {
     If *false*, then contents of framebuffer do not change automatically.
     */
     open var renderChildren = true
+    
+    open let program = ShaderHelper.programDictionaryForString("Basic Shader")!
+    
+    // MARK: - DoubleBuffered Conformance
+    
+    open var buffer:GLSFrameBuffer { return self }
+    open var shouldRedraw: Bool {
+        get { return self.renderAutomatically }
+        set { self.renderAutomatically = self.shouldRedraw }
+    }
+    ///Has no effect, exists only to conform to DoubleBuffered.
+    open var bufferIsDirty:Bool = false
     
     /**
     Texture Parameters must be *GL_LINEAR* and *GL_CLAMP_TO_EDGE*
@@ -113,12 +124,14 @@ open class GLSFrameBuffer: GLSNode {
  
         let ccSize = self.size * self.internalScale / self.internalSize
         self.ccTexture = CCTexture(name: self.internalTextureName, frame: CGRect(x: 0.0, y: 0.0, width: ccSize.width, height: ccSize.height))
-        self.sprite = GLSSprite(position: CGPoint.zero, size: self.size, texture: self.ccTexture)
  
         super.init(position:CGPoint.zero, size: self.size)
-        
-        self.vertices = self.sprite.vertices
         self.texture = self.ccTexture
+        self.vertices = TexturedQuad.generateVerticesWithHandler() { index, vertex in
+            let pos = TexturedQuad.pointForIndex(index)
+            vertex.position = (pos * size).getGLTuple()
+            vertex.texture = pos.getGLTuple()
+        }
     }
     
     override open func render(_ model: SCMatrix4) {
@@ -126,16 +139,7 @@ open class GLSFrameBuffer: GLSNode {
         let childModel = self.modelMatrix() * model
         
         if self.renderChildren {
-            self.framebufferStack?.pushGLSFramebuffer(buffer: self)
-            
-            self.bindClearColor()
-            //        super.render(SCMatrix4())
-            let identityMatrix = SCMatrix4()
-            for cur in self.children {
-                cur.render(identityMatrix)
-            }
-            
-            self.framebufferStack?.popFramebuffer()
+            self.renderToTexture()
         }
         //If 'renderAutomatically' is false, then framebuffer
         //does not handle rendering to screen, but it does
@@ -144,16 +148,44 @@ open class GLSFrameBuffer: GLSNode {
             return
         }
         
-        //Make sure sprite's values are equal to framebuffer's values
-        self.sprite.position = self.contentSize.center
-        self.sprite.anchor = self.anchor
-        self.sprite.alpha = self.alpha
-        self.sprite.scaleX = self.scaleX
-        self.sprite.scaleY = self.scaleY
-        self.sprite.rotation = self.rotation
-        self.sprite.projection = self.projection
-        self.sprite.render(childModel)
+        if (self.hidden) {
+            return
+        }//hidden: don't render
+        
+        self.program.use()
+        glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<UVertex>.size * self.vertices.count, self.vertices, GLenum(GL_STATIC_DRAW))
+        
+        glBindTexture(GLenum(GL_TEXTURE_2D), self.texture?.name ?? 0)
+        glUniform1i(self.program["u_TextureInfo"], 0)
+        
+        self.program.uniformMatrix4fv("u_Projection", matrix: self.projection)
+        self.program.uniformMatrix4fv("u_ModelMatrix", matrix: childModel)
+        
+        glUniform1f(self.program["u_Alpha"], GLfloat(self.alpha))
+        self.bridgeUniform3f(self.program["u_TintColor"], vector: self.tintColor)
+        self.bridgeUniform3f(self.program["u_TintIntensity"], vector: self.tintIntensity)
+        self.bridgeUniform3f(self.program["u_ShadeColor"], vector: self.shadeColor)
+        
+        self.program.enableAttributes()
+        self.program.bridgeAttributesWithSizes([2, 2, 1], stride: MemoryLayout<UVertex>.size)
+        
+        glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.vertices.count))
+        
+        self.program.disable()
     }//render
+    
+    open func renderToTexture() {
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self)
+        
+        self.bindClearColor()
+        //        super.render(SCMatrix4())
+        let identityMatrix = SCMatrix4()
+        for cur in self.children {
+            cur.render(identityMatrix)
+        }
+        
+        self.framebufferStack?.popFramebuffer()
+    }
     
     open func bindClearColor() {
         
@@ -275,8 +307,6 @@ open class GLSFrameBuffer: GLSNode {
         self.copyFromNode(buffer)
         
         self.clearColor = buffer.clearColor
-        
-        self.sprite.copyFromSprite(buffer.sprite)
     }//copy from buffer
     
     deinit {
@@ -284,75 +314,7 @@ open class GLSFrameBuffer: GLSNode {
         glDeleteTextures(1, &internalTextureName)
     }
     
-    
-    //Override Properties
-    
-    override open var position:CGPoint {
-        didSet {
-            self.sprite.position = self.position
-        }
-    }
-    override open var rotation:CGFloat {
-        didSet {
-            self.sprite.rotation = self.rotation
-        }
-    }
-    override open var scaleX:CGFloat {
-        didSet {
-            self.sprite.scaleX = self.scaleX
-        }
-    }
-    override open var scaleY:CGFloat {
-        didSet {
-            self.sprite.scaleX = self.scaleY
-        }
-    }
-    override open var alpha:CGFloat {
-        didSet {
-            self.sprite.alpha = self.alpha
-        }
-    }
-    override open var anchor:CGPoint {
-        didSet {
-            self.sprite.anchor = self.anchor
-        }
-    }
-    override open var tintColor:SCVector3 {
-        didSet {
-            self.sprite.tintColor = self.tintColor
-        }
-    }
-    override open var tintIntensity:SCVector3 {
-        didSet {
-            self.sprite.tintIntensity = self.tintIntensity
-        }
-    }
-    override open var shadeColor:SCVector3 {
-        didSet {
-            self.sprite.shadeColor = self.shadeColor
-        }
-    }
 }
-
-//Convenience
-public extension GLSFrameBuffer {
-    /*
-    public var shadeColor:SCVector3 {
-    get { return self.sprite.shadeColor }
-    set { self.sprite.shadeColor = newValue }
-    }
-    
-    public var tintColor:SCVector3 {
-    get { return self.sprite.tintColor }
-    set { self.sprite.tintColor = newValue }
-    }
-    
-    public var tintIntensity:SCVector3 {
-    get { return self.sprite.tintIntensity }
-    set { self.sprite.tintIntensity = newValue }
-    }
-    */
-}//Access 'sprite's properties conveniently
 
 //Getters / public class Functions
 public extension GLSFrameBuffer {
