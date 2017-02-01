@@ -11,6 +11,7 @@ import UIKit
 #else
 import Cocoa
 #endif
+import CoronaConvenience
 import CoronaStructures
 
 open class AnimationStructContainer {
@@ -40,7 +41,7 @@ public extension GLSNode {
         }
         return StaticInstance.instance
     }
-    
+
     public var inAnimationBlock:Bool {
         get {
             return GLSNode.animationInstance.inAnimationBlock
@@ -71,6 +72,13 @@ public extension GLSNode {
         } set {
             GLSNode.animationInstance.animationSpeed = newValue
         }
+    }
+    
+    public func runWithoutAnimating(handler:() -> Void) {
+        let oldValue = self.inAnimationBlock
+        self.inAnimationBlock = false
+        handler()
+        self.inAnimationBlock = oldValue
     }
     
     // MARK: - Initiating Animations
@@ -251,3 +259,4 @@ public extension GLSNode {
     }//add animation-3
     
 }//extend GLSNode
+

@@ -235,6 +235,7 @@ open class CCTextureOrganizer: NSObject, XMLFileHandlerDelegate {
         do {
             tex = try GLKTextureLoader.texture(withContentsOf: data, options: [GLKTextureLoaderOriginBottomLeft:true])
         } catch {
+            print(error)
             tex = nil
         }
         

@@ -23,6 +23,20 @@ open class GLSSprite: GLSNode {
             self.setQuadForTexture()
         }
     }
+    open var textureFrame = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0) {
+        didSet {
+            if self.inAnimationBlock {
+                let old = SCVector4(x: oldValue.origin.x, y: oldValue.origin.y, z: oldValue.size.width, w: oldValue.size.height)
+                let new = SCVector4(x: self.textureFrame.origin.x, y: self.textureFrame.origin.y, z: self.textureFrame.size.width, w: self.textureFrame.size.height)
+                self.add4Animation(old, end: new) { [unowned self] vector in
+                    self.textureFrame = CGRect(x: vector.x, y: vector.y, width: vector.z, height: vector.w)
+                }
+                self.textureFrame = oldValue
+            } else {
+                self.setQuadForTexture()
+            }
+        }
+    }
     
     open let program = ShaderHelper.programDictionaryForString("Basic Shader")!
     
@@ -62,7 +76,7 @@ open class GLSSprite: GLSNode {
     }
     
     open func setQuadForTexture() {
-        let tFrame = self.texture?.frame ?? CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        let tFrame = (self.texture?.frame ?? CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)).inset(rect: self.textureFrame)
         TexturedQuad.setTexture(tFrame, ofVertices: &self.vertices)
         self.verticesAreDirty = true
     }//set quad for texture

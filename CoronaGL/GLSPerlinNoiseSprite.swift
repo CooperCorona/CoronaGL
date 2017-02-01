@@ -106,7 +106,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     ///Offset of noise texture. Note that the texture is not redrawn when *offset* is changed.
     open var offset:SCVector3 = SCVector3() {
         didSet {
-            self.offset = SCVector3(x: self.offset.x.truncatingRemainder(dividingBy: 255.0), y: self.offset.y.truncatingRemainder(dividingBy: 255.0), z: self.offset.z.truncatingRemainder(dividingBy: 255.0))
+            self.offset = SCVector3(x: self.offset.x.truncatingRemainder(dividingBy: CGFloat(self.period.x)), y: self.offset.y.truncatingRemainder(dividingBy: CGFloat(self.period.y)), z: self.offset.z.truncatingRemainder(dividingBy: CGFloat(self.period.z)))
             if self.shouldRedraw && !(self.offset ~= oldValue) {
                 self.renderToTexture()
             } else {

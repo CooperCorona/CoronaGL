@@ -578,6 +578,17 @@ open class GLSNode: NSObject {
         self.setTintIntensityScalar(intensity)
     }
     
+    /**
+    Changes the anchor and the position such that
+    the sprite will appear unmoved.
+     - parameter anchor: The new anchor.
+     */
+    open func move(anchor:CGPoint) {
+        let origin = self.position - self.anchor * self.contentSize
+        self.position = origin + anchor * self.contentSize
+        self.anchor = anchor
+    }
+    
     // MARK: - GPU Bridges
     
     fileprivate var currentTextureIndex = 0
