@@ -81,7 +81,7 @@ open class GLKOmniController: GLKViewController {
     // MARK: - Positioning
     
     open func centerContainer(position:CGPoint, scale containerScale:CGFloat? = nil) -> CGPoint {
-        let vSize = self.view.frame.size
+        let vSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
         let scale = containerScale ?? self.container.scale
         return CGPoint(x: vSize.width / 2.0 - position.x, y: vSize.height / 2.0 - position.y) * scale
     }
@@ -95,7 +95,7 @@ open class GLKOmniController: GLKViewController {
         let oBounds = (max: maxBoundary, min: minBoundary)
         let oFrame = CGRect(x: oBounds.min, y: 0.0, width: oBounds.max - oBounds.min, height: oSize.height)
 
-        let maxYSubtractionTerm = oFrame.minY * scale + hudHeight * (scale - 1.0) / 2.0
+        let maxYSubtractionTerm = oFrame.minY * scale// + hudHeight * (scale - 1.0) / 2.0
         let maxX = vSize.width  * (scale - 1.0) / 2.0 - oFrame.minX * scale
         let maxY = vSize.height * (scale - 1.0) / 2.0 - maxYSubtractionTerm
         let minX = vSize.width  * (scale + 1.0) / 2.0 - oFrame.maxX * scale

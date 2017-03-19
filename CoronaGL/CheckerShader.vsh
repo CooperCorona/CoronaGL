@@ -1,12 +1,10 @@
-#version 150
 
 uniform mat4 u_Projection;
 uniform mat4 u_ModelMatrix;
+attribute vec2 a_Position;
+attribute vec2 a_Texture;
 
-in vec2 a_Position;
-in vec2 a_Texture;
-
-out vec2 v_Texture;
+varying vec2 v_Texture;
 
 void main(void) {
     

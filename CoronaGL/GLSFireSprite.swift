@@ -12,9 +12,15 @@ import UIKit
 import Cocoa
 #endif
 import CoronaConvenience
+import CoronaStructures
 
 ///Uses 2D Noise to create and animate a colorable fire.
 open class GLSFireSprite: GLSSprite, DoubleBuffered {
+    
+    public enum NoiseType {
+        case `default`
+        case fractal
+    }
     
     public struct FireVertex {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
@@ -31,7 +37,20 @@ open class GLSFireSprite: GLSSprite, DoubleBuffered {
     
     open let buffer:GLSFrameBuffer
     
-    open let fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
+    open var noiseType:NoiseType = .default {
+        didSet {
+            switch self.noiseType {
+            case .default:
+                self.fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
+            case .fractal:
+                self.fireProgram = ShaderHelper.programDictionaryForString("Fractal Fire Shader")!
+            }
+            if oldValue != self.noiseType {
+                self.bufferIsDirty = true
+            }
+        }
+    }
+    public private(set) var fireProgram = ShaderHelper.programDictionaryForString("Fire Shader")!
     open let fireVertices = TexturedQuadVertices(vertex: FireVertex())
     
     ///How much noise (how many peaks/troughs).
@@ -65,12 +84,25 @@ open class GLSFireSprite: GLSSprite, DoubleBuffered {
             if self.shouldRedraw && !(self.offset ~= oldValue) {
                 self.renderToTexture()
             }
-            
+            let x = self.offset.x.truncatingRemainder(dividingBy: CGFloat(self.period.x))
+            let y = self.offset.y.truncatingRemainder(dividingBy: CGFloat(self.period.y))
+            self.offset = CGPoint(x: x, y: y)
             self.bufferIsDirty = true
         }
     }
     ///How fast the offset is changing.
     open var offsetVelocity = CGPoint.zero
+    ///The point at which the noise starts repeating.
+    ///If you set it equal to the noise size (or some
+    ///divisor thereof), the sprite becomes tileable.
+    open var period:(x:Int, y:Int) = (255, 255) {
+        didSet {
+            let x = self.offset.x.truncatingRemainder(dividingBy: CGFloat(self.period.x))
+            let y = self.offset.y.truncatingRemainder(dividingBy: CGFloat(self.period.y))
+            self.offset = CGPoint(x: x, y: y)
+            self.bufferIsDirty = true
+        }
+    }
     
     ///Whether the fire should attenuate the alpha near the top.
     ///Note that this causes the fire to appear smaller than it actually is,
@@ -82,14 +114,13 @@ open class GLSFireSprite: GLSSprite, DoubleBuffered {
     open fileprivate(set) var bufferIsDirty = false
     
     /**
-Initialize a Fire sprite.
+    Initialize a Fire sprite.
 
-- parameter size: The size of the sprite.
-- parameter noise: The desired noise gradients.
-- parameter gradient: The color gradient.
-*/
+    - parameter size: The size of the sprite.
+    - parameter noise: The desired noise gradients.
+    - parameter gradient: The color gradient.
+    */
     public init(size:CGSize, noise:Noise2DTexture2D, gradient:GLGradientTexture2D) {
-        
         self.buffer = GLSFrameBuffer(size: size)
         self.noiseTexture = noise
         self.gradient = gradient
@@ -112,7 +143,6 @@ Initialize a Fire sprite.
         
         self.fireProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), self.fireVertices.size, self.fireVertices.vertices, GLenum(GL_STATIC_DRAW))
-        
         self.fireProgram.uniformMatrix4fv("u_Projection", matrix: self.projection)
         
         self.fireProgram.uniform2f("u_Offset", value: self.offset)
@@ -120,6 +150,7 @@ Initialize a Fire sprite.
         self.fireProgram.uniform1f("u_NoiseCenter", value: self.noiseCenter)
         self.fireProgram.uniform1f("u_NoiseRange", value: self.noiseRange)
         self.fireProgram.uniform1f("u_AttenuateAlpha", value: self.attenuateAlpha ? 1.0 : 0.0)
+        glUniform2i(self.fireProgram["u_Period"], GLint(self.period.x), GLint(self.period.y))
         
         self.pushTexture(self.noiseTexture.permutationTexture, atLocation: self.fireProgram["u_PermutationInfo"])
         self.pushTexture(self.noiseTexture.noiseTexture, atLocation: self.fireProgram["u_NoiseTextureInfo"])

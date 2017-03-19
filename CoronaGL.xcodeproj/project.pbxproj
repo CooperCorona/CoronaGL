@@ -64,12 +64,16 @@
 		DC5CDCFE1D80B6D1008C2A8D /* SmoothingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */; };
 		DC5CDCFF1D80B6D1008C2A8D /* TrilinearArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */; };
 		DC5E203E1D8B3AE7006B7498 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5E203D1D8B3AE7006B7498 /* GameplayKit.framework */; };
-		DC6E8B0F1DCBC88E00620B7C /* CheckerShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */; };
-		DC6E8B101DCBC88E00620B7C /* CheckerShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */; };
 		DC6E8B141DCBC89D00620B7C /* GLSCheckerSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC6E8B131DCBC89D00620B7C /* GLSCheckerSprite.swift */; };
 		DC806F371D8202A9006F95F7 /* GLSBoolList2DSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */; };
 		DC8EC0581D8C435800CA55AD /* UniversalParticleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587301D8A467B00194959 /* UniversalParticleShader.fsh */; };
 		DC8EC0591D8C435800CA55AD /* UniversalParticleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */; };
+		DC912B191E47EAA7001567D0 /* CheckerShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B171E47EAA7001567D0 /* CheckerShader.fsh */; };
+		DC912B1A1E47EAA7001567D0 /* CheckerShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B181E47EAA7001567D0 /* CheckerShader.vsh */; };
+		DC912B1F1E47EAB8001567D0 /* FireShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1B1E47EAB8001567D0 /* FireShader.fsh */; };
+		DC912B201E47EAB8001567D0 /* FireShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1C1E47EAB8001567D0 /* FireShader.vsh */; };
+		DC912B211E47EAB8001567D0 /* FractalFireShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1D1E47EAB8001567D0 /* FractalFireShader.fsh */; };
+		DC912B221E47EAB8001567D0 /* FractalFireShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1E1E47EAB8001567D0 /* FractalFireShader.vsh */; };
 		DC94962C1E4249BD008CF23E /* GLSSprite+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC94962B1E4249BD008CF23E /* GLSSprite+Animation.swift */; };
 		DCB587321D8A467B00194959 /* AlphaHoleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */; };
 		DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */; };
@@ -87,8 +91,6 @@
 		DCB5873F1D8A467B00194959 /* FastBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587191D8A467B00194959 /* FastBlurShader.vsh */; };
 		DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */; };
 		DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */; };
-		DCB587421D8A467B00194959 /* FireShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871C1D8A467B00194959 /* FireShader.fsh */; };
-		DCB587431D8A467B00194959 /* FireShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871D1D8A467B00194959 /* FireShader.vsh */; };
 		DCB587441D8A467B00194959 /* HardBlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */; };
 		DCB587451D8A467B00194959 /* HardBlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */; };
 		DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB587201D8A467B00194959 /* NoiseShader.fsh */; };
@@ -180,10 +182,14 @@
 		DC5CDCF51D80B6D1008C2A8D /* SmoothingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothingFunctions.swift; sourceTree = "<group>"; };
 		DC5CDCF61D80B6D1008C2A8D /* TrilinearArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrilinearArray.swift; sourceTree = "<group>"; };
 		DC5E203D1D8B3AE7006B7498 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
-		DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.fsh; sourceTree = "<group>"; };
-		DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.vsh; sourceTree = "<group>"; };
 		DC6E8B131DCBC89D00620B7C /* GLSCheckerSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSCheckerSprite.swift; sourceTree = "<group>"; };
 		DC806F361D8202A9006F95F7 /* GLSBoolList2DSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSBoolList2DSprite.swift; sourceTree = "<group>"; };
+		DC912B171E47EAA7001567D0 /* CheckerShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.fsh; sourceTree = "<group>"; };
+		DC912B181E47EAA7001567D0 /* CheckerShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CheckerShader.vsh; sourceTree = "<group>"; };
+		DC912B1B1E47EAB8001567D0 /* FireShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.fsh; sourceTree = "<group>"; };
+		DC912B1C1E47EAB8001567D0 /* FireShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.vsh; sourceTree = "<group>"; };
+		DC912B1D1E47EAB8001567D0 /* FractalFireShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FractalFireShader.fsh; sourceTree = "<group>"; };
+		DC912B1E1E47EAB8001567D0 /* FractalFireShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FractalFireShader.vsh; sourceTree = "<group>"; };
 		DC94962B1E4249BD008CF23E /* GLSSprite+Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GLSSprite+Animation.swift"; sourceTree = "<group>"; };
 		DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.fsh; sourceTree = "<group>"; };
 		DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.vsh; sourceTree = "<group>"; };
@@ -201,8 +207,6 @@
 		DCB587191D8A467B00194959 /* FastBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastBlurShader.vsh; sourceTree = "<group>"; };
 		DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastFractalShader.fsh; sourceTree = "<group>"; };
 		DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FastFractalShader.vsh; sourceTree = "<group>"; };
-		DCB5871C1D8A467B00194959 /* FireShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.fsh; sourceTree = "<group>"; };
-		DCB5871D1D8A467B00194959 /* FireShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FireShader.vsh; sourceTree = "<group>"; };
 		DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HardBlurShader.fsh; sourceTree = "<group>"; };
 		DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HardBlurShader.vsh; sourceTree = "<group>"; };
 		DCB587201D8A467B00194959 /* NoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoiseShader.fsh; sourceTree = "<group>"; };
@@ -242,8 +246,8 @@
 				DCB5870F1D8A467B00194959 /* BasicGradientShader.vsh */,
 				DCB587101D8A467B00194959 /* BasicShader.fsh */,
 				DCB587111D8A467B00194959 /* BasicShader.vsh */,
-				DC6E8B0E1DCBC88E00620B7C /* CheckerShader.vsh */,
-				DC6E8B0D1DCBC88E00620B7C /* CheckerShader.fsh */,
+				DC912B171E47EAA7001567D0 /* CheckerShader.fsh */,
+				DC912B181E47EAA7001567D0 /* CheckerShader.vsh */,
 				DCB587121D8A467B00194959 /* ColorShader.fsh */,
 				DCB587131D8A467B00194959 /* ColorShader.vsh */,
 				DCB587141D8A467B00194959 /* DoubleShader.fsh */,
@@ -254,8 +258,10 @@
 				DCB587191D8A467B00194959 /* FastBlurShader.vsh */,
 				DCB5871A1D8A467B00194959 /* FastFractalShader.fsh */,
 				DCB5871B1D8A467B00194959 /* FastFractalShader.vsh */,
-				DCB5871C1D8A467B00194959 /* FireShader.fsh */,
-				DCB5871D1D8A467B00194959 /* FireShader.vsh */,
+				DC912B1B1E47EAB8001567D0 /* FireShader.fsh */,
+				DC912B1C1E47EAB8001567D0 /* FireShader.vsh */,
+				DC912B1D1E47EAB8001567D0 /* FractalFireShader.fsh */,
+				DC912B1E1E47EAB8001567D0 /* FractalFireShader.vsh */,
 				DCB5871E1D8A467B00194959 /* HardBlurShader.fsh */,
 				DCB5871F1D8A467B00194959 /* HardBlurShader.vsh */,
 				DC2A535D1DEA7BC500E961FC /* ImplosionShader.fsh */,
@@ -496,9 +502,10 @@
 			files = (
 				DC8EC0581D8C435800CA55AD /* UniversalParticleShader.fsh in Resources */,
 				DC8EC0591D8C435800CA55AD /* UniversalParticleShader.vsh in Resources */,
+				DC912B201E47EAB8001567D0 /* FireShader.vsh in Resources */,
+				DC912B211E47EAB8001567D0 /* FractalFireShader.fsh in Resources */,
 				DCB587381D8A467B00194959 /* ColorShader.fsh in Resources */,
 				DCB587341D8A467B00194959 /* BasicGradientShader.fsh in Resources */,
-				DCB587431D8A467B00194959 /* FireShader.vsh in Resources */,
 				DCB587361D8A467B00194959 /* BasicShader.fsh in Resources */,
 				DCB587461D8A467B00194959 /* NoiseShader.fsh in Resources */,
 				DCB587471D8A467B00194959 /* NoiseShader.vsh in Resources */,
@@ -510,8 +517,8 @@
 				DCB587351D8A467B00194959 /* BasicGradientShader.vsh in Resources */,
 				DCB587401D8A467B00194959 /* FastFractalShader.fsh in Resources */,
 				DCB587501D8A467B00194959 /* RadialGradientShader.fsh in Resources */,
+				DC912B191E47EAA7001567D0 /* CheckerShader.fsh in Resources */,
 				DC2A535F1DEA7BC500E961FC /* ImplosionShader.fsh in Resources */,
-				DC6E8B0F1DCBC88E00620B7C /* CheckerShader.fsh in Resources */,
 				DC4054291D8C6B0D00608A8F /* PerlinNoiseShader.fsh in Resources */,
 				DCB587411D8A467B00194959 /* FastFractalShader.vsh in Resources */,
 				DCB587391D8A467B00194959 /* ColorShader.vsh in Resources */,
@@ -522,19 +529,20 @@
 				DC4054281D8C6B0D00608A8F /* PerlinFractalNoiseShader.vsh in Resources */,
 				DCB587541D8A467B00194959 /* Universal2DShader.fsh in Resources */,
 				DC4054251D8C6B0D00608A8F /* PerlinAbsNoiseShader.fsh in Resources */,
-				DCB587421D8A467B00194959 /* FireShader.fsh in Resources */,
 				DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */,
-				DC6E8B101DCBC88E00620B7C /* CheckerShader.vsh in Resources */,
 				DC40542B1D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh in Resources */,
 				DC40542C1D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh in Resources */,
+				DC912B1A1E47EAA7001567D0 /* CheckerShader.vsh in Resources */,
 				DCB5873C1D8A467B00194959 /* DummyShader.fsh in Resources */,
 				DCB5873A1D8A467B00194959 /* DoubleShader.fsh in Resources */,
 				DCB5873D1D8A467B00194959 /* DummyShader.vsh in Resources */,
 				DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */,
 				DCB587441D8A467B00194959 /* HardBlurShader.fsh in Resources */,
+				DC912B221E47EAB8001567D0 /* FractalFireShader.vsh in Resources */,
 				DCB587531D8A467B00194959 /* SoftBlurShader.vsh in Resources */,
 				DCB587371D8A467B00194959 /* BasicShader.vsh in Resources */,
 				DCB5873B1D8A467B00194959 /* DoubleShader.vsh in Resources */,
+				DC912B1F1E47EAB8001567D0 /* FireShader.fsh in Resources */,
 				DC40542A1D8C6B0D00608A8F /* PerlinNoiseShader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

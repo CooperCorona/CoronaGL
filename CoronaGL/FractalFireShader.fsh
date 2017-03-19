@@ -16,8 +16,8 @@ uniform float u_NoiseDivisor;
 uniform float u_NoiseCenter;
 uniform float u_NoiseRange;
 uniform float u_AttenuateAlpha;
-//uniform float u_Alpha;
 uniform ivec2 u_Period;
+//uniform float u_Alpha;
 varying highp vec2 v_NoiseTexture;
 
 int modulus(int x, int y) {
@@ -97,12 +97,18 @@ float noiseAt(vec2 pos) {
     return bilinearlyInterpolate(weight, ll, ul, lu, uu);
 }
 
+float fractalNoiseAt(vec2 pos) {
+    float noise = noiseAt(pos);
+    noise += noiseAt(2.0 * pos) / 2.0;
+    noise += noiseAt(4.0 * pos) / 4.0;
+    noise += noiseAt(8.0 * pos) / 8.0;
+    return noise;
+}
+
 void main(void) {
     
     vec2 noisePos = vec2(v_NoiseTexture.x, 0.0) + u_Offset;
-    //    float noise = noiseAt(noisePos) / 2.0 / u_NoiseDivisor + 0.5;
-    //    float noise = noiseAt(noisePos) / u_NoiseDivisor / 2.0 + 0.5;
-    float noise = noiseAt(noisePos) / u_NoiseDivisor * u_NoiseRange;
+    float noise = fractalNoiseAt(noisePos) / u_NoiseDivisor * u_NoiseRange;
     noise += u_NoiseCenter;
     noise = clamp(noise, 0.0, 1.0);
     if (v_NoiseTexture.y > noise) {
@@ -114,7 +120,5 @@ void main(void) {
     
     
     float alpha = 1.0 - noise * noise * noise * noise * u_AttenuateAlpha;
-    //    float y = noise;
-    //    float alpha = 1.0 - y * y * y * y * u_AttenuateAlpha;
     gl_FragColor = vec4(graColor.rgb, graColor.a * alpha);
 }//main

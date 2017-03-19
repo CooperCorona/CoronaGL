@@ -290,6 +290,19 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
         
         return filePath
     }//save with name
+    #else
+    open func save(url:URL) {
+        let image = self.getImage()
+        let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+        let bitmap = NSBitmapImageRep(cgImage: cgImage)
+        bitmap.size = image.size
+        let data = bitmap.representation(using: NSBitmapImageFileType.PNG, properties: [:])
+        do {
+            try data?.write(to: url, options: .atomic)
+        } catch {
+            print(error)
+        }
+    }
     #endif
     
     override open func clone() -> GLSFrameBuffer {
