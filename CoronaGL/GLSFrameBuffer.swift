@@ -196,7 +196,7 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
     
     open func getImage() -> ImageType {
     
-        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), self.framebufferName)
+        self.framebufferStack?.pushGLSFramebuffer(buffer: self)
         glReadBuffer(GLenum(GL_COLOR_ATTACHMENT0))
         
         let width = Int(ceil(self.internalSize.width))
@@ -261,6 +261,7 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
         #else
         let im = NSImage(cgImage: cgIm2!, size: self.contentSize)
         #endif
+        self.framebufferStack?.popFramebuffer()
         return im
     }//get framebuffer as image
     

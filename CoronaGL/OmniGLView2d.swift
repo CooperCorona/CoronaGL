@@ -87,10 +87,14 @@ open class OmniGLView2d: NSOpenGLView {
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
     }
     
+    public class func setViewport(to size:NSSize) {
+        glViewport(0, 0, GLsizei(size.width), GLsizei(size.height))
+        GLSNode.universalProjection = SCMatrix4(right: size.width, top: size.height)
+    }
+    
     open override func reshape() {
         super.reshape()
-        glViewport(0, 0, GLsizei(self.frame.width), GLsizei(self.frame.height))
-        GLSNode.universalProjection = SCMatrix4(right: self.frame.width, top: self.frame.height)
+        OmniGLView2d.setViewport(to: self.frame.size)
     }
     
     // MARK: - Logic
