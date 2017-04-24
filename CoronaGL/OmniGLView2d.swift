@@ -119,7 +119,7 @@ open class OmniGLView2d: NSOpenGLView {
         self.setNeedsDisplay(self.frame)
     }
     
-    open func removeChild(_ child:GLSNode) -> GLSNode? {
+    @discardableResult open func removeChild(_ child:GLSNode) -> GLSNode? {
         let node = self.container.removeChild(child)
         self.setNeedsDisplay(self.frame)
         return node
