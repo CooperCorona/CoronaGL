@@ -90,6 +90,16 @@ open class OmniGLView2d: NSOpenGLView {
     public class func setViewport(to size:NSSize) {
         glViewport(0, 0, GLsizei(size.width), GLsizei(size.height))
         GLSNode.universalProjection = SCMatrix4(right: size.width, top: size.height)
+        
+        //The GLSFrameBuffer context does not update when the
+        //previous code is called because it is not the current
+        //context, so we need to set the viewport in terms
+        //of the GLSFrameBuffer.globalContext, too. For some reason,
+        //resizing the window (thus calling reshape and then this method)
+        //fixes the issue, so I don't know where the viewport is being
+        //set elsewhere (or maybe it's just off by one and is imperceptible).
+        GLSFrameBuffer.globalContext.makeCurrentContext()
+        glViewport(0, 0, GLsizei(size.width), GLsizei(size.height))
     }
     
     open override func reshape() {

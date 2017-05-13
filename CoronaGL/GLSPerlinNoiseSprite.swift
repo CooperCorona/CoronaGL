@@ -248,7 +248,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
             return
         }
         
-        glClearColor(0.0, 0.0, 0.0, 0.0)
+        glClearColor(0.0, 0.0, 1.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
         
         self.noiseProgram.use()
@@ -333,6 +333,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     open override func contentSizeChanged() {
         self.buffer = GLSFrameBuffer(size: self.contentSize)
+        self.buffer.framebufferStack = self.framebufferStack
         self.texture = self.buffer.ccTexture
         
         let sizeAsPoint = self.contentSize.getCGPoint()

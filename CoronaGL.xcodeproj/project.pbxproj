@@ -103,6 +103,7 @@
 		DCB587551D8A467B00194959 /* Universal2DShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5872F1D8A467B00194959 /* Universal2DShader.vsh */; };
 		DCC50CC71D81ECED007092CA /* ColorGradient1D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */; };
 		DCEA99B91D8CCA740019964F /* OmniGLView2d.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEA99B81D8CCA740019964F /* OmniGLView2d.swift */; };
+		DCF65C881EBC523D00D16693 /* GLSPolygonSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF65C871EBC523D00D16693 /* GLSPolygonSprite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,6 +222,7 @@
 		DCB587311D8A467B00194959 /* UniversalParticleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UniversalParticleShader.vsh; sourceTree = "<group>"; };
 		DCC50CC61D81ECED007092CA /* ColorGradient1D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient1D.swift; sourceTree = "<group>"; };
 		DCEA99B81D8CCA740019964F /* OmniGLView2d.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmniGLView2d.swift; sourceTree = "<group>"; };
+		DCF65C871EBC523D00D16693 /* GLSPolygonSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSPolygonSprite.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -325,6 +327,7 @@
 				DC5CDC9D1D80B351008C2A8D /* GLSNode.swift */,
 				DC5CDC9F1D80B351008C2A8D /* GLSParticleEmitter.swift */,
 				DC5CDCA01D80B351008C2A8D /* GLSPerlinNoiseSprite.swift */,
+				DCF65C871EBC523D00D16693 /* GLSPolygonSprite.swift */,
 				DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */,
 				DC5CDCA21D80B351008C2A8D /* GLSRecursivePropertyNode.swift */,
 				DC5CDCA41D80B351008C2A8D /* GLSSprite.swift */,
@@ -554,6 +557,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCF65C881EBC523D00D16693 /* GLSPolygonSprite.swift in Sources */,
 				DC5CDCDA1D80B360008C2A8D /* TexturedQuad.swift in Sources */,
 				DC5CDCA81D80B351008C2A8D /* GLSDoubleSprite.swift in Sources */,
 				DC5CDCD41D80B360008C2A8D /* MultiTexturedQuad.swift in Sources */,
