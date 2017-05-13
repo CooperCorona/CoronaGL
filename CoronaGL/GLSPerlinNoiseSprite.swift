@@ -248,7 +248,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
             return
         }
         
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(0.0, 0.0, 0.0, 0.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
         
         self.noiseProgram.use()
