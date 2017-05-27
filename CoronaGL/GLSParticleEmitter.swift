@@ -57,7 +57,6 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
             
             let pos = CGPoint(tupleGL: vertex.position) + self.velocity * dt
             vertex.position = pos.getGLTuple()
-            
         }//update vertex
     }
     
@@ -252,6 +251,9 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     open func renderToTexture() {
         self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
+        
+        glEnable(GLenum(GL_VERTEX_PROGRAM_POINT_SIZE))
+        glEnable(GLenum(GL_PROGRAM_POINT_SIZE))
         
         self.buffer.bindClearColor()
         

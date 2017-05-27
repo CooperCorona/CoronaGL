@@ -117,6 +117,7 @@ open class OmniGLView2d: NSOpenGLView {
         }
         GLSNode.universalProjection = SCMatrix4(right: self.frame.width, top: self.frame.height)
         self.clearColor.bindGLClearColor()
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
         self.container.render()
         glFlush()
         self.openGLContext?.flushBuffer()
