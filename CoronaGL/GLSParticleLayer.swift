@@ -88,13 +88,38 @@ public struct GLSDefaultParticleLayerEmitter: GLSParticleLayerEmitter {
     }
 }
 
+public class GLSDefaultParticleLayerEmitterNode: GLSNode, GLSParticleLayerEmitter {
+    
+    private var underlyingEmitter:GLSParticleLayerEmitter
+    public var particlesToSpawn: Int { return self.underlyingEmitter.particlesToSpawn }
+    public var isFinished: Bool { return self.underlyingEmitter.isFinished }
+    
+    public init(emitter:GLSParticleLayerEmitter) {
+        self.underlyingEmitter = emitter
+        super.init(position: CGPoint.zero, size: CGSize.zero)
+    }
+    
+    public func update(dt: CGFloat) {
+        self.underlyingEmitter.update(dt: dt)
+    }
+    
+    public func emit() -> GLSParticle {
+        var particle = self.underlyingEmitter.emit()
+        particle.position = (self.recursiveModelMatrix() * CGPoint(tupleGL: particle.position)).getGLTuple()
+        return particle
+    }
+    
+}
+
 /**
  Defines a framebuffer that renders particles. Previous implementations
  of particle emitters were separate sprites that used their own
  framebuffers. This defines a single framebuffer (presumably the size
  of the screen) that renders *all* particle emitters to the same
  framebuffer. This will allow interactions, hopefully speed up the
- rendering, and be an opportunity to update the emitter logic.
+ rendering, and be an opportunity to update the emitter logic. It also
+ allows particles to move independently of their emitters / other particles
+ once spawned.
  */
 open class GLSParticleLayer: GLSSprite, DoubleBuffered {
 
