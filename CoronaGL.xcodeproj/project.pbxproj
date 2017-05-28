@@ -75,6 +75,7 @@
 		DC912B211E47EAB8001567D0 /* FractalFireShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1D1E47EAB8001567D0 /* FractalFireShader.fsh */; };
 		DC912B221E47EAB8001567D0 /* FractalFireShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC912B1E1E47EAB8001567D0 /* FractalFireShader.vsh */; };
 		DC94962C1E4249BD008CF23E /* GLSSprite+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC94962B1E4249BD008CF23E /* GLSSprite+Animation.swift */; };
+		DC9FCCF21EDA193B00881218 /* GLSParticleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9FCCF11EDA193B00881218 /* GLSParticleLayer.swift */; };
 		DCB587321D8A467B00194959 /* AlphaHoleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */; };
 		DCB587331D8A467B00194959 /* AlphaHoleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */; };
 		DCB587341D8A467B00194959 /* BasicGradientShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DCB5870E1D8A467B00194959 /* BasicGradientShader.fsh */; };
@@ -192,6 +193,7 @@
 		DC912B1D1E47EAB8001567D0 /* FractalFireShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FractalFireShader.fsh; sourceTree = "<group>"; };
 		DC912B1E1E47EAB8001567D0 /* FractalFireShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FractalFireShader.vsh; sourceTree = "<group>"; };
 		DC94962B1E4249BD008CF23E /* GLSSprite+Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GLSSprite+Animation.swift"; sourceTree = "<group>"; };
+		DC9FCCF11EDA193B00881218 /* GLSParticleLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSParticleLayer.swift; sourceTree = "<group>"; };
 		DCB5870C1D8A467B00194959 /* AlphaHoleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.fsh; sourceTree = "<group>"; };
 		DCB5870D1D8A467B00194959 /* AlphaHoleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaHoleShader.vsh; sourceTree = "<group>"; };
 		DCB5870E1D8A467B00194959 /* BasicGradientShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BasicGradientShader.fsh; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				DC2A53591DEA7A7F00E961FC /* GLSImplosionSprite.swift */,
 				DC5CDC9D1D80B351008C2A8D /* GLSNode.swift */,
 				DC5CDC9F1D80B351008C2A8D /* GLSParticleEmitter.swift */,
+				DC9FCCF11EDA193B00881218 /* GLSParticleLayer.swift */,
 				DC5CDCA01D80B351008C2A8D /* GLSPerlinNoiseSprite.swift */,
 				DCF65C871EBC523D00D16693 /* GLSPolygonSprite.swift */,
 				DC5CDCA11D80B351008C2A8D /* GLSRadialGradientSprite.swift */,
@@ -565,6 +568,7 @@
 				DC5CDCC91D80B360008C2A8D /* CCTexture.swift in Sources */,
 				DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */,
 				DC5CDCAE1D80B351008C2A8D /* GLSNode.swift in Sources */,
+				DC9FCCF21EDA193B00881218 /* GLSParticleLayer.swift in Sources */,
 				DC5CDCF71D80B6D1008C2A8D /* BilinearArray.swift in Sources */,
 				DC94962C1E4249BD008CF23E /* GLSSprite+Animation.swift in Sources */,
 				DC5CDCD31D80B360008C2A8D /* GLSNode+Animation.swift in Sources */,

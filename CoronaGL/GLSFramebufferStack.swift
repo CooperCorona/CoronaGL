@@ -14,6 +14,7 @@ public class GLSFramebufferStack: NSObject {
    
     private let initialBuffer:GLKView
     private var buffers:[GLuint] = []
+    fileprivate var viewports:[[GLint]] = []
     
     public init(initialBuffer:GLKView) {
         
@@ -22,17 +23,34 @@ public class GLSFramebufferStack: NSObject {
         super.init()
     }//initialize
     
+    private func getViewport() -> [GLint] {
+        var viewport:[GLint] = [-1, -1, -1, -1]
+        glGetIntegerv(GLenum(GL_VIEWPORT), &viewport)
+        return viewport
+    }
+    
     public func pushFramebuffer(buffer:GLuint) -> Bool {
         
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer)
         self.buffers.append(buffer)
+        
+        //We can't infer anything about the framebuffer's
+        //size (well, there might be a glGet option, but
+        //I don't know for sure), so we just duplicate
+        //the current state.
+        self.viewports.append(self.getViewport())
         
         return true
     }//push a framebuffer
     
     public func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         
-        return self.pushFramebuffer(buffer: buffer.framebuffer)
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
+        self.buffers.append(buffer)
+        
+        let viewport = [0, 0, GLint(buffer.size.width), GLint(buffer.size.height)]
+        glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
+        viewports.append(viewport)
         
     }//push a framebuffer
     
@@ -44,8 +62,9 @@ public class GLSFramebufferStack: NSObject {
         
         self.buffers.removeLast()
         
-        if let topBuffer = self.buffers.last {
+        if let topBuffer = self.buffers.last, let viewport = self.viewports.last {
             glBindFramebuffer(GLenum(topBuffer), topBuffer)
+            glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
         } else {
             self.initialBuffer.bindDrawable()
         }
@@ -62,6 +81,8 @@ open class GLSFramebufferStack: NSObject {
     fileprivate let initialBuffer:NSOpenGLView?
     fileprivate var buffers:[GLuint] = []
     fileprivate var renderBuffers:[GLuint] = []
+    fileprivate var viewports:[[GLint]] = []
+    fileprivate var projections:[SCMatrix4] = []
     open let internalContext:NSOpenGLContext?
     
     public init(initialBuffer:NSOpenGLView?) {
@@ -70,11 +91,26 @@ open class GLSFramebufferStack: NSObject {
         super.init()
     }//initialize
     
+    private func getViewport() -> [GLint] {
+        var viewport:[GLint] = [-1, -1, -1, -1]
+        glGetIntegerv(GLenum(GL_VIEWPORT), &viewport)
+        return viewport
+    }
+    
+    private func set(viewport:[GLint]) {
+        glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
+    }
     
     open func pushFramebuffer(buffer:GLuint) -> Bool {
         
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer)
         self.buffers.append(buffer)
+        
+        //We can't infer anything about the framebuffer's
+        //size (well, there might be a glGet option, but
+        //I don't know for sure), so we just duplicate
+        //the current state.
+        self.viewports.append(self.getViewport())
         
         return true
     }//push a framebuffer
@@ -84,9 +120,16 @@ open class GLSFramebufferStack: NSObject {
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
         glBindRenderbuffer(GLenum(GL_RENDERBUFFER), buffer.renderBuffer)
+        //TODO: Figure out if this needs to be internalSize or not.
+        let viewport = [0, 0, GLint(buffer.size.width), GLint(buffer.size.height)]
+        self.set(viewport: viewport)
+        
+        self.projections.append(GLSNode.universalProjection)
+        GLSNode.universalProjection = SCMatrix4(right: CGFloat(viewport[2]), top: CGFloat(viewport[3]))
         
         self.buffers.append(buffer.framebuffer)
         self.renderBuffers.append(buffer.renderBuffer)
+        self.viewports.append(viewport)
         
         return true
     }//push a framebuffer
@@ -100,10 +143,13 @@ open class GLSFramebufferStack: NSObject {
         //renderBuffers is guarunteed to be the same length as buffers.
         self.buffers.removeLast()
         self.renderBuffers.removeLast()
+        self.viewports.removeLast()
+        GLSNode.universalProjection = self.projections.removeLast()
         
-        if let topBuffer = self.buffers.last, let renderBuffer = self.renderBuffers.last {
+        if let topBuffer = self.buffers.last, let renderBuffer = self.renderBuffers.last, let viewport = self.viewports.last {
             glBindFramebuffer(GLenum(topBuffer), topBuffer)
             glBindRenderbuffer(GLenum(GL_RENDERBUFFER), renderBuffer)
+            glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
         } else {
             glFlush()
             self.initialBuffer?.openGLContext?.makeCurrentContext()
