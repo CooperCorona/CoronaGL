@@ -115,7 +115,7 @@ open class GLSFramebufferStack: NSObject {
         return true
     }//push a framebuffer
     
-    open func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
+    @discardableResult open func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         self.internalContext?.makeCurrentContext()
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
@@ -134,7 +134,7 @@ open class GLSFramebufferStack: NSObject {
         return true
     }//push a framebuffer
     
-    open func popFramebuffer() -> Bool {
+    @discardableResult open func popFramebuffer() -> Bool {
         
         if (self.buffers.count <= 0) {
             return false
