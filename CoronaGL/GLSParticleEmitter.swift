@@ -23,7 +23,7 @@ public protocol RandomPointProtocol {
 
 public struct PEVertex: CustomStringConvertible {
     
-    public var position:(GLfloat, GLfloat) = (0.0, 0.0)
+    public var position:GLPoint = GLPoint(x: 0.0, y: 0.0)
     public var color:(GLfloat, GLfloat, GLfloat) = (0.0, 0.0, 0.0)
     public var size:GLfloat = 0.0
     public var textureAnchor:(GLfloat, GLfloat, GLfloat, GLfloat) = (0.0, 0.0, 1.0, 1.0)
@@ -55,8 +55,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
             
             self.life -= dt
             
-            let pos = CGPoint(tupleGL: vertex.position) + self.velocity * dt
-            vertex.position = pos.getGLTuple()
+            vertex.position += self.velocity * dt
         }//update vertex
     }
     
@@ -155,7 +154,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         let size = GLSParticleEmitter.randomFloat(self.particleSize, withRange: self.particleSizeRange)
         
         var part = PEVertex()
-        part.position = self.randomPointForParticle().getGLTuple()
+        part.position = GLPoint(point: self.randomPointForParticle())
         part.color = color.getGLTuple()
         part.size = GLfloat(size * self.screenScale)
         part.textureAnchor = self.particleTextureAnchor
