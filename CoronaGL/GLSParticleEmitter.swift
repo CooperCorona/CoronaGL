@@ -24,9 +24,9 @@ public protocol RandomPointProtocol {
 public struct PEVertex: CustomStringConvertible {
     
     public var position:GLPoint = GLPoint(x: 0.0, y: 0.0)
-    public var color:(GLfloat, GLfloat, GLfloat) = (0.0, 0.0, 0.0)
+    public var color = GLVector3()
     public var size:GLfloat = 0.0
-    public var textureAnchor:(GLfloat, GLfloat, GLfloat, GLfloat) = (0.0, 0.0, 1.0, 1.0)
+    public var textureAnchor = GLVector4(x: 0.0, y: 0.0, z: 1.0, w: 1.0)
     
     public var description:String {
         return "P-\(position) C-\(color) S-\(size)"
@@ -77,7 +77,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     open var particleAngleMinimum:CGFloat = 0.0
     open var particleAngleMaximum:CGFloat = 2.0 * CGFloat(M_PI)
     open let particleTexture:CCTexture?
-    open let particleTextureAnchor:(GLfloat, GLfloat, GLfloat, GLfloat)
+    open let particleTextureAnchor:GLVector4
     open var particleSpawnShape:RandomPointProtocol? = nil
     
     open let screenScale:CGFloat = GLSFrameBuffer.getRetinaScale()
@@ -119,13 +119,9 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         self.particleTexture = texture
         
         if let tex = self.particleTexture {
-            let x = GLfloat(tex.frame.origin.x)
-            let y = GLfloat(tex.frame.origin.y)
-            let w = GLfloat(tex.frame.size.width)
-            let h = GLfloat(tex.frame.size.height)
-            self.particleTextureAnchor = (x, y, w, h)
+            self.particleTextureAnchor = GLVector4(rect: tex.frame)
         } else {
-            self.particleTextureAnchor = (0.0, 0.0, 1.0, 1.0)
+            self.particleTextureAnchor = GLVector4(x: 0.0, y: 0.0, z: 1.0, w: 1.0)
         }
         
         self.duration = duration
@@ -155,7 +151,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         
         var part = PEVertex()
         part.position = GLPoint(point: self.randomPointForParticle())
-        part.color = color.getGLTuple()
+        part.color = color.getGLVector()
         part.size = GLfloat(size * self.screenScale)
         part.textureAnchor = self.particleTextureAnchor
         
