@@ -28,41 +28,25 @@ public struct PEVertex: CustomStringConvertible {
     public var size:GLfloat = 0.0
     public var textureAnchor = GLVector4(x: 0.0, y: 0.0, z: 1.0, w: 1.0)
     
+    public var velocity:GLPoint = GLPoint()
+    public var life:GLfloat = 0.0
+    public var isFinished:Bool { return self.life <= 0.0 }
+    
+    mutating public func update(_ dt:CGFloat) {
+        self.life -= GLfloat(dt)
+        self.position += self.velocity * dt
+    }//update vertex
+    
     public var description:String {
         return "P-\(position) C-\(color) S-\(size)"
     }
 }
 
 open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
-    /*
-    private static var __once: () = {
-            StaticInstance.instance = DispatchQueue(label: "GLSParticleEmitter Update", attributes: [])
-        }()
-    */
-    // MARK: - Types
-    
-    open class PEVertexData {
-        let velocity:CGPoint
-        var life:CGFloat
-        var isFinished:Bool { return self.life <= 0.0 }
-        
-        public init(velocity:CGFloat, angle:CGFloat, life:CGFloat) {
-            self.velocity = CGPoint(angle: angle, length: velocity)
-            self.life = life
-        }//initialize
-        
-        func update(_ dt:CGFloat, vertex:inout PEVertex) {
-            
-            self.life -= dt
-            
-            vertex.position += self.velocity * dt
-        }//update vertex
-    }
     
     // MARK: - Properties
     
     open var particles:[PEVertex] = []
-    open var particleData:[PEVertexData] = []
     
     open let particleSize:CGFloat
     open let particleSizeRange:CGFloat
@@ -75,7 +59,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     open let particleBirthFrequency:CGFloat
     open let particleBirthRate:Int
     open var particleAngleMinimum:CGFloat = 0.0
-    open var particleAngleMaximum:CGFloat = 2.0 * CGFloat(M_PI)
+    open var particleAngleMaximum:CGFloat = 2.0 * CGFloat.pi
     open let particleTexture:CCTexture?
     open let particleTextureAnchor:GLVector4
     open var particleSpawnShape:RandomPointProtocol? = nil
@@ -140,7 +124,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     // MARK: - Logic
     
-    open func generateParticle() -> (PEVertex, PEVertexData) {
+    open func generateParticle() -> PEVertex {
         
         let color = GLSParticleEmitter.randomVector3(self.particleColor, withRange: self.particleColorRange)
         
@@ -155,9 +139,10 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         part.size = GLfloat(size * self.screenScale)
         part.textureAnchor = self.particleTextureAnchor
         
-        let data = PEVertexData(velocity: velocity, angle: angle, life: life)
+        part.velocity = GLPoint(point: CGPoint(angle: angle, length: velocity))
+        part.life = GLfloat(life)
         
-        return (part, data)
+        return part
     }//generate vertex
     
     open func randomPointForParticle() -> CGPoint {
@@ -180,51 +165,39 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     open func updateParticles(_ dt:CGFloat) {
         
-        var storedData      = self.particleData
         var storedParticles = self.particles
         
         var filteredParticles:[PEVertex] = []
-        var filteredData:[PEVertexData] = []
-        for iii in 0..<storedParticles.count {
-            storedData[iii].update(dt, vertex: &storedParticles[iii])
+        for i in 0..<storedParticles.count {
+            storedParticles[i].update(dt)
             
-            if !storedData[iii].isFinished {
-                filteredParticles.append(storedParticles[iii])
-                filteredData.append(storedData[iii])
+            if !storedParticles[i].isFinished {
+                filteredParticles.append(storedParticles[i])
             }
         }
         
         if self.isEmitting {
             let partsToAdd = self.addParticles(dt)
-            filteredParticles += partsToAdd.vertices
-            filteredData += partsToAdd.data
+            filteredParticles += partsToAdd
         }
         
         self.particles = filteredParticles
-        self.particleData = filteredData
         
         self.bufferIsDirty = true
     }
 
-    open func addParticles(_ dt:CGFloat) -> (vertices:[PEVertex], data:[PEVertexData]) {
+    open func addParticles(_ dt:CGFloat) -> [PEVertex] {
         
         self.spawnCount += dt
         var parts:[PEVertex] = []
-        var datas:[PEVertexData] = []
         while (self.spawnCount >= self.particleBirthFrequency) {
-            
-            let (particle, data) = self.generateParticle()
-            
-//            self.particles.append(particle)
-//            self.particleData.append(data)
+            let particle = self.generateParticle()
             parts.append(particle)
-            datas.append(data)
             
             self.spawnCount -= self.particleBirthFrequency
         }//spawn a particle
         
-        //        return parts
-        return (parts, datas)
+        return parts
     }//add particles
 
     open func updateDuration(_ dt:CGFloat) {
