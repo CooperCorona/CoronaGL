@@ -37,9 +37,10 @@ open class ShaderHelper : NSObject {
         for (key, file) in dict {
             if let vshURL = Bundle.main.url(forResource: file, withExtension: "vsh"),
             let fshURL = Bundle.main.url(forResource: file, withExtension: "fsh") {
-                let program = buildProgramVertexURL(vshURL, fragmentURL: fshURL)
+                let gshURL = Bundle.main.url(forResource: file, withExtension: "gsh")
+                let program = buildProgramVertexURL(vshURL, fragmentURL: fshURL, geometryURL: gshURL)
                 programs[key] = program
-                programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
+                programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL, geometryURL: gshURL)
             }
         }//create shaders
         
@@ -60,6 +61,7 @@ open class ShaderHelper : NSObject {
         var basePaths:[String:String] = [:]
         var vshURLs:[String:URL] = [:]
         var fshURLs:[String:URL] = [:]
+        var gshURLs:[String:URL] = [:]
         var bundles:[Bundle] = Bundle.allFrameworks.filter() { $0.bundlePath.contains("CoronaGL") }
         bundles.append(Bundle.main)
         for bundle in bundles {
@@ -72,6 +74,8 @@ open class ShaderHelper : NSObject {
                             vshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
                         } else if currentPath.hasSuffix(".fsh") {
                             fshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
+                        } else if currentPath.hasSuffix(".gsh") {
+                            gshURLs[key] = URL(fileURLWithPath: "\(resourcePath)/\(currentPath)")
                         }
                     }
                 }
@@ -85,10 +89,11 @@ open class ShaderHelper : NSObject {
                 print("Error: Failed to load shader (\(key)).")
                 continue
             }
-            let program = self.buildProgramVertexURL(vshURL, fragmentURL: fshURL)
+            let gshURL = gshURLs[key]
+            let program = self.buildProgramVertexURL(vshURL, fragmentURL: fshURL, geometryURL: gshURL)
             self.programs[key] = program
             
-            self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
+            self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL, geometryURL: gshURL)
         }
         /*
         let frames = NSBundle.allFrameworks().filter() { $0.bundlePath.hasSuffix(("CoronaGL.framework")) }
@@ -154,7 +159,7 @@ open class ShaderHelper : NSObject {
         return (key, filePath)
     }
     
-    open func buildProgramVertexURL(_ vshURL:URL, fragmentURL fshURL:URL) -> GLuint {
+    open func buildProgramVertexURL(_ vshURL:URL, fragmentURL fshURL:URL, geometryURL:URL? = nil) -> GLuint {
         let program = glCreateProgram()
 
         let vertexShader = self.buildShader(vshURL, shaderType: GLenum(GL_VERTEX_SHADER))
@@ -162,6 +167,11 @@ open class ShaderHelper : NSObject {
         
         glAttachShader(program, vertexShader)
         glAttachShader(program, fragmentShader)
+        
+        if let geometryURL = geometryURL {
+            let geometryShader = self.buildShader(geometryURL, shaderType: GLenum(GL_GEOMETRY_SHADER))
+            glAttachShader(program, geometryShader)
+        }
         
         glLinkProgram(program)
     
@@ -211,12 +221,18 @@ open class ShaderHelper : NSObject {
         return source
     }//create shader
     
-    fileprivate func createProgramDictionary(_ program:GLuint, vertexURL vshURL:URL, fragmentURL fshURL:URL) -> GLProgramDictionary? {
+    fileprivate func createProgramDictionary(_ program:GLuint, vertexURL vshURL:URL, fragmentURL fshURL:URL, geometryURL gshURL:URL? = nil) -> GLProgramDictionary? {
         guard let vshData = try? String(contentsOf: vshURL, encoding: String.Encoding.ascii),
             let fshData = try? String(contentsOf: fshURL, encoding: String.Encoding.ascii) else {
                 return nil
         }
-        return GLProgramDictionary(program: program, vertexShader: vshData, fragmentShader: fshData)
+        let gshData:String?
+        if let gshURL = gshURL {
+            gshData = try? String(contentsOf: gshURL, encoding: String.Encoding.ascii)
+        } else {
+            gshData = nil
+        }
+        return GLProgramDictionary(program: program, vertexShader: vshData, fragmentShader: fshData, geometryShader: gshData)
     }
     
     open class func programDictionaryForString(_ key:String) -> GLProgramDictionary? {

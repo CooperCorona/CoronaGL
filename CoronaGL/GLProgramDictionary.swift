@@ -70,7 +70,7 @@ open class GLProgramDictionary: GLAttributeBridger {
         #endif
     }
     
-    public convenience init?(program:GLuint, vertexShader:String, fragmentShader:String) {
+    public convenience init?(program:GLuint, vertexShader:String, fragmentShader:String, geometryShader:String? = nil) {
         var uniforms:[String]       = []
         var attributes:[String]     = []
         var attributeSizes:[Int]    = []
@@ -80,7 +80,16 @@ open class GLProgramDictionary: GLAttributeBridger {
         attributeSizes += vertexLocations.attributeSizes
         let fragmentLocations = GLProgramDictionary.bridgeLocationsForFile(fragmentShader, shaderType: GLenum(GL_FRAGMENT_SHADER))
         uniforms += fragmentLocations.uniforms
-        // Fragment shader doesn't have attributes
+        
+        if let geometryShader = geometryShader {
+            let geometryLocations = GLProgramDictionary.bridgeLocationsForFile(geometryShader, shaderType: GLenum(GL_GEOMETRY_SHADER))
+            uniforms += geometryLocations.uniforms
+        }
+        
+        // Fragment (and geometry) shader doesn't have attributes.
+        // (it has varyings, but they're input from
+        // the vertex shader, so the program dictionary
+        // doesn't need to know about them).
         self.init(program: program, locations: uniforms + attributes)
         self.attributeSizes = attributeSizes
     }
