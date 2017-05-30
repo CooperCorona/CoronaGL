@@ -14,53 +14,6 @@ import Cocoa
 import CoronaConvenience
 import CoronaStructures
 
-//Conform to random point protocol to let
-//'GLSParticleEmitter' use your class
-//to spawn particles in random positions
-public protocol GLSParticleEmitterDelegate {
-
-    ///Used by the particle emitter to determine how large to make the underlying buffer.
-    var emitterSize:CGSize { get }
-    ///Used by the particle emitter to stop emitting in time for smooth endings.
-    var maxLife:CGFloat { get }
-    
-    func emit() -> PEVertex
-
-}
-
-public struct GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
-    
-    public var emitterSize: CGSize {
-        return CGSize(square: self.velocity * self.life + self.size * 2.0)
-    }
-    public var maxLife:CGFloat {
-        return self.life
-    }
-    
-    public var color:SCVector3
-    public var velocity:CGFloat
-    public var life:CGFloat
-    public var size:CGFloat
-    
-    public init(color:SCVector3, velocity:CGFloat, life:CGFloat, size:CGFloat) {
-        self.color = color
-        self.velocity = velocity
-        self.life = life
-        self.size = size
-    }
-    
-    public func emit() -> PEVertex {
-        var vertex = PEVertex()
-        vertex.position = GLPoint()
-        vertex.velocity = GLPoint(point: CGPoint(angle: CGFloat.randomMiddle(0.0, range: 2.0 * CGFloat.pi), length: self.velocity))
-        vertex.life = GLfloat(self.life)
-        vertex.color = GLVector3(vector: self.color)
-        vertex.size = GLfloat(self.size)
-        return vertex
-    }
-    
-}
-
 public struct PEVertex: CustomStringConvertible {
     
     public var position:GLPoint = GLPoint(x: 0.0, y: 0.0)
@@ -71,6 +24,10 @@ public struct PEVertex: CustomStringConvertible {
     public var velocity:GLPoint = GLPoint()
     public var life:GLfloat = 0.0
     public var isFinished:Bool { return self.life <= 0.0 }
+    
+    public init() {
+        
+    }
     
     mutating public func update(_ dt:CGFloat) {
         self.life -= GLfloat(dt)
@@ -276,7 +233,6 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         self.particleProgram.disable()
         self.framebufferStack?.popFramebuffer()
         self.bufferIsDirty = false
-        print(self.particles.count)
     }
     
     
