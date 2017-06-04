@@ -126,6 +126,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         
         self.updateParticles(dt)
         self.updateDuration(dt)
+        self.particleDelegate.updateAnimations(dt)
     }
     
     open func updateParticles(_ dt:CGFloat) {
@@ -214,6 +215,10 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
         self.bufferIsDirty = false
     }
     
+    public override func stopAnimations() {
+        super.stopAnimations()
+        self.particleDelegate.stopAnimations()
+    }
     
     deinit {
         ParticleEmitterBackgroundQueue.removeEmitter(self)

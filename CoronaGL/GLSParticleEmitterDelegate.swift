@@ -17,7 +17,7 @@ import CoronaStructures
 //Conform to random point protocol to let
 //'GLSParticleEmitter' use your class
 //to spawn particles in random positions
-public protocol GLSParticleEmitterDelegate {
+public protocol GLSParticleEmitterDelegate: GLSAnimatable {
     
     ///Used by the particle emitter to determine how large to make the underlying buffer.
     var emitterSize:CGSize { get }
@@ -28,7 +28,7 @@ public protocol GLSParticleEmitterDelegate {
     
 }
 
-public struct GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
+public class GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
     
     public var emitterSize: CGSize {
         return CGSize(square: self.velocity * self.life + self.size * 2.0)
@@ -37,10 +37,28 @@ public struct GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
         return self.life
     }
     
-    public var color:SCVector3
-    public var velocity:CGFloat
-    public var life:CGFloat
-    public var size:CGFloat
+    public var animations: [GLSAnimator] = []
+    
+    public var color:SCVector3 {
+        didSet {
+            self.add3Animation(oldValue, end: self.color) { [unowned self] in self.color = $0 }
+        }
+    }
+    public var velocity:CGFloat {
+        didSet {
+            self.add1Animation(oldValue, end: self.velocity) { [unowned self] in self.velocity = $0 }
+        }
+    }
+    public var life:CGFloat {
+        didSet {
+            self.add1Animation(oldValue, end: self.life) { [unowned self] in self.life = $0 }
+        }
+    }
+    public var size:CGFloat {
+        didSet {
+            self.add1Animation(oldValue, end: self.size) { [unowned self] in self.size = $0 }
+        }
+    }
     
     public init(color:SCVector3, velocity:CGFloat, life:CGFloat, size:CGFloat) {
         self.color = color
@@ -61,7 +79,7 @@ public struct GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
     
 }
 
-public struct GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegate {
+public class GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegate {
     
     public var emitterSize: CGSize {
         let velocityIncrease = (1.0 + self.velocityFactor / 2.0)
@@ -72,6 +90,8 @@ public struct GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegat
     public var maxLife:CGFloat {
         return self.wrappedDelegate.maxLife + self.lifeFactor / 2.0
     }
+    
+    public var animations: [GLSAnimator] = []
     
     public let wrappedDelegate:GLSParticleEmitterDelegate
     public var colorFactor:SCVector3

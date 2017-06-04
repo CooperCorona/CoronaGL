@@ -25,6 +25,8 @@ public enum AnimationModes: CustomStringConvertible {
     case cycle(CGFloat)
     case autoreverse
     case fluctuate(FluctuatingNoise1D)
+    case abruptIn
+    case abruptOut
     
     public var description:String {
         switch self {
@@ -46,6 +48,10 @@ public enum AnimationModes: CustomStringConvertible {
             return "Autoreverse"
         case let .fluctuate(fNoise):
             return "Fluctuate(\(fNoise))"
+        case .abruptIn:
+            return "Abrupt In"
+        case .abruptOut:
+            return "Abrupt Out"
         }
     }
     
@@ -132,6 +138,12 @@ open class GLSAnimationHelper: NSObject {
             
         case let .fluctuate(fNoise):
             return fNoise.value
+            
+        case .abruptIn:
+            return 1.0 - (t - 1.0) * (t - 1.0)
+            
+        case .abruptOut:
+            return t * t
             
         }//get time for mode
     }

@@ -24,7 +24,7 @@ public struct UVertex: CustomStringConvertible {
     }
 }
 
-open class GLSNode: NSObject {
+open class GLSNode: NSObject, GLSAnimatable {
     
     open var position:CGPoint = CGPoint(x: 0.0, y: 0.0) {
         
@@ -458,7 +458,7 @@ open class GLSNode: NSObject {
         
     }
     
-    //Children
+    // MARK: - Children
     open func addChild(_ child:GLSNode) {
         self.children.append(child)
         child.superNode = self
@@ -594,7 +594,7 @@ open class GLSNode: NSObject {
     fileprivate var currentTextureIndex = 0
     open func pushTexture(_ tex:GLuint, atLocation:GLint) {
         glUniform1i(atLocation, GLint(self.currentTextureIndex))
-        glActiveTexture(GLenum(GL_TEXTURE0 + self.currentTextureIndex))
+        glActiveTexture(GLenum(GL_TEXTURE0 + Int32(self.currentTextureIndex)))
         glBindTexture(GLenum(GL_TEXTURE_2D), tex)
         self.currentTextureIndex += 1
     }
@@ -603,6 +603,35 @@ open class GLSNode: NSObject {
         glActiveTexture(GLenum(GL_TEXTURE0))
         self.currentTextureIndex = 0
     }
+    
+    // MARK: - Handling Animations
+    
+    public func updateAnimations(_ dt:CGFloat) {
+        
+        var indicesToRemove:[Int] = []
+        
+        for iii in 0..<self.animations.count {
+            
+            self.animations[iii].update(dt)
+            
+            if (self.animations[iii].isFinished) {
+                self.animations[iii].endAnimation()
+                indicesToRemove.append(iii)
+            }//finished
+            
+        }//check if finished
+        
+        let count = indicesToRemove.count
+        for i in 0..<count {
+            let j = count - i - 1
+            self.animations.remove(at: indicesToRemove[j])
+        }//remove animations
+        
+    }//update animations
+    
+    public func stopAnimations() {
+        self.animations.removeAll(keepingCapacity: false)
+    }//stop animations from animating
     
     
 }//GLSNode

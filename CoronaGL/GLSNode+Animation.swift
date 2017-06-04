@@ -74,6 +74,13 @@ public extension GLSNode {
         }
     }
     
+    public class func runWithoutAnimating(handler:() -> Void) {
+        let oldValue = GLSNode.animationInstance.inAnimationBlock
+        GLSNode.animationInstance.inAnimationBlock = false
+        handler()
+        GLSNode.animationInstance.inAnimationBlock = oldValue
+    }
+    
     public func runWithoutAnimating(handler:() -> Void) {
         let oldValue = self.inAnimationBlock
         self.inAnimationBlock = false
@@ -193,70 +200,6 @@ public extension GLSNode {
         }
         
     }
-    
-    // MARK: - Handling Animations
-    
-    public func updateAnimations(_ dt:CGFloat) {
-        
-        var indicesToRemove:[Int] = []
-        
-        for iii in 0..<self.animations.count {
-            
-            self.animations[iii].update(dt)
-            
-            if (self.animations[iii].isFinished) {
-                self.animations[iii].endAnimation()
-//                self.animations[iii].completionHandler?()
-                indicesToRemove.append(iii)
-            }//finished
-            
-        }//check if finished
-        
-        let count = indicesToRemove.count
-        for i in 0..<count {
-            let j = count - i - 1
-            self.animations.remove(at: indicesToRemove[j])
-        }//remove animations
-        
-    }//update animations
-    
-    public func stopAnimations() {
-        /*
-        for iii in 0..<animations.count {
-            
-            animations[iii].stop()
-            
-        }//stop animations
-        */
-        animations.removeAll(keepingCapacity: false)
-        
-    }//stop animations from animating
-    
-    // MARK: - Adding Animations
-    
-    public func add1Animation(_ start:CGFloat, end:CGFloat, function:@escaping (CGFloat) -> ()) {
-//        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, floatFunction: function))
-        let animation = GLSFloatAnimator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
-        self.animations.append(animation)
-    }//add animation-1
-    
-    public func add2Animation(_ start:CGPoint, end:CGPoint, function:@escaping (CGPoint) -> ()) {
-        //        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, pointFunction: function))
-        let animation = GLSPointAnimator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
-        self.animations.append(animation)
-    }//add animation-2
-    
-    public func add3Animation(_ start:SCVector3, end:SCVector3, function:@escaping (SCVector3) -> ()) {
-//        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, vector3Function: function))
-        let animation = GLSVector3Animator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
-        self.animations.append(animation)
-    }//add animation-3
-    
-    public func add4Animation(_ start:SCVector4, end:SCVector4, function:@escaping (SCVector4) -> ()) {
-//        animations.append(GLSAnimator(mode: animationMode, duration: animationDuration, speed:animationSpeed, startValue: start, endValue: end, vector4Function: function))
-        let animation = GLSVector4Animator(mode: self.animationMode, duration: self.animationDuration, start: start, end: end, handler: function)
-        self.animations.append(animation)
-    }//add animation-3
     
 }//extend GLSNode
 
