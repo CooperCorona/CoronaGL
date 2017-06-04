@@ -26,7 +26,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         var position:(GLfloat, GLfloat) = (0.0, 0.0)
         var texture:(GLfloat, GLfloat)  = (0.0, 0.0)
         public var noiseTexture:(GLfloat, GLfloat, GLfloat) = (0.0, 0.0, 0.0)
-        var aspectRatio:(GLfloat, GLfloat) = (0.0, 0.0)
+//        var aspectRatio:(GLfloat, GLfloat) = (0.0, 0.0)
     }
     
     public enum NoiseType: String {
@@ -216,7 +216,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
             
             vertex.noiseTexture = (vertex.texture.0, vertex.texture.1, 0.0)
             
-            vertex.aspectRatio = (curPoint * CGPoint(x: 1.0, y: size.height / size.width)).getGLTuple()
+//            vertex.aspectRatio = (curPoint * CGPoint(x: 1.0, y: size.height / size.width)).getGLTuple()
             return
         }
         
@@ -287,9 +287,9 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
         
         glDrawArrays(TexturedQuad.drawingMode, 0, GLsizei(self.noiseVertices.count))
         
+        glActiveTexture(GLenum(GL_TEXTURE0))
         self.noiseProgram.disable()
         self.framebufferStack?.popFramebuffer()
-        glActiveTexture(GLenum(GL_TEXTURE0))
         
         self.bufferIsDirty = false
     }
