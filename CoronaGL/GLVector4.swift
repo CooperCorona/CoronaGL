@@ -13,7 +13,11 @@
 #endif
 import CoronaConvenience
 import CoronaStructures
-import OpenGL
+#if os(iOS)
+    import OpenGLES
+#else
+    import OpenGL
+#endif
 
 /**
  Represents a 4-component vector using

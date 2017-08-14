@@ -185,10 +185,11 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     open func renderToTexture() {
         self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
-        
+
+#if os(OSX)
         glEnable(GLenum(GL_VERTEX_PROGRAM_POINT_SIZE))
         glEnable(GLenum(GL_PROGRAM_POINT_SIZE))
-        
+#endif
         self.buffer.bindClearColor()
         
         glBlendColor(0, 0, 0, 1.0);

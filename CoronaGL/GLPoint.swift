@@ -7,8 +7,12 @@
 //
 
 import Foundation
+#if os(iOS)
+import UIKit
+import OpenGLES
+#else
 import OpenGL
-
+#endif
 /**
  Represents a point in a cartesian plane, but
  instead of storing the x and y coordinates as

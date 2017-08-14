@@ -9,7 +9,12 @@
 import Foundation
 import CoronaConvenience
 import CoronaStructures
-import OpenGL
+#if os(iOS)
+    import UIKit
+    import OpenGLES
+#else
+    import OpenGL
+#endif
 
 /**
  Represents a 3-component vector using

@@ -258,15 +258,17 @@ open class GLSParticleLayer: GLSSprite, DoubleBuffered {
             print("Error (GLSParticleLayerEmitter): framebuffer failed to push (\(result)).")
         }
         
-        if self.additiveBlending {
-            glEnable(GLenum(GL_VERTEX_PROGRAM_POINT_SIZE))
-            glEnable(GLenum(GL_PROGRAM_POINT_SIZE))
-        }
+#if os(OSX)
+        glEnable(GLenum(GL_VERTEX_PROGRAM_POINT_SIZE))
+        glEnable(GLenum(GL_PROGRAM_POINT_SIZE))
+#endif
         
         self.buffer.bindClearColor()
         
-        glBlendColor(0, 0, 0, 1.0);
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_CONSTANT_ALPHA));
+        if self.additiveBlending {
+            glBlendColor(0, 0, 0, 1.0);
+            glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_CONSTANT_ALPHA));
+        }
         
         self.particleProgram.use()
         glBufferData(GLenum(GL_ARRAY_BUFFER), MemoryLayout<GLSParticle>.size * self.particles.count, self.particles, GLenum(GL_STATIC_DRAW))

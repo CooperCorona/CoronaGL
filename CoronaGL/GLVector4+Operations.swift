@@ -9,7 +9,12 @@
 import Foundation
 import CoronaConvenience
 import CoronaStructures
-import OpenGL
+#if os(iOS)
+    import UIKit
+    import OpenGLES
+#else
+    import OpenGL
+#endif
 
 public func +(lhs:GLVector4, rhs:GLVector4) -> GLVector4 {
     return GLVector4(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z, w: lhs.w + rhs.w)

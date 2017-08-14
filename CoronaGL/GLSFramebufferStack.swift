@@ -46,12 +46,12 @@ public class GLSFramebufferStack: NSObject {
     public func pushGLSFramebuffer(buffer:GLSFrameBuffer) -> Bool {
         
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
-        self.buffers.append(buffer)
+        self.buffers.append(buffer.framebuffer)
         
         let viewport = [0, 0, GLint(buffer.size.width), GLint(buffer.size.height)]
         glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
         viewports.append(viewport)
-        
+        return true
     }//push a framebuffer
     
     public func popFramebuffer() -> Bool {

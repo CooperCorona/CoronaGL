@@ -80,12 +80,12 @@ open class GLProgramDictionary: GLAttributeBridger {
         attributeSizes += vertexLocations.attributeSizes
         let fragmentLocations = GLProgramDictionary.bridgeLocationsForFile(fragmentShader, shaderType: GLenum(GL_FRAGMENT_SHADER))
         uniforms += fragmentLocations.uniforms
-        
+#if os(OSX)
         if let geometryShader = geometryShader {
             let geometryLocations = GLProgramDictionary.bridgeLocationsForFile(geometryShader, shaderType: GLenum(GL_GEOMETRY_SHADER))
             uniforms += geometryLocations.uniforms
         }
-        
+#endif
         // Fragment (and geometry) shader doesn't have attributes.
         // (it has varyings, but they're input from
         // the vertex shader, so the program dictionary

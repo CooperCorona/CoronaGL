@@ -8,7 +8,12 @@
 
 import Foundation
 import CoronaConvenience
-import OpenGL
+#if os(iOS)
+    import UIKit
+    import OpenGLES
+#else
+    import OpenGL
+#endif
 
 public func +(lhs:GLPoint, rhs:GLPoint) -> GLPoint {
     return GLPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)

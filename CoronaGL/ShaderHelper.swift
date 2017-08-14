@@ -167,12 +167,12 @@ open class ShaderHelper : NSObject {
         
         glAttachShader(program, vertexShader)
         glAttachShader(program, fragmentShader)
-        
+#if os(OSX)
         if let geometryURL = geometryURL {
             let geometryShader = self.buildShader(geometryURL, shaderType: GLenum(GL_GEOMETRY_SHADER))
             glAttachShader(program, geometryShader)
         }
-        
+#endif
         glLinkProgram(program)
     
         return program

@@ -8,7 +8,9 @@
 
 import Foundation
 import CoronaStructures
-
+#if os(iOS)
+    import UIKit
+#endif
 /**
  *  Defines a protocol for objects that can be animated.
  *  There's no way to simply annotate properties and
