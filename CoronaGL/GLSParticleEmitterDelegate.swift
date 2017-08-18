@@ -23,38 +23,49 @@ public protocol GLSParticleEmitterDelegate: GLSAnimatable {
     var emitterSize:CGSize { get }
     ///Used by the particle emitter to stop emitting in time for smooth endings.
     var maxLife:CGFloat { get }
+    ///Used by the particle emitter to determine where the particles are being spawned.
+    ///Delegates can position particles in any coordinate system they choose and use
+    ///the spawnAnchor to tell the particle emitter how to convert it to its own coordinates.
+    ///(0, 0) is the bottom left, (1, 1) is the top right. Defaults to (0.5, 0.5), the center
+    ///of the emitter. So particles with position (0, 0) would be converted to
+    ///(emitterSize.width / 2, emitterSize.height / 2).
+    var spawnAnchor:CGPoint { get }
     
     func emit() -> PEVertex
     
 }
 
-public class GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
+extension GLSParticleEmitterDelegate {
+    public var spawnAnchor:CGPoint { return CGPoint(xy: 0.5) }
+}
+
+open class GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
     
-    public var emitterSize: CGSize {
+    open var emitterSize: CGSize {
         return CGSize(square: self.velocity * self.life + self.size * 2.0)
     }
-    public var maxLife:CGFloat {
+    open var maxLife:CGFloat {
         return self.life
     }
     
-    public var animations: [GLSAnimator] = []
+    open var animations: [GLSAnimator] = []
     
-    public var color:SCVector3 {
+    open var color:SCVector3 {
         didSet {
             self.add3Animation(oldValue, end: self.color) { [unowned self] in self.color = $0 }
         }
     }
-    public var velocity:CGFloat {
+    open var velocity:CGFloat {
         didSet {
             self.add1Animation(oldValue, end: self.velocity) { [unowned self] in self.velocity = $0 }
         }
     }
-    public var life:CGFloat {
+    open var life:CGFloat {
         didSet {
             self.add1Animation(oldValue, end: self.life) { [unowned self] in self.life = $0 }
         }
     }
-    public var size:CGFloat {
+    open var size:CGFloat {
         didSet {
             self.add1Animation(oldValue, end: self.size) { [unowned self] in self.size = $0 }
         }
@@ -67,7 +78,7 @@ public class GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
         self.size = size
     }
     
-    public func emit() -> PEVertex {
+    open func emit() -> PEVertex {
         var vertex = PEVertex()
         vertex.position = GLPoint()
         vertex.velocity = GLPoint(point: CGPoint(angle: CGFloat.randomMiddle(0.0, range: 2.0 * CGFloat.pi), length: self.velocity))
@@ -79,26 +90,26 @@ public class GLSParticleEmitterDefaultDelegate: GLSParticleEmitterDelegate {
     
 }
 
-public class GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegate {
+open class GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegate {
     
-    public var emitterSize: CGSize {
+    open var emitterSize: CGSize {
         let velocityIncrease = (1.0 + self.velocityFactor / 2.0)
         let lifeIncrease = (1.0 + self.lifeFactor / 2.0)
         let sizeIncrease = (1.0 + self.sizeFactor / 2.0)
         return self.wrappedDelegate.emitterSize * velocityIncrease * lifeIncrease * sizeIncrease
     }
-    public var maxLife:CGFloat {
+    open var maxLife:CGFloat {
         return self.wrappedDelegate.maxLife + self.lifeFactor / 2.0
     }
     
-    public var animations: [GLSAnimator] = []
+    open var animations: [GLSAnimator] = []
     
-    public let wrappedDelegate:GLSParticleEmitterDelegate
-    public var colorFactor:SCVector3
-    public var velocityFactor:CGFloat
-    public var velocityAngleFactor:CGFloat
-    public var lifeFactor:CGFloat
-    public var sizeFactor:CGFloat
+    open let wrappedDelegate:GLSParticleEmitterDelegate
+    open var colorFactor:SCVector3
+    open var velocityFactor:CGFloat
+    open var velocityAngleFactor:CGFloat
+    open var lifeFactor:CGFloat
+    open var sizeFactor:CGFloat
     
     public init(delegate:GLSParticleEmitterDelegate) {
         self.wrappedDelegate = delegate
@@ -118,7 +129,7 @@ public class GLSParticleEmitterRandomDelegateWrapper: GLSParticleEmitterDelegate
         self.sizeFactor = sizeFactor
     }
     
-    public func emit() -> PEVertex {
+    open func emit() -> PEVertex {
         var vertex = self.wrappedDelegate.emit()
         let r = CGFloat.randomMiddle(1.0, range: self.colorFactor.r)
         let g = CGFloat.randomMiddle(1.0, range: self.colorFactor.g)

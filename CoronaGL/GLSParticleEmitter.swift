@@ -116,7 +116,7 @@ open class GLSParticleEmitter: GLSSprite, DoubleBuffered {
     
     open func generateParticle() -> PEVertex {
         var particle = self.particleDelegate.emit()
-        particle.position += self.bufferSize.center
+        particle.position += self.particleDelegate.spawnAnchor * self.bufferSize
         particle.textureAnchor = self.particleTextureAnchor
         return particle
     }//generate vertex

@@ -26,6 +26,7 @@
 		DC40542A1D8C6B0D00608A8F /* PerlinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054221D8C6B0D00608A8F /* PerlinNoiseShader.vsh */; };
 		DC40542B1D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054231D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh */; };
 		DC40542C1D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DC4054241D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh */; };
+		DC4C25431F47870400EFE7A2 /* GLSParticleEmitterFireballDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4C25421F47870400EFE7A2 /* GLSParticleEmitterFireballDelegate.swift */; };
 		DC5CDCA51D80B351008C2A8D /* GLSTileSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */; };
 		DC5CDCA61D80B351008C2A8D /* GLSAlphaHoleSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC951D80B351008C2A8D /* GLSAlphaHoleSprite.swift */; };
 		DC5CDCA71D80B351008C2A8D /* GLSBlurSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5CDC961D80B351008C2A8D /* GLSBlurSprite.swift */; };
@@ -116,6 +117,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DC28460B1F44BB93003C3FF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC6B68CA1EB59E7700B0FF92;
+			remoteInfo = CoronaConvenience.Tests;
+		};
+		DC2846151F44BB93003C3FF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC5CDCE51D80B3BD008C2A8D /* CoronaStructures.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC66C0D51F43C9AB0097AB9C;
+			remoteInfo = "CoronaStructures-Tests";
+		};
 		DC5CDCE21D80B388008C2A8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DC5CDCDE1D80B388008C2A8D /* CoronaConvenience.xcodeproj */;
@@ -152,6 +167,7 @@
 		DC4054221D8C6B0D00608A8F /* PerlinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinNoiseShader.vsh; sourceTree = "<group>"; };
 		DC4054231D8C6B0D00608A8F /* PerlinSinNoiseShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.fsh; sourceTree = "<group>"; };
 		DC4054241D8C6B0D00608A8F /* PerlinSinNoiseShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PerlinSinNoiseShader.vsh; sourceTree = "<group>"; };
+		DC4C25421F47870400EFE7A2 /* GLSParticleEmitterFireballDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSParticleEmitterFireballDelegate.swift; sourceTree = "<group>"; };
 		DC5CDC891D80B30F008C2A8D /* CoronaGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5CDC8E1D80B30F008C2A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC5CDC941D80B351008C2A8D /* GLSTileSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLSTileSprite.swift; sourceTree = "<group>"; };
@@ -376,6 +392,7 @@
 				DC5CDCC01D80B360008C2A8D /* GLSFramebufferStack.swift */,
 				DC5CDCC11D80B360008C2A8D /* GLSNode+Animation.swift */,
 				DCA41A6F1EDD1A2F00DE5F3A /* GLSParticleEmitterDelegate.swift */,
+				DC4C25421F47870400EFE7A2 /* GLSParticleEmitterFireballDelegate.swift */,
 				DC94962B1E4249BD008CF23E /* GLSSprite+Animation.swift */,
 				DC5CDCC21D80B360008C2A8D /* MultiTexturedQuad.swift */,
 				DC5CDCC31D80B360008C2A8D /* NoiseFadeAnimation.swift */,
@@ -400,6 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				DC5CDCE31D80B388008C2A8D /* CoronaConvenience.framework */,
+				DC28460C1F44BB93003C3FF0 /* CoronaConvenience.Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -408,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				DC5CDCEB1D80B3BD008C2A8D /* CoronaStructures.framework */,
+				DC2846161F44BB93003C3FF0 /* CoronaStructures-Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,6 +528,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		DC28460C1F44BB93003C3FF0 /* CoronaConvenience.Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CoronaConvenience.Tests.xctest;
+			remoteRef = DC28460B1F44BB93003C3FF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DC2846161F44BB93003C3FF0 /* CoronaStructures-Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "CoronaStructures-Tests.xctest";
+			remoteRef = DC2846151F44BB93003C3FF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		DC5CDCE31D80B388008C2A8D /* CoronaConvenience.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -615,6 +648,7 @@
 				DC5CDCD01D80B360008C2A8D /* GLSCamera.swift in Sources */,
 				DC5CDCD61D80B360008C2A8D /* NoiseTexture2D.swift in Sources */,
 				DC5CDCD81D80B360008C2A8D /* PlaygroundOpenGLDelegate.swift in Sources */,
+				DC4C25431F47870400EFE7A2 /* GLSParticleEmitterFireballDelegate.swift in Sources */,
 				DC1CC00E1EDBDA1E004DF502 /* GLVector3+Operations.swift in Sources */,
 				DC5CDCD71D80B360008C2A8D /* ParticleEmitterBackgroundQueue.swift in Sources */,
 				DC5CDCCF1D80B360008C2A8D /* GLSAnimator.swift in Sources */,
