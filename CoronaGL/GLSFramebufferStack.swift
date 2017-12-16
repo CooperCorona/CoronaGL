@@ -14,7 +14,15 @@ public class GLSFramebufferStack: NSObject {
    
     private let initialBuffer:GLKView
     private var buffers:[GLuint] = []
-    fileprivate var viewports:[[GLint]] = []
+    //The viewport and projection stacks cannot be combined
+    //into a single structure because the viewport is pushed
+    //after being changed while the projection is pushed
+    //before being changed. This is because the GLKView.bindDrawable
+    //sets its viewport, so we don't need to know the original one.
+    //However, the projection is not controlled by the GLKView so
+    //its original state must be persisted (before being changed).
+    private var viewports = Stack<[GLint]>()
+    private var projections = Stack<SCMatrix4>()
     
     public init(initialBuffer:GLKView) {
         
@@ -38,7 +46,10 @@ public class GLSFramebufferStack: NSObject {
         //size (well, there might be a glGet option, but
         //I don't know for sure), so we just duplicate
         //the current state.
-        self.viewports.append(self.getViewport())
+//        let viewport = self.getViewport()
+//        self.viewports.push(viewport)
+//        self.projections.push(GLSNode.universalProjection)
+//        GLSNode.universalProjection = SCMatrix4(right: CGFloat(viewport[2]), top: CGFloat(viewport[3]))
         
         return true
     }//push a framebuffer
@@ -48,9 +59,11 @@ public class GLSFramebufferStack: NSObject {
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), buffer.framebuffer)
         self.buffers.append(buffer.framebuffer)
         
-        let viewport = [0, 0, GLint(buffer.size.width), GLint(buffer.size.height)]
-        glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
-        viewports.append(viewport)
+//        let viewport = [0, 0, GLint(buffer.size.width), GLint(buffer.size.height)]
+//        glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
+//        self.viewports.push(viewport)
+//        self.projections.push(GLSNode.universalProjection)
+//        GLSNode.universalProjection = SCMatrix4(right: buffer.size.width, top: buffer.size.height)
         return true
     }//push a framebuffer
     
@@ -62,12 +75,17 @@ public class GLSFramebufferStack: NSObject {
         
         self.buffers.removeLast()
         
-        if let topBuffer = self.buffers.last, let viewport = self.viewports.last {
+        if let topBuffer = self.buffers.last/*, let viewport = self.viewports.pop()*/ {
             glBindFramebuffer(GLenum(topBuffer), topBuffer)
-            glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
+//            glViewport(GLsizei(viewport[0]), GLsizei(viewport[1]), GLsizei(viewport[2]), GLsizei(viewport[3]))
         } else {
             self.initialBuffer.bindDrawable()
         }
+        //The projection must be re-bound regardless of whether the new buffer
+        //is a GLKView or GLFramebuffer because GLKView doesn't manage the projection.
+//        if let projection = self.projections.pop() {
+//            GLSNode.universalProjection = projection
+//        }
         
         return true
     }//pop the top framebuffer

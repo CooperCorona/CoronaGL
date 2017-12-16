@@ -466,7 +466,7 @@ open class GLSNode: NSObject, GLSAnimatable {
         child.framebufferStack = self.framebufferStack
     }//add child
     
-    open func removeChild(_ child:GLSNode) -> GLSNode? {
+    @discardableResult open func removeChild(_ child:GLSNode) -> GLSNode? {
         child.superNode = nil
         return removeObject(child, fromArray:&self.children)
     }//remove child

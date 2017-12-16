@@ -153,7 +153,7 @@ open class StaticRenderer: NSObject {
         self.count += 1
     }
     
-    fileprivate func addBatch() -> Bool {
+    @discardableResult fileprivate func addBatch() -> Bool {
         guard self.count > 0 else {
             return false
         }
@@ -203,7 +203,6 @@ open class StaticRenderer: NSObject {
     
     fileprivate func renderCurrent() {
         self.addBatch()
-        return
         
         if self.asynchronous {
             DispatchQueue.main.sync {

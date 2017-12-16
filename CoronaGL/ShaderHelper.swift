@@ -82,9 +82,7 @@ open class ShaderHelper : NSObject {
                     
             }
         }
-        for (key, path) in basePaths {
-//            let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")
-//            let fshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).fsh")
+        for (key, _) in basePaths {
             guard let vshURL = vshURLs[key], let fshURL = fshURLs[key] else {
                 print("Error: Failed to load shader (\(key)).")
                 continue
@@ -95,58 +93,6 @@ open class ShaderHelper : NSObject {
             
             self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL, geometryURL: gshURL)
         }
-        /*
-        let frames = NSBundle.allFrameworks().filter() { $0.bundlePath.hasSuffix(("CoronaGL.framework")) }
-        for frame in [frames[0], NSBundle.mainBundle()] {
-            var basePaths:[String:String] = [:]
-            guard let resourcePath = frame.resourcePath else {
-                return
-            }
-            print(resourcePath)
-            if let enumerator = NSFileManager.defaultManager().enumeratorAtPath(resourcePath) {
-                while let currentPath = enumerator.nextObject() as? String {
-                    if currentPath.containsString("Frameworks/") {
-                        //Since the main bundle's enumerator includes the CoronaGL framework as
-                        //a subdirectory, it tries to load all the shaders again, but the
-                        //keyAndPathForPath method strips all the extra information, so
-                        //it tries to load them from the project's own resource path, crashing
-                        //the app. We just ignore the CoronaGL framework (and other frameworks,
-                        //in case they contain shaders
-                        continue
-                    }
-                    print("\t\(currentPath)")
-                    if let (key, path) = self.keyAndPathForPath(currentPath) {
-                        print("\t\(currentPath)")
-                        basePaths[key] = path
-                    }
-                }
-                
-            }
-            for (key, path) in basePaths {
-                let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")
-                let fshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).fsh")
-                let program = self.buildProgramVertexURL(vshURL, fragmentURL: fshURL)
-                self.programs[key] = program
-                
-                self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
-            }
-        }
-        */
-        /*
-        let bundle = NSBundle(forClass: ShaderHelper.self)
-        
-        let frames = NSBundle.allFrameworks().filter() { $0.bundlePath.hasSuffix(("OmniSwift.framework")) }
-        guard let resourcePath = frames.objectAtIndex(0)?.resourcePath else {
-            return
-        }
-        for (key, path) in basePaths {
-            let vshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).vsh")
-            let fshURL = NSURL(fileURLWithPath: resourcePath + "/\(path).fsh")
-            let program = self.buildProgramVertexURL(vshURL, fragmentURL: fshURL)
-            self.programs[key] = program
-            self.programDictionaries[key] = self.createProgramDictionary(program, vertexURL: vshURL, fragmentURL: fshURL)
-        }
-        */
     }
     
     fileprivate func keyAndPathForPath(_ path:String) -> (key:String, path:String)? {
@@ -195,7 +141,7 @@ open class ShaderHelper : NSObject {
         let cSource = data!.cString(using: String.Encoding.ascii)
         var text:UnsafePointer<GLchar>? = UnsafePointer<GLchar> (cSource!)
         let source = glCreateShader(shaderType)
-        var length = GLint(data!.characters.count)
+        var length = GLint(data!.count)
         glShaderSource(source, 1, &text, &length)
         glCompileShader(source)
         #endif

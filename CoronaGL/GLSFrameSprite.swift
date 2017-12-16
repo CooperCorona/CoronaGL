@@ -154,7 +154,7 @@ open class GLSFrameSprite: GLSSprite {
         return false
     }
     
-    fileprivate func textureIndexChanged() -> Bool {
+    @discardableResult fileprivate func textureIndexChanged() -> Bool {
         
         if (self.textureIndex < 0 || self.textureIndex >= self.textures.count) {
             return false

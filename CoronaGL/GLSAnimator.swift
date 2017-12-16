@@ -112,13 +112,13 @@ open class GLSAnimationHelper: NSObject {
             return t
             
         case .easeIn:
-            return 1.0 - cos(CGFloat(M_PI_2) * t)
+            return 1.0 - cos(CGFloat.pi / 2.0 * t)
             
         case .easeOut:
-            return sin(CGFloat(M_PI_2) * t)
+            return sin(CGFloat.pi / 2.0 * t)
             
         case .easeInOut:
-            return (1.0 - cos(CGFloat(M_PI) * t)) / 2.0
+            return (1.0 - cos(CGFloat.pi * t)) / 2.0
             
         case .smoothstep:
             return t * t * (3.0 - 2.0 * t)
@@ -131,10 +131,10 @@ open class GLSAnimationHelper: NSObject {
             return h1 + h2 + h3 + h4
             
         case let .cycle(speed):
-            return (1.0 - cos(CGFloat(M_PI_2) * self.time * speed)) / 2.0
+            return (1.0 - cos(CGFloat.pi / 2.0 * self.time * speed)) / 2.0
             
         case .autoreverse:
-            return (1.0 - cos(CGFloat(2.0 * M_PI) * t)) / 2.0
+            return (1.0 - cos(2.0 * CGFloat.pi * t)) / 2.0
             
         case let .fluctuate(fNoise):
             return fNoise.value

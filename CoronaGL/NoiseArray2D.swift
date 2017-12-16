@@ -49,7 +49,7 @@ open class NoiseArray2D {
         //are always the same for the same seeds)
         for iii in 0..<NoiseArray2D.totalCount {
             
-            let angle = self.randomValue() * (2.0 * CGFloat(M_PI))
+            let angle = self.randomValue() * (2.0 * CGFloat.pi)
             let p = CGPoint(angle: angle, length: 1.0)
             
             self.gradients[iii] = p

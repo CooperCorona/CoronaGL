@@ -233,7 +233,7 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
         }
         
         
-        let dProvider = CGDataProvider(dataInfo: nil, data: buffer, size: Int(dataLength), releaseData: { _ in })!
+        let dProvider = CGDataProvider(dataInfo: nil, data: buffer, size: Int(dataLength), releaseData: { _,_,_  in })!
         let bitsPerComponent = 8
         let bitsPerPixel = bitsPerComponent * 4
         let bytesPerRow = width * 4
@@ -297,7 +297,7 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
         let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
         let bitmap = NSBitmapImageRep(cgImage: cgImage)
         bitmap.size = image.size
-        let data = bitmap.representation(using: NSBitmapImageFileType.PNG, properties: [:])
+        let data = bitmap.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
         do {
             try data?.write(to: url, options: .atomic)
         } catch {

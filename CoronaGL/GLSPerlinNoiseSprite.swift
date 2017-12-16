@@ -171,7 +171,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     
     open var noiseAngle:CGFloat = 0.0 {
         didSet {
-            self.noiseAngle = self.noiseAngle.truncatingRemainder(dividingBy: CGFloat(2.0 * M_PI))
+            self.noiseAngle = self.noiseAngle.truncatingRemainder(dividingBy: 2.0 * CGFloat.pi)
             self.bufferIsDirty = true;
         }
     }
@@ -244,7 +244,7 @@ open class GLSPerlinNoiseSprite: GLSSprite, DoubleBuffered {
     open func renderToTexture() {
         guard let success = self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer) , success else {
             print("Error: Couldn't push framebuffer!")
-            print("Stack: \(self.framebufferStack)")
+            print("Stack: \(String(describing: self.framebufferStack))")
             return
         }
         

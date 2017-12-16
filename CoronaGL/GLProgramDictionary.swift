@@ -105,8 +105,7 @@ open class GLProgramDictionary: GLAttributeBridger {
         }
         
         guard let uniformRegex = NSRegularExpression(regex: "u_.*[^;]"),
-            let attributeRegex = NSRegularExpression(regex: "a_.*[^;]"),
-            let varyingRegex = NSRegularExpression(regex: "v_.*[^;]") else {
+            let attributeRegex = NSRegularExpression(regex: "a_.*[^;]") else {
                 return ([], [], [])
         }
         var uniforms:[String] = []

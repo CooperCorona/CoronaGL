@@ -64,7 +64,7 @@ open class FluctuatingNoise1D: CustomStringConvertible {
             return abs(self.baseNoise(4) / self.noiseDivisor) * self.range + self.middleValue
         case .Sin:
             let val = abs(self.baseNoise(4) / self.noiseDivisor) * self.range + self.middleValue
-            return sin(CGFloat(M_PI) * self.time + val)
+            return sin(CGFloat.pi * self.time + val)
         }
     }
     

@@ -255,7 +255,7 @@ open class GLSParticleLayer: GLSSprite, DoubleBuffered {
     public func renderToTexture() {
         let result = self.framebufferStack?.pushGLSFramebuffer(buffer: self.buffer)
         if result != true {
-            print("Error (GLSParticleLayerEmitter): framebuffer failed to push (\(result)).")
+            print("Error (GLSParticleLayerEmitter): framebuffer failed to push (\(String(describing: result))).")
         }
         
 #if os(OSX)
