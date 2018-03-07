@@ -187,6 +187,14 @@ open class GLSFrameBuffer: GLSNode, DoubleBuffered {
         self.framebufferStack?.popFramebuffer()
     }
     
+    open override func contentSizeChanged() {
+        let sizeAsPoint = self.contentSize.getCGPoint()
+        for i in 0..<TexturedQuad.verticesPerQuad {
+            self.vertices[i].position = (TexturedQuad.pointForIndex(i) * sizeAsPoint).getGLTuple()
+        }
+        self.verticesAreDirty = true
+    }
+    
     open func bindClearColor() {
         
         glClearColor(GLfloat(self.clearColor.r), GLfloat(self.clearColor.g), GLfloat(self.clearColor.b), GLfloat(self.clearColor.a))
